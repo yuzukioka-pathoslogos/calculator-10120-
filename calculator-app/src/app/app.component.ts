@@ -28,11 +28,12 @@ export class AppComponent implements AfterViewInit {
     const squareRoot = document.querySelector('.button-sqrt') as HTMLButtonElement;
     const persent = document.querySelector('.button-percent') as HTMLButtonElement;
 
-
+    //基本的に式の左辺がstack[0]、右辺がstack[1]
     const stack: string[] = ['', '0'];
+    display.textContent = stack[1];
+    // 最後に押した演算子を格納
     let operator: string | null = null;
-    display.textContent = stack[0];
-    //演算子によって計算を行う関数
+    //計算を行う関数
     const calc = function(){
       switch(operator){
         case '+':
@@ -67,6 +68,7 @@ export class AppComponent implements AfterViewInit {
     //数字をクリックした時に表示される数字を追加
     buttons.forEach((btn: HTMLButtonElement) => {
       btn.addEventListener('click', () => {
+
         if(operator !== null){          //演算子が入力されている場合
           if(stack[1] === '0'){         //ディスプレイが0の時は消してから数字を入力
             stack[1] = '';
@@ -106,8 +108,6 @@ export class AppComponent implements AfterViewInit {
         }else{
           calc();
           operator = op.value as string;
-          stack[0] = stack[1];
-          stack[1] = '';
         }
       });
     });
@@ -117,12 +117,13 @@ export class AppComponent implements AfterViewInit {
       calc();
     });
   
-
+    //CEをクリックした時にスタックの1番目を初期化
     clearEntry.addEventListener('click', () => {
       stack[1] = '0';
       display.textContent = stack[1];
     });
     
+    //Cをクリックした時にスタックを初期化
     clear.addEventListener('click', () => {
       stack[0] = '';
       stack[1] = '0';
@@ -130,6 +131,7 @@ export class AppComponent implements AfterViewInit {
       display.textContent = stack[1];
     });
 
+    //±をクリックした時に符号を反転
     plusMinus.addEventListener('click', () => {
       stack[1] = (Number(stack[1]) * -1).toString();
       display.textContent = stack[1];
