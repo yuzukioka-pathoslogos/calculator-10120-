@@ -38,26 +38,27 @@ export class AppComponent implements AfterViewInit {
         case '+':
           stack[1] = (Number(stack[0]) + Number(stack[1])).toString();
           display.textContent = stack[1];
-          stack[0] = '';
           break;
         case '-':
           stack[1] = (Number(stack[0]) - Number(stack[1])).toString();
           display.textContent = stack[1];
-          stack[0] = '';
           break;
         case '*':
           stack[1] = (Number(stack[0]) * Number(stack[1])).toString();
           display.textContent = stack[1];
-          stack[0] = '';
           break;
         case '/':
+          if(Number(stack[1]) === 0){
+            display.textContent = 'error';
+            stack[0] = '';
+            stack[1] = '0';
+            return;
+          }
           stack[1] = (Number(stack[0]) / Number(stack[1])).toString();
           display.textContent = stack[1];
-          stack[0] = '';
           break;
         default:
           return;
-          break;
       }
     }
 
@@ -125,6 +126,7 @@ export class AppComponent implements AfterViewInit {
     clear.addEventListener('click', () => {
       stack[0] = '';
       stack[1] = '0';
+      operator = null;
       display.textContent = stack[1];
     });
 
