@@ -37,16 +37,37 @@ export class AppComponent implements AfterViewInit {
     const calc = function(){
       switch(operator){
         case '+':
-          stack[1] = (Number(stack[0]) + Number(stack[1])).toString();
+          const sum = (Number(stack[0]) + Number(stack[1])).toString();
+          stack[1] = sum.slice(0, 10);
           display.textContent = stack[1];
+          if(Number(sum) > 9999999999 || Number(sum) < -9999999999){
+            display.textContent = `e${stack[1]}`;
+            stack[0] = '';
+            stack[1] = '0';
+            return;
+          }
           break;
         case '-':
-          stack[1] = (Number(stack[0]) - Number(stack[1])).toString();
+          const diff = (Number(stack[0]) - Number(stack[1])).toString();
+          stack[1] = diff.slice(0, 10);
           display.textContent = stack[1];
+          if(Number(diff) > 9999999999 || Number(diff) < -9999999999){
+            display.textContent = `e${stack[1]}`;
+            stack[0] = '';
+            stack[1] = '0';
+            return;
+          }
           break;
         case '*':
-          stack[1] = (Number(stack[0]) * Number(stack[1])).toString();
+          const prod = (Number(stack[0]) * Number(stack[1])).toString();
+          stack[1] = prod.slice(0, 10);
           display.textContent = stack[1];
+          if(Number(prod) > 9999999999 || Number(prod) < -9999999999){
+            display.textContent = `e${stack[1]}`;
+            stack[0] = '';
+            stack[1] = '0';
+            return;
+          }
           break;
         case '/':
           if(Number(stack[1]) === 0){
@@ -55,8 +76,15 @@ export class AppComponent implements AfterViewInit {
             stack[1] = '0';
             return;
           }
-          stack[1] = (Number(stack[0]) / Number(stack[1])).toString();
+          const quot = (Number(stack[0]) / Number(stack[1])).toString();
+          stack[1] = quot.slice(0, 10);
           display.textContent = stack[1];
+          if(Number(quot) > 9999999999 || Number(quot) < -9999999999){
+            display.textContent = `e${stack[1]}`;
+            stack[0] = '';
+            stack[1] = '0';
+            return;
+          }
           break;
         default:
           return;
@@ -95,6 +123,9 @@ export class AppComponent implements AfterViewInit {
     dot.addEventListener('click', () => {
       if(stack[1] === ''){
         stack[1] = '0';
+      }
+      if(stack[1] !=null && stack[1].length === 10){
+        return;
       }
       if(stack[1].includes('.')){       //小数点がすでに入力されている場合は入力しない
         return;
@@ -145,7 +176,8 @@ export class AppComponent implements AfterViewInit {
 
     //平方根をクリックした時に平方根を入力
     squareRoot.addEventListener('click', () => {
-      stack[1] = Math.sqrt(Number(stack[1])).toString();
+      const ans = Math.sqrt(Number(stack[1])).toString();
+      stack[1] = ans.slice(0, 10);
       display.textContent = stack[1];
     });
 
