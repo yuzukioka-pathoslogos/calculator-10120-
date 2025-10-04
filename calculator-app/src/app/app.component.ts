@@ -185,6 +185,7 @@ export class AppComponent implements AfterViewInit {
     persent.addEventListener('click', () => {
       if(operator === '*' || operator === '/'){
         stack[1] = (Number(stack[1]) / 100).toString();
+        console.log(`stack[1]: ${stack[1]} stack[0]: ${stack[0]} operator: ${operator}`);
         calc();
       }else if(operator === '+' || operator === '-'){
         stack[1] = (Number(stack[0]) * Number(stack[1]) / 100).toString();
