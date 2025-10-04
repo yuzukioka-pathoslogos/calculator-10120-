@@ -73,11 +73,17 @@ export class AppComponent implements AfterViewInit {
           if(stack[1] === '0'){         //ディスプレイが0の時は消してから数字を入力
             stack[1] = '';
           }
+          if(stack[1] !=null && stack[1].length === 10){
+            return;
+          }
           stack[1] += btn.value as string;
           display.textContent = stack[1];
         }else{                          //演算子が入力されていない場合
           if(stack[1] === '0'){
             stack[1] = '';
+          }
+          if(stack[1] !=null && stack[1].length === 10){
+            return;
           }
           stack[1] += btn.value as string;
           display.textContent = stack[1];
