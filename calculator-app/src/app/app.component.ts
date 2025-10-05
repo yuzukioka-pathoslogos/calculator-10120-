@@ -39,6 +39,16 @@ export class AppComponent implements AfterViewInit {
         case '+':
           const sum = (Number(stack[0]) + Number(stack[1])).toString();
           stack[1] = sum.slice(0, 10);
+          //小数点以下の末尾の0を削除
+          for(let i = 0; i < 10; i++){
+            if(stack[1].includes('.') && stack[1].endsWith('0')){
+              stack[1] = stack[1].slice(0, -1);
+            }
+            if(stack[1].endsWith('.')){
+              stack[1] = stack[1].slice(0, -1);
+              break;
+            }
+          }
           display.textContent = stack[1];
           if(Number(sum) > 9999999999 || Number(sum) < -9999999999){
             display.textContent = `e${stack[1]}`;
@@ -50,6 +60,15 @@ export class AppComponent implements AfterViewInit {
         case '-':
           const diff = (Number(stack[0]) - Number(stack[1])).toString();
           stack[1] = diff.slice(0, 10);
+          for(let i = 0; i < 10; i++){
+            if(stack[1].includes('.') && stack[1].endsWith('0')){
+              stack[1] = stack[1].slice(0, -1);
+            }
+            if(stack[1].endsWith('.')){
+              stack[1] = stack[1].slice(0, -1);
+              break;
+            }
+          }
           display.textContent = stack[1];
           if(Number(diff) > 9999999999 || Number(diff) < -9999999999){
             display.textContent = `e${stack[1]}`;
@@ -61,6 +80,15 @@ export class AppComponent implements AfterViewInit {
         case '*':
           const prod = (Number(stack[0]) * Number(stack[1])).toString();
           stack[1] = prod.slice(0, 10);
+          for(let i = 0; i < 10; i++){
+            if(stack[1].includes('.') && stack[1].endsWith('0')){
+              stack[1] = stack[1].slice(0, -1);
+            }
+            if(stack[1].endsWith('.')){
+              stack[1] = stack[1].slice(0, -1);
+              break;
+            }
+          }
           display.textContent = stack[1];
           if(Number(prod) > 9999999999 || Number(prod) < -9999999999){
             display.textContent = `e${stack[1]}`;
@@ -78,6 +106,15 @@ export class AppComponent implements AfterViewInit {
           }
           const quot = (Number(stack[0]) / Number(stack[1])).toString();
           stack[1] = quot.slice(0, 10);
+          for(let i = 0; i < 10; i++){
+            if(stack[1].includes('.') && stack[1].endsWith('0')){
+              stack[1] = stack[1].slice(0, -1);
+            }
+            if(stack[1].endsWith('.')){
+              stack[1] = stack[1].slice(0, -1);
+              break;
+            }
+          }
           display.textContent = stack[1];
           if(Number(quot) > 9999999999 || Number(quot) < -9999999999){
             display.textContent = `e${stack[1]}`;
