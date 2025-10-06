@@ -258,19 +258,19 @@ export class AppComponent implements AfterViewInit {
             afterCalc = true;
             break;
           case '/':
-            //0で割られた場合の処理
-            if(Number(stack[1]) === 0){
-              display.textContent = 'error';
-              stack[0] = '';
-              stack[1] = '0';
-              return;
-            }
             //連続計算対応のための処理
             if(afterCalc === true){
               stack[0] = stack[1];
               stack[1] = stack[2];
             }else{
               stack[2] = stack[1];
+            } 
+            //0で割られた場合の処理
+            if(Number(stack[1]) === 0){
+              display.textContent = 'error';
+              stack[0] = '';
+              stack[1] = '0';
+              return;
             }
             //浮動小数点誤差と指数表記を回避
             const quot = (Number(stack[0]) / Number(stack[1])).toFixed(13).toString();
@@ -313,8 +313,8 @@ export class AppComponent implements AfterViewInit {
     //数字をクリックした時に表示される数字を追加
     buttons.forEach((btn: HTMLButtonElement) => {
       btn.addEventListener('click', () => {
-        if(operator !== ''){          //演算子が入力されている場合
-          if(stack[1] === '0'){         //ディスプレイが0の時は消してから数字を入力
+        if(operator !== ''){            //演算子が入力されている場合
+          if(stack[1] === '0' && !stack[1].includes('.')){         //ディスプレイが0の時は消してから数字を入力、小数点が入力されている場合は消さない
             stack[1] = '';
           }
           if(afterCalc === true){
@@ -332,7 +332,7 @@ export class AppComponent implements AfterViewInit {
           stack[1] += btn.value as string;
           display.textContent = stack[1];
         }else{                          //演算子が入力されていない場合
-          if(stack[1] === '0'){
+          if(stack[1] === '0' && !stack[1].includes('.')){
             stack[1] = '';
           }
           if(afterCalc === true){
@@ -358,7 +358,7 @@ export class AppComponent implements AfterViewInit {
       if(stack[1] === ''){
         stack[1] = '0';
       }
-      if(stack[1] !=null && stack[1].length === 10){
+      if(stack[1] !== '' && stack[1].length === 10){
         return;
       }
       if(stack[1].includes('.')){       //小数点がすでに入力されている場合は入力しない
@@ -455,7 +455,6 @@ export class AppComponent implements AfterViewInit {
       }
       if(operator === '*' || operator === '/'){
         stack[1] = (Number(stack[1]) / 100).toString();
-        console.log(`stack[1]: ${stack[1]} stack[0]: ${stack[0]} operator: ${operator}`);
         calc();
       }else if(operator === '+'){
         stack[1] = (Number(stack[0]) * Number(stack[1]) / 100).toString();
