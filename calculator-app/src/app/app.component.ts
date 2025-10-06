@@ -31,11 +31,18 @@ export class AppComponent implements AfterViewInit {
     //基本的に式の左辺がstack[0]、右辺がstack[1]、連続計算対応のための一時保管場所としてstack[2]を用意
     const stack: string[] = ['', '0', ''];
     let afterCalc: boolean = false;
+    let error: boolean = false;
     display.textContent = stack[1];
     // 最後に押した演算子を格納
     let operator: string = '';
     //計算を行う関数
     const calc = function(){
+      console.log(`stack[0]: ${stack[0]} stack[1]: ${stack[1]} 
+        stack[2]: ${stack[2]} operator: ${operator} afterCalc: ${afterCalc}`);
+      //エラーが発生している場合は計算を行わない
+      if(error === true){
+        return;
+      }
       //演算子の後に＝を押した場合の処理
       if(stack[0] !== '' && stack[1] === '' && operator !== ''){
         switch(operator){
@@ -92,8 +99,7 @@ export class AppComponent implements AfterViewInit {
             //表示できないほど大きい数の場合はeを表示
             if(Number(stack[1]) >= 10 ** 10 || Number(stack[1]) <= -(10 ** 10)){
               display.textContent = `e${stack[1]}`;
-              stack[0] = '';
-              stack[1] = '0';
+              error = true;
               return;
             }
             display.textContent = stack[1];
@@ -103,8 +109,7 @@ export class AppComponent implements AfterViewInit {
             //0で割られた場合の処理
             if(Number(stack[0]) === 0){
               display.textContent = 'error';
-              stack[0] = '';
-              stack[1] = '0';
+              error = true;
               return;
             }
             //連続計算対応のための処理
@@ -133,8 +138,7 @@ export class AppComponent implements AfterViewInit {
             //表示できないほど大きい数の場合はeを表示
             if(Number(stack[1]) >= 10 ** 10 || Number(stack[1]) <= -(10 ** 10)){
               display.textContent = `e${stack[1]}`;
-              stack[0] = '';
-              stack[1] = '0';
+              error = true;
               return;
             }
             display.textContent = stack[1];
@@ -179,8 +183,7 @@ export class AppComponent implements AfterViewInit {
             //表示できないほど大きい数の場合はeを表示
             if(Number(sum) >= 10 ** 10 || Number(sum) <= -(10 ** 10)){
               display.textContent = `e${stack[1]}`;
-              stack[0] = '';
-              stack[1] = '0';
+              error = true;
               return;
             }
             afterCalc = true;
@@ -218,8 +221,7 @@ export class AppComponent implements AfterViewInit {
             //表示できないほど大きい数の場合はeを表示
             if(Number(diff) >= 10 ** 10 || Number(diff) <= -(10 ** 10)){
               display.textContent = `e${stack[1]}`;
-              stack[0] = '';
-              stack[1] = '0';
+              error = true;
               return;
             }
             afterCalc = true;
@@ -251,8 +253,7 @@ export class AppComponent implements AfterViewInit {
             //表示できないほど大きい数の場合はeを表示
             if(Number(prod) >= 10 ** 10 || Number(prod) <= -(10 ** 10)){
               display.textContent = `e${stack[1]}`;
-              stack[0] = '';
-              stack[1] = '0';
+              error = true;
               return;
             }
             afterCalc = true;
@@ -268,8 +269,7 @@ export class AppComponent implements AfterViewInit {
             //0で割られた場合の処理
             if(Number(stack[1]) === 0){
               display.textContent = 'error';
-              stack[0] = '';
-              stack[1] = '0';
+              error = true;
               return;
             }
             //浮動小数点誤差と指数表記を回避
@@ -298,8 +298,7 @@ export class AppComponent implements AfterViewInit {
             //表示できないほど大きい数の場合はeを表示
             if(Number(quot) >= 10 ** 10 || Number(quot) <= -(10 ** 10)){
               display.textContent = `e${stack[1]}`;
-              stack[0] = '';
-              stack[1] = '0';
+              error = true;
               return;
             } 
             afterCalc = true;
@@ -313,11 +312,15 @@ export class AppComponent implements AfterViewInit {
     //数字をクリックした時に表示される数字を追加
     buttons.forEach((btn: HTMLButtonElement) => {
       btn.addEventListener('click', () => {
+        //エラーが発生している場合入力を受け付けない
+        if(error === true){
+          return;
+        }
         if(operator !== ''){            //演算子が入力されている場合
           //calc後の数値入力を初期化
           if(afterCalc === true){
             stack[0] = '';
-            stack[1] = '';
+            stack[1] = '0';
             stack[2] = '';
             operator = '';
             afterCalc = false;
@@ -336,7 +339,7 @@ export class AppComponent implements AfterViewInit {
           //calc後の数値入力を初期化
           if(afterCalc === true){
             stack[0] = '';
-            stack[1] = '';
+            stack[1] = '0';
             stack[2] = '';
             operator = '';
             afterCalc = false;
@@ -352,15 +355,21 @@ export class AppComponent implements AfterViewInit {
           stack[1] += btn.value as string;
           display.textContent = stack[1];
         }
+        console.log(`stack[0]: ${stack[0]} stack[1]: ${stack[1]} 
+          stack[2]: ${stack[2]} operator: ${operator} afterCalc: ${afterCalc}`);
       });
     });
 
     //小数点をクリックした時に小数点を入力
     dot.addEventListener('click', () => {
+      //エラーが発生している場合入力を受け付けない
+      if(error === true){
+        return;
+      }
       //calc後の数値入力を初期化
       if(afterCalc === true){
         stack[0] = '';
-        stack[1] = '';
+        stack[1] = '0';
         stack[2] = '';
         operator = '';
         afterCalc = false;
@@ -382,6 +391,10 @@ export class AppComponent implements AfterViewInit {
     //演算子の処理
     operators.forEach((op: HTMLButtonElement) => {
       op.addEventListener('click', () => {
+        //エラーが発生している場合入力を受け付けない
+        if(error === true){
+          return;
+        }
         if(stack[0] === ''){
           operator = op.value as string;
           stack[0] = stack[1];
@@ -400,21 +413,31 @@ export class AppComponent implements AfterViewInit {
           stack[1] = '';
           afterCalc = false;
         }
+        console.log(`stack[0]: ${stack[0]} stack[1]: ${stack[1]} 
+          stack[2]: ${stack[2]} operator: ${operator} afterCalc: ${afterCalc}`);
       });
     });
 
     //=をクリックした時に演算子によって計算を行う
     equal.addEventListener('click', () => {
+      //エラーが発生している場合入力を受け付けない
+      if(error === true){
+        return;
+      }
       calc();
     });
   
     //CEをクリックした時にスタックの1番目を初期化
     clearEntry.addEventListener('click', () => {
-    if(afterCalc === true){
-      return;
-    }else if(afterCalc === false){
-        stack[1] = '0';
-        display.textContent = stack[1];
+      //エラーが発生している場合入力を受け付けない
+      if(error === true){
+        return;
+      }
+      if(afterCalc === true){
+        return;
+      }else if(afterCalc === false){
+          stack[1] = '0';
+          display.textContent = stack[1];
       }
     });
     
@@ -424,11 +447,17 @@ export class AppComponent implements AfterViewInit {
       stack[1] = '0';
       stack[2] = '';
       operator = '';
+      afterCalc = false;
+      error = false;
       display.textContent = stack[1];
     });
 
     //±をクリックした時に符号を反転
     plusMinus.addEventListener('click', () => {
+      //エラーが発生している場合入力を受け付けない
+      if(error === true){
+        return;
+      }
       stack[1] = (Number(stack[1]) * -1).toFixed(13).toString();
       //小数点以下の末尾の0を削除
       for(let i = 0; i < 13; i++){
@@ -445,12 +474,13 @@ export class AppComponent implements AfterViewInit {
 
     //平方根をクリックした時に平方根を入力
     squareRoot.addEventListener('click', () => {
+      //エラーが発生している場合入力を受け付けない
+      if(error === true){
+        return;
+      }
       if(stack[1].includes('-')){
         display.textContent = 'error';
-        stack[0] = '';
-        stack[1] = '0';
-        stack[2] = '';
-        operator = '';
+        error = true;
         return;
       }
       const ans = Math.sqrt(Number(stack[1])).toString();
@@ -461,6 +491,10 @@ export class AppComponent implements AfterViewInit {
 
     //パーセントをクリックした時にパーセントを入力
     persent.addEventListener('click', () => {
+      //エラーが発生している場合入力を受け付けない
+      if(error === true){
+        return;
+      }
       if(afterCalc === true){
         return;
       }
