@@ -314,15 +314,16 @@ export class AppComponent implements AfterViewInit {
     buttons.forEach((btn: HTMLButtonElement) => {
       btn.addEventListener('click', () => {
         if(operator !== ''){            //演算子が入力されている場合
-          if(stack[1] === '0' && !stack[1].includes('.')){         //ディスプレイが0の時は消してから数字を入力、小数点が入力されている場合は消さない
-            stack[1] = '';
-          }
+          //calc後の数値入力を初期化
           if(afterCalc === true){
             stack[0] = '';
             stack[1] = '';
             stack[2] = '';
             operator = '';
             afterCalc = false;
+          }
+          if(stack[1] === '0' && !stack[1].includes('.')){         //ディスプレイが0の時は消してから数字を入力、小数点が入力されている場合は消さない
+            stack[1] = '';
           }
           if(stack[1] !=null && stack[1].length === 10 && stack[1].includes('-') === false){
             return;
@@ -332,15 +333,16 @@ export class AppComponent implements AfterViewInit {
           stack[1] += btn.value as string;
           display.textContent = stack[1];
         }else{                          //演算子が入力されていない場合
-          if(stack[1] === '0' && !stack[1].includes('.')){
-            stack[1] = '';
-          }
+          //calc後の数値入力を初期化
           if(afterCalc === true){
             stack[0] = '';
             stack[1] = '';
             stack[2] = '';
             operator = '';
             afterCalc = false;
+          }
+          if(stack[1] === '0' && !stack[1].includes('.')){
+            stack[1] = '';
           }
           if(stack[1] !=null && stack[1].length === 10 && stack[1].includes('-') === false){
             return;
@@ -355,6 +357,14 @@ export class AppComponent implements AfterViewInit {
 
     //小数点をクリックした時に小数点を入力
     dot.addEventListener('click', () => {
+      //calc後の数値入力を初期化
+      if(afterCalc === true){
+        stack[0] = '';
+        stack[1] = '';
+        stack[2] = '';
+        operator = '';
+        afterCalc = false;
+      }
       if(stack[1] === ''){
         stack[1] = '0';
       }
@@ -446,6 +456,7 @@ export class AppComponent implements AfterViewInit {
       const ans = Math.sqrt(Number(stack[1])).toString();
       stack[1] = ans.slice(0, 10);
       display.textContent = stack[1];
+      afterCalc = true;
     });
 
     //パーセントをクリックした時にパーセントを入力
