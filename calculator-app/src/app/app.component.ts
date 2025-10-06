@@ -278,8 +278,12 @@ export class AppComponent implements AfterViewInit {
   
     //CEをクリックした時にスタックの1番目を初期化
     clearEntry.addEventListener('click', () => {
-      stack[1] = '0';
-      display.textContent = stack[1];
+    if(afterCalc === true){
+      return;
+    }else if(afterCalc === false){
+        stack[1] = '0';
+        display.textContent = stack[1];
+      }
     });
     
     //Cをクリックした時にスタックを初期化
