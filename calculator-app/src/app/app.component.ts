@@ -101,7 +101,7 @@ export class AppComponent implements AfterViewInit {
             break;
           case '/':
             //0で割られた場合の処理
-            if(Number(stack[1]) === 0){
+            if(Number(stack[0]) === 0){
               display.textContent = 'error';
               stack[0] = '';
               stack[1] = '0';
