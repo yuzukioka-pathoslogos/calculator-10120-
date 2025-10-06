@@ -100,6 +100,13 @@ export class AppComponent implements AfterViewInit {
             afterCalc = true;
             break;
           case '/':
+            //0で割られた場合の処理
+            if(Number(stack[1]) === 0){
+              display.textContent = 'error';
+              stack[0] = '';
+              stack[1] = '0';
+              return;
+            }
             //連続計算対応のための処理
             stack[2] = stack[0];
             stack[1] = (1 / Number(stack[0])).toFixed(13).toString();
@@ -251,19 +258,19 @@ export class AppComponent implements AfterViewInit {
             afterCalc = true;
             break;
           case '/':
-            //連続計算対応のための処理
-            if(afterCalc === true){
-              stack[0] = stack[1];
-              stack[1] = stack[2];
-            }else{
-              stack[2] = stack[1];
-            }
             //0で割られた場合の処理
             if(Number(stack[1]) === 0){
               display.textContent = 'error';
               stack[0] = '';
               stack[1] = '0';
               return;
+            }
+            //連続計算対応のための処理
+            if(afterCalc === true){
+              stack[0] = stack[1];
+              stack[1] = stack[2];
+            }else{
+              stack[2] = stack[1];
             }
             //浮動小数点誤差と指数表記を回避
             const quot = (Number(stack[0]) / Number(stack[1])).toFixed(13).toString();
@@ -412,7 +419,17 @@ export class AppComponent implements AfterViewInit {
 
     //±をクリックした時に符号を反転
     plusMinus.addEventListener('click', () => {
-      stack[1] = (Number(stack[1]) * -1).toString();
+      stack[1] = (Number(stack[1]) * -1).toFixed(13).toString();
+      //小数点以下の末尾の0を削除
+      for(let i = 0; i < 13; i++){
+        if(stack[1].includes('.') && stack[1].endsWith('0')){
+          stack[1] = stack[1].slice(0, -1);
+        }
+        if(stack[1].endsWith('.')){
+          stack[1] = stack[1].slice(0, -1);
+          break;
+        }
+      }
       display.textContent = stack[1];
     });
 
