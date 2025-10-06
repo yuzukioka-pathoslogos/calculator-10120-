@@ -28,7 +28,7 @@ export class AppComponent implements AfterViewInit {
     const squareRoot = document.querySelector('.button-sqrt') as HTMLButtonElement;
     const persent = document.querySelector('.button-percent') as HTMLButtonElement;
 
-    //基本的に式の左辺がstack[0]、右辺がstack[1]、連続計算対応のための一時保管場所としてstack[3]を用意
+    //基本的に式の左辺がstack[0]、右辺がstack[1]、連続計算対応のための一時保管場所としてstack[2]を用意
     const stack: string[] = ['', '0', ''];
     let afterCalc: boolean = false;
     display.textContent = stack[1];
@@ -38,7 +38,7 @@ export class AppComponent implements AfterViewInit {
     const calc = function(){
       switch(operator){
         case '+':
-          stack[3] = stack[1];
+          stack[2] = stack[1];
           //小数点以下13桁まで丸めることで浮動小数点誤差を防ぐ
           const sum = (Number(stack[0]) + Number(stack[1])).toPrecision(13).toString();
           if(sum.includes('-')){
@@ -48,7 +48,7 @@ export class AppComponent implements AfterViewInit {
           }
           //連続計算対応のためにstack[0]にcalc前のstack[1]を代入
           if(afterCalc === false){
-            stack[0] = stack[3];
+            stack[0] = stack[2];
           }
           //小数点以下の末尾の0を削除
           for(let i = 0; i < 10; i++){
@@ -73,9 +73,9 @@ export class AppComponent implements AfterViewInit {
           //連続計算対応
           if(afterCalc === true){
             stack[0] = stack[1];
-            stack[1] = stack[3];
+            stack[1] = stack[2];
           }else{
-            stack[3] = stack[1];
+            stack[2] = stack[1];
           }
           const diff = (Number(stack[0]) - Number(stack[1])).toPrecision(13).toString();
           if(diff.includes('-')){
@@ -130,9 +130,9 @@ export class AppComponent implements AfterViewInit {
           //連続計算対応
           if(afterCalc === true){
             stack[0] = stack[1];
-            stack[1] = stack[3];
+            stack[1] = stack[2];
           }else{
-            stack[3] = stack[1];
+            stack[2] = stack[1];
           }
           if(Number(stack[1]) === 0){
             display.textContent = 'error';
@@ -172,17 +172,20 @@ export class AppComponent implements AfterViewInit {
     //数字をクリックした時に表示される数字を追加
     buttons.forEach((btn: HTMLButtonElement) => {
       btn.addEventListener('click', () => {
-        if(operator !== null){          //演算子が入力されている場合
+        if(operator !== ''){          //演算子が入力されている場合
           if(stack[1] === '0'){         //ディスプレイが0の時は消してから数字を入力
             stack[1] = '';
           }
           if(afterCalc === true){
             stack[0] = '';
             stack[1] = '';
+            stack[2] = '';
             operator = '';
             afterCalc = false;
           }
-          if(stack[1] !=null && stack[1].length === 10){
+          if(stack[1] !=null && stack[1].length === 10 && stack[1].includes('-') === false){
+            return;
+          }else if(stack[1] !=null && stack[1].length === 11 && stack[1].includes('-') === true){
             return;
           }
           stack[1] += btn.value as string;
@@ -194,9 +197,13 @@ export class AppComponent implements AfterViewInit {
           if(afterCalc === true){
             stack[0] = '';
             stack[1] = '';
+            stack[2] = '';
+            operator = '';
             afterCalc = false;
           }
-          if(stack[1] !=null && stack[1].length === 10){
+          if(stack[1] !=null && stack[1].length === 10 && stack[1].includes('-') === false){
+            return;
+          }else if(stack[1] !=null && stack[1].length === 11 && stack[1].includes('-') === true){
             return;
           }
           stack[1] += btn.value as string;
@@ -260,6 +267,7 @@ export class AppComponent implements AfterViewInit {
     clear.addEventListener('click', () => {
       stack[0] = '';
       stack[1] = '0';
+      stack[2] = '';
       operator = '';
       display.textContent = stack[1];
     });
@@ -276,6 +284,8 @@ export class AppComponent implements AfterViewInit {
         display.textContent = 'error';
         stack[0] = '';
         stack[1] = '0';
+        stack[2] = '';
+        operator = '';
         return;
       }
       const ans = Math.sqrt(Number(stack[1])).toString();
