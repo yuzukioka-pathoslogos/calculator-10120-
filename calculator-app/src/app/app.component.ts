@@ -39,8 +39,9 @@ export class AppComponent implements AfterViewInit {
       switch(operator){
         case '+':
           stack[2] = stack[1];
-          //小数点以下13桁まで丸めることで浮動小数点誤差を防ぐ
-          const sum = (Number(stack[0]) + Number(stack[1])).toPrecision(13).toString();
+          //浮動小数点誤差と指数表記を回避
+          const sum = (Number(stack[0]) + Number(stack[1])).toFixed(13).toString();
+          //符号が-の場合は11桁まで、+の場合は10桁までを表示
           if(sum.includes('-')){
             stack[1] = sum.slice(0, 11);
           }else{
@@ -60,6 +61,10 @@ export class AppComponent implements AfterViewInit {
               break;
             }
           }
+          //表示できないほど小さい数の場合は0を表示
+          if(Number(sum) < 10 ** -8 && Number(sum) > -(10 ** -8)){
+            stack[1] = '0';
+          }
           display.textContent = stack[1];
           if(Number(sum) > 9999999999 || Number(sum) < -9999999999){
             display.textContent = `e${stack[1]}`;
@@ -77,7 +82,7 @@ export class AppComponent implements AfterViewInit {
           }else{
             stack[2] = stack[1];
           }
-          const diff = (Number(stack[0]) - Number(stack[1])).toPrecision(13).toString();
+          const diff = (Number(stack[0]) - Number(stack[1])).toFixed(13).toString();
           if(diff.includes('-')){
             stack[1] = diff.slice(0, 11);
           }else{
@@ -92,6 +97,9 @@ export class AppComponent implements AfterViewInit {
               break;
             }
           }
+          if(Number(diff) < 10 ** -8 && Number(diff) > -(10 ** -8)){
+            stack[1] = '0';
+          }
           display.textContent = stack[1];
           if(Number(diff) > 9999999999 || Number(diff) < -9999999999){
             display.textContent = `e${stack[1]}`;
@@ -102,7 +110,7 @@ export class AppComponent implements AfterViewInit {
           afterCalc = true;
           break;
         case '*':
-          const prod = (Number(stack[0]) * Number(stack[1])).toPrecision(13).toString();
+          const prod = (Number(stack[0]) * Number(stack[1])).toFixed(13).toString();
           if(prod.includes('-')){
             stack[1] = prod.slice(0, 11);
           }else{
@@ -116,6 +124,9 @@ export class AppComponent implements AfterViewInit {
               stack[1] = stack[1].slice(0, -1);
               break;
             }
+          }
+          if(Number(prod) < 10 ** -9 && Number(prod) > -(10 ** -9)){
+            stack[1] = '0';
           }
           display.textContent = stack[1];
           if(Number(prod) > 9999999999 || Number(prod) < -9999999999){
@@ -140,7 +151,8 @@ export class AppComponent implements AfterViewInit {
             stack[1] = '0';
             return;
           }
-          const quot = (Number(stack[0]) / Number(stack[1])).toPrecision(13).toString();
+          const quot = (Number(stack[0]) / Number(stack[1])).toFixed(13).toString();
+        
           if(quot.includes('-')){
             stack[1] = quot.slice(0, 11);
           }else{
@@ -154,6 +166,9 @@ export class AppComponent implements AfterViewInit {
               stack[1] = stack[1].slice(0, -1);
               break;
             }
+          }
+          if(Number(quot) < 10 ** -8 && Number(quot) > -(10 ** -8)){
+            stack[1] = '0';
           }
           display.textContent = stack[1];
           if(Number(quot) > 9999999999 || Number(quot) < -9999999999){
@@ -235,7 +250,7 @@ export class AppComponent implements AfterViewInit {
           operator = op.value as string;
           stack[0] = stack[1];
           stack[1] = '';
-        }else if(stack[0] !== '' && stack[1] === ''){
+        }else if(stack[0] !== '' && stack[1] === ''){     //演算子の入力を訂正したいとき
           operator = op.value as string;
         }else if(stack[0] !== '' && stack[1] !== '' && afterCalc === false){
           calc();
@@ -291,22 +306,29 @@ export class AppComponent implements AfterViewInit {
       const ans = Math.sqrt(Number(stack[1])).toString();
       stack[1] = ans.slice(0, 10);
       display.textContent = stack[1];
-      afterCalc = true;
     });
 
     //パーセントをクリックした時にパーセントを入力
     persent.addEventListener('click', () => {
+      if(afterCalc === true){
+        return;
+      }
       if(operator === '*' || operator === '/'){
         stack[1] = (Number(stack[1]) / 100).toString();
         console.log(`stack[1]: ${stack[1]} stack[0]: ${stack[0]} operator: ${operator}`);
         calc();
-      }else if(operator === '+' || operator === '-'){
+      }else if(operator === '+'){
+        stack[1] = (Number(stack[0]) * Number(stack[1]) / 100).toString();
+        const stack0: string = stack[0];
+        calc();
+        stack[0] = stack0;      //連続計算を見本の電卓の仕様に合わせる
+      }else if(operator === '-'){
         stack[1] = (Number(stack[0]) * Number(stack[1]) / 100).toString();
         calc();
+        stack[2] = stack[0];    //連続計算を見本の電卓の仕様に合わせる
       }else{
         return;
       }
     });
-
   }
 }
