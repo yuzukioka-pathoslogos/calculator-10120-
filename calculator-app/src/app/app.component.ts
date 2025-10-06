@@ -36,6 +36,10 @@ export class AppComponent implements AfterViewInit {
     let operator: string = '';
     //計算を行う関数
     const calc = function(){
+      //stack[0]とstack[1]が空の場合は計算を行わない
+      if(stack[0] === '' || stack[1] === ''){
+        return;
+      }
       switch(operator){
         case '+':
           stack[2] = stack[1];
