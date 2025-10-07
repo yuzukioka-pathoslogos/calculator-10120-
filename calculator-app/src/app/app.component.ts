@@ -143,15 +143,21 @@ export class AppComponent implements AfterViewInit {
             return;
         }
       }
-      //表示できないほど小さい数の場合は0を表示
-      if(Number(stack[1]) < 10 ** -8 && Number(stack[1]) > -(10 ** -8)){
-        stack[1] = '0';
-      }
       //表示できないほど大きい数の場合はeを表示
       if(Number(stack[1]) >= 10 ** 10 || Number(stack[1]) <= -(10 ** 10)){
+        //符号が-の場合は11桁まで、+の場合は10桁までを表示
+        if(stack[1].includes('-')){
+          stack[1] = stack[1].slice(0, 11);
+        }else{
+          stack[1] = stack[1].slice(0, 10);
+        }
         display.textContent = `e${stack[1]}`;
         error = true;
         return;
+      }
+      //表示できないほど小さい数の場合は0を表示
+      if(Number(stack[1]) < 10 ** -8 && Number(stack[1]) > -(10 ** -8)){
+        stack[1] = '0';
       }
       //符号が-の場合は11桁まで、+の場合は10桁までを表示
       if(stack[1].includes('-')){
@@ -371,6 +377,7 @@ export class AppComponent implements AfterViewInit {
         stack[1] = ans.slice(0, 10);
         display.textContent = stack[1];
         afterSqrt = true;
+        afterCalc = false;
       }
       console.log(`stack[0]: ${stack[0]} stack[1]: ${stack[1]} stack[2]: ${stack[2]} 
         operator: ${operator} afterCalc: ${afterCalc} error: ${error} afterSqrt: ${afterSqrt}`);
@@ -382,23 +389,47 @@ export class AppComponent implements AfterViewInit {
       if(error === true){
         return;
       }
-      if(afterCalc === true){
-        return;
-      }
-      if(operator === '*' || operator === '/'){
-        stack[1] = (Number(stack[1]) / 100).toString();
-        calc();
-      }else if(operator === '+'){
-        stack[1] = (Number(stack[0]) * Number(stack[1]) / 100).toString();
-        const stack0: string = stack[0];
-        calc();
-        stack[2] = stack0;      //連続計算を見本の電卓の仕様に合わせる
-      }else if(operator === '-'){
-        stack[1] = (Number(stack[0]) * Number(stack[1]) / 100).toString();
-        calc();
-        stack[2] = stack[0];    //連続計算を見本の電卓の仕様に合わせる
-      }else{
-        return;
+      if(afterCalc === false){
+        switch(operator){
+          case '+':
+            stack[1] = (Number(stack[0]) * Number(stack[1]) / 100).toString();
+            calc();
+            stack[2] = stack[0];       //連続計算を見本の電卓の仕様に合わせる
+            break;
+          case '-':
+            const stackMinus = stack[0];
+            stack[1] = (Number(stack[0]) * Number(stack[1]) / 100).toString();
+            calc();
+            stack[2] = stackMinus;     //連続計算を見本の電卓の仕様に合わせる
+            break;
+          case '*':
+            stack[1] = (Number(stack[1]) / 100).toString();
+            calc();
+            break;
+          case '/':
+            const stackDivide = stack[1];
+            stack[1] = (Number(stack[1]) / 100).toString();
+            calc();
+            stack[2] = stackDivide;     //連続計算を見本の電卓の仕様に合わせる
+            break;
+          default:
+          return;
+        }
+      }else if(afterCalc === true){
+        switch(operator){
+          case '*':
+            stack[1] = (Number(stack[1]) / 100).toString();
+            calc();
+            break;
+          case '/':
+            const stackDivide = stack[2];
+            stack[2] = (Number(stack[2]) / 100).toString();
+            calc();
+            stack[2] = stackDivide;     //連続計算を見本の電卓の仕様に合わせる
+            break;
+          default:
+            return;
+        }
       }
       console.log(`stack[0]: ${stack[0]} stack[1]: ${stack[1]} stack[2]: ${stack[2]} 
         operator: ${operator} afterCalc: ${afterCalc} error: ${error} afterSqrt: ${afterSqrt}`);
