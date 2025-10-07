@@ -31,6 +31,7 @@ export class AppComponent implements AfterViewInit {
     //基本的に式の左辺がstack[0]、右辺がstack[1]、連続計算対応のための一時保管場所としてstack[2]を用意
     const stack: string[] = ['', '0', ''];
     let afterCalc: boolean = false;
+    let afterSqrt: boolean = false;
     let error: boolean = false;
     display.textContent = stack[1];
     // 最後に押した演算子を格納
@@ -324,6 +325,7 @@ export class AppComponent implements AfterViewInit {
             stack[2] = '';
             operator = '';
             afterCalc = false;
+            afterSqrt = false;
           }
           if(stack[1] === '0' && !stack[1].includes('.')){         //ディスプレイが0の時は消してから数字を入力、小数点が入力されている場合は消さない
             stack[1] = '';
@@ -337,12 +339,13 @@ export class AppComponent implements AfterViewInit {
           display.textContent = stack[1];
         }else{                          //演算子が入力されていない場合
           //calc後の数値入力を初期化
-          if(afterCalc === true){
+          if(afterCalc === true || afterSqrt === true){
             stack[0] = '';
             stack[1] = '0';
             stack[2] = '';
             operator = '';
             afterCalc = false;
+            afterSqrt = false;
           }
           if(stack[1] === '0' && !stack[1].includes('.')){
             stack[1] = '';
@@ -367,12 +370,13 @@ export class AppComponent implements AfterViewInit {
         return;
       }
       //calc後の数値入力を初期化
-      if(afterCalc === true){
+      if(afterCalc === true || afterSqrt === true){
         stack[0] = '';
         stack[1] = '0';
         stack[2] = '';
         operator = '';
         afterCalc = false;
+        afterSqrt = false;
       }
       if(stack[1] === ''){
         stack[1] = '0';
@@ -448,6 +452,7 @@ export class AppComponent implements AfterViewInit {
       stack[2] = '';
       operator = '';
       afterCalc = false;
+      afterSqrt = false;
       error = false;
       display.textContent = stack[1];
     });
@@ -472,7 +477,7 @@ export class AppComponent implements AfterViewInit {
       display.textContent = stack[1];
     });
 
-    //平方根をクリックした時に平方根を入力
+    //平方根をクリックした時の処理
     squareRoot.addEventListener('click', () => {
       //エラーが発生している場合入力を受け付けない
       if(error === true){
@@ -486,10 +491,10 @@ export class AppComponent implements AfterViewInit {
       const ans = Math.sqrt(Number(stack[1])).toString();
       stack[1] = ans.slice(0, 10);
       display.textContent = stack[1];
-      afterCalc = true;
+      afterSqrt = true;
     });
 
-    //パーセントをクリックした時にパーセントを入力
+    //パーセントをクリックした時の処理
     persent.addEventListener('click', () => {
       //エラーが発生している場合入力を受け付けない
       if(error === true){
