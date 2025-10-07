@@ -145,7 +145,7 @@ export class AppComponent implements AfterViewInit {
         }
       }
       //calc後に演算子を入力してすぐにcalcを行う場合の例外処理
-      else if(stack[0] !== '' && stack[1] === '' && stack[2] !== '' && operator !== ''){
+      else if(stack[0] !== '' && stack[1] === '' && stack[2] !== '' && operator !== '' && afterCalc === false){
         switch(operator){
           case '+':
             //浮動小数点誤差と指数表記を回避
@@ -176,6 +176,42 @@ export class AppComponent implements AfterViewInit {
             stack[1] = (1 / Number(stack[0])).toFixed(13);
             //連続計算対応のための処理
             stack[2] = stack[0];
+            break;
+          default:
+            return;
+        }
+      }
+      //stack[2]が値を持つときに演算子を入力してすぐにcalcを行う場合の例外処理
+      else if(stack[0] !== '' && stack[1] === '' && stack[2] !== '' && operator !== '' && afterCalc === true){
+        switch(operator){
+          case '+':
+            //連続計算対応のための処理
+            stack[2] = stack[0];
+            stack[1] = stack[0];
+            break;
+          case '-':
+            //連続計算対応のための処理
+            stack[2] = stack[0];
+            //浮動小数点誤差と指数表記を回避
+            stack[1] = (Number(stack[0]) * -1).toFixed(13);
+            break;
+          case '*':
+            //連続計算対応のための処理
+            stack[2] = stack[0];
+            //浮動小数点誤差と指数表記を回避
+            stack[1] = (Number(stack[0]) ** 2).toFixed(13);
+            break;
+          case '/':
+            //連続計算対応のための処理
+            stack[2] = stack[0];
+            //0で割られた場合の処理
+            if(Number(stack[0]) === 0){
+              display.textContent = 'error';
+              error = true;
+              return;
+            }
+            //浮動小数点誤差と指数表記を回避
+            stack[1] = (1 / Number(stack[0])).toFixed(13);        
             break;
           default:
             return;
@@ -309,13 +345,15 @@ export class AppComponent implements AfterViewInit {
           operator = op.value as string;
           stack[0] = stack[1];
           stack[1] = '';
+          afterCalc = false;
         }else if(stack[0] !== '' && stack[1] === ''){     //演算子の入力を訂正したいとき
           operator = op.value as string;
         }else if(stack[0] !== '' && stack[1] !== '' && afterCalc === false){
+          stack[2] = '';
           calc();
           stack[0] = stack[1];
           stack[1] = '';
-          afterCalc = false;
+          // afterCalc = false;
           operator = op.value as string;
         }else if(stack[0] !== '' && stack[1] !== '' && afterCalc === true){
           operator = op.value as string;
