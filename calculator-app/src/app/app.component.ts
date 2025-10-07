@@ -43,7 +43,7 @@ export class AppComponent implements AfterViewInit {
         return;
       }
       //演算子の後に＝を押した場合の処理
-      if(stack[0] !== '' && stack[1] === '' && operator !== '' && afterCalc === false){
+      if(stack[0] !== '' && stack[1] === '' && stack[2] === '' && operator !== '' && afterCalc === false){
         switch(operator){
           case '+':
             //連続計算対応のための処理
@@ -78,7 +78,7 @@ export class AppComponent implements AfterViewInit {
             return;
         }
       }
-      else if(stack[0] !== '' && stack[1] !== '' && operator !== '' && afterCalc === false){
+      else if(stack[0] !== '' && stack[1] !== '' && stack[2] === '' && operator !== '' && afterCalc === false){
         switch(operator){
           case '+':
             //連続計算対応のための処理
@@ -115,7 +115,7 @@ export class AppComponent implements AfterViewInit {
         }
       }
       //連続計算対応のための処理
-      else if(stack[1] !== '' && stack[2] !== '' && operator !== '' && afterCalc === true){
+      else if(stack[1] !== '' && stack[2] !== '' && operator !== ''){
         switch(operator){
           case '+':
             //浮動小数点誤差と指数表記を回避
@@ -270,12 +270,14 @@ export class AppComponent implements AfterViewInit {
           stack[1] = '';
           afterCalc = false;
         }
+        //演算子を入力したときは連続計算処理を回避するためにstack[2]を初期化
+        stack[2] = '';
         console.log(`stack[0]: ${stack[0]} stack[1]: ${stack[1]} stack[2]: ${stack[2]} 
           operator: ${operator} afterCalc: ${afterCalc} error: ${error} afterSqrt: ${afterSqrt}`);
       });
     });
 
-    //=をクリックした時に演算子によって計算を行う
+    //=をクリックした時の処理
     equal.addEventListener('click', () => {
       //エラーが発生している場合入力を受け付けない
       if(error === true){
@@ -294,9 +296,9 @@ export class AppComponent implements AfterViewInit {
       }
       if(afterCalc === true){
         return;
-      }else if(afterCalc === false){
-          stack[1] = '0';
-          display.textContent = stack[1];
+      }else{
+        stack[1] = '0';
+        display.textContent = stack[1];
       }
       console.log(`stack[0]: ${stack[0]} stack[1]: ${stack[1]} stack[2]: ${stack[2]} 
         operator: ${operator} afterCalc: ${afterCalc} error: ${error} afterSqrt: ${afterSqrt}`);
@@ -335,7 +337,7 @@ export class AppComponent implements AfterViewInit {
           }
         }
         display.textContent = stack[1];
-      }else if(stack[0] !== '' && stack[1] === ''){
+      }else if(stack[0] !== '' && stack[1] === ''){   //演算子が入力されている場合
         stack[0] = (Number(stack[0]) * -1).toFixed(13).toString();
         //小数点以下の末尾の0を削除
         for(let i = 0; i < 13; i++){
@@ -348,8 +350,6 @@ export class AppComponent implements AfterViewInit {
           }
         }
         display.textContent = stack[0];
-      }else{
-        return;
       }
       console.log(`stack[0]: ${stack[0]} stack[1]: ${stack[1]} stack[2]: ${stack[2]} 
         operator: ${operator} afterCalc: ${afterCalc} error: ${error} afterSqrt: ${afterSqrt}`);
