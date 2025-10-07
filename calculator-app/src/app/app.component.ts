@@ -362,11 +362,7 @@ export class AppComponent implements AfterViewInit {
       }
       //calc後の数値入力を初期化
       if(afterCalc === true || afterSqrt === true){
-        stack[0] = '';
         stack[1] = '0';
-        stack[2] = '';
-        operator = '';
-        afterCalc = false;
         afterSqrt = false;
       }
       if(stack[1] === ''){
@@ -454,18 +450,35 @@ export class AppComponent implements AfterViewInit {
       if(error === true){
         return;
       }
-      stack[1] = (Number(stack[1]) * -1).toFixed(13).toString();
-      //小数点以下の末尾の0を削除
-      for(let i = 0; i < 13; i++){
-        if(stack[1].includes('.') && stack[1].endsWith('0')){
-          stack[1] = stack[1].slice(0, -1);
+      if(stack[1] !== ''){
+        stack[1] = (Number(stack[1]) * -1).toFixed(13).toString();
+        //小数点以下の末尾の0と小数点を削除
+        for(let i = 0; i < 13; i++){
+          if(stack[1].includes('.') && stack[1].endsWith('0')){
+            stack[1] = stack[1].slice(0, -1);
+          }
+          if(stack[1].endsWith('.')){
+            stack[1] = stack[1].slice(0, -1);
+            break;
+          }
         }
-        if(stack[1].endsWith('.')){
-          stack[1] = stack[1].slice(0, -1);
-          break;
+        display.textContent = stack[1];
+      }else if(stack[0] !== '' && stack[1] === ''){
+        stack[0] = (Number(stack[0]) * -1).toFixed(13).toString();
+        //小数点以下の末尾の0を削除
+        for(let i = 0; i < 13; i++){
+          if(stack[0].includes('.') && stack[0].endsWith('0')){
+            stack[0] = stack[0].slice(0, -1);
+          }
+          if(stack[0].endsWith('.')){
+            stack[0] = stack[0].slice(0, -1);
+            break;
+          }
         }
+        display.textContent = stack[0];
+      }else{
+        return;
       }
-      display.textContent = stack[1];
     });
 
     //平方根をクリックした時の処理
@@ -474,15 +487,17 @@ export class AppComponent implements AfterViewInit {
       if(error === true){
         return;
       }
-      if(stack[1].includes('-')){
-        display.textContent = 'error';
-        error = true;
-        return;
+      if(stack[1] !== ''){
+        if(stack[1].includes('-')){
+          display.textContent = 'error';
+          error = true;
+          return;
+        }
+        const ans = Math.sqrt(Number(stack[1])).toString();
+        stack[1] = ans.slice(0, 10);
+        display.textContent = stack[1];
+        afterSqrt = true;
       }
-      const ans = Math.sqrt(Number(stack[1])).toString();
-      stack[1] = ans.slice(0, 10);
-      display.textContent = stack[1];
-      afterSqrt = true;
     });
 
     //パーセントをクリックした時の処理
