@@ -38,235 +38,69 @@ export class AppComponent implements AfterViewInit {
     let operator: string = '';
     //計算を行う関数
     const calc = function(){
-      console.log(`stack[0]: ${stack[0]} stack[1]: ${stack[1]} 
-        stack[2]: ${stack[2]} operator: ${operator} afterCalc: ${afterCalc}`);
       //エラーが発生している場合は計算を行わない
       if(error === true){
         return;
       }
       //演算子の後に＝を押した場合の処理
-      if(stack[0] !== '' && stack[1] === '' && operator !== ''){
+      if(stack[0] !== '' && stack[1] === '' && operator !== '' && afterCalc === false){
         switch(operator){
           case '+':
+            //連続計算対応のための処理
+            stack[2] = stack[0];
             stack[1] = stack[0];
-            display.textContent = stack[1];
-            afterCalc = true;
             break;
           case '-':
             //連続計算対応のための処理
             stack[2] = stack[0];
+            //浮動小数点誤差と指数表記を回避
             stack[1] = (Number(stack[0]) * -1).toFixed(13).toString();
-            //符号が-の場合は11桁まで、+の場合は10桁までを表示
-            if(stack[1].includes('-')){
-              stack[1] = stack[1].slice(0, 11);
-            }else{
-              stack[1] = stack[1].slice(0, 10);
-            }
-            //小数点以下の末尾の0を削除
-            for(let i = 0; i < 10; i++){
-              if(stack[1].includes('.') && stack[1].endsWith('0')){
-                stack[1] = stack[1].slice(0, -1);
-              }
-              if(stack[1].endsWith('.')){
-                stack[1] = stack[1].slice(0, -1);
-                break;
-              }
-            }
-            display.textContent = stack[1];
-            afterCalc = true;
             break;
           case '*':
+            //連続計算対応のための処理
+            stack[2] = stack[0];
+            //浮動小数点誤差と指数表記を回避
             stack[1] = (Number(stack[0]) ** 2).toFixed(13).toString();
-            //符号が-の場合は11桁まで、+の場合は10桁までを表示
-            if(stack[1].includes('-')){
-              stack[1] = stack[1].slice(0, 11);
-            }else{
-              stack[1] = stack[1].slice(0, 10);
-            }
-            //小数点以下の末尾の0を削除
-            for(let i = 0; i < 10; i++){
-              if(stack[1].includes('.') && stack[1].endsWith('0')){
-                stack[1] = stack[1].slice(0, -1);
-              }
-              if(stack[1].endsWith('.')){
-                stack[1] = stack[1].slice(0, -1);
-                break;
-              }
-            }
-            //表示できないほど小さい数の場合は0を表示
-            if(Number(stack[1]) < 10 ** -8 && Number(stack[1]) > -(10 ** -8)){
-              stack[1] = '0';
-            }
-            //表示できないほど大きい数の場合はeを表示
-            if(Number(stack[1]) >= 10 ** 10 || Number(stack[1]) <= -(10 ** 10)){
-              display.textContent = `e${stack[1]}`;
-              error = true;
-              return;
-            }
-            display.textContent = stack[1];
-            afterCalc = true;
             break;
           case '/':
+            //連続計算対応のための処理
+            stack[2] = stack[0];
             //0で割られた場合の処理
             if(Number(stack[0]) === 0){
               display.textContent = 'error';
               error = true;
               return;
             }
-            //連続計算対応のための処理
-            stack[2] = stack[0];
-            stack[1] = (1 / Number(stack[0])).toFixed(13).toString();
-             //符号が-の場合は11桁まで、+の場合は10桁までを表示
-             if(stack[1].includes('-')){
-              stack[1] = stack[1].slice(0, 11);
-            }else{
-              stack[1] = stack[1].slice(0, 10);
-            }
-            //小数点以下の末尾の0を削除
-            for(let i = 0; i < 10; i++){
-              if(stack[1].includes('.') && stack[1].endsWith('0')){
-                stack[1] = stack[1].slice(0, -1);
-              }
-              if(stack[1].endsWith('.')){
-                stack[1] = stack[1].slice(0, -1);
-                break;
-              }
-            }
-            //表示できないほど小さい数の場合は0を表示
-            if(Number(stack[1]) < 10 ** -8 && Number(stack[1]) > -(10 ** -8)){
-              stack[1] = '0';
-            }
-            //表示できないほど大きい数の場合はeを表示
-            if(Number(stack[1]) >= 10 ** 10 || Number(stack[1]) <= -(10 ** 10)){
-              display.textContent = `e${stack[1]}`;
-              error = true;
-              return;
-            }
-            display.textContent = stack[1];
-            afterCalc = true;
+            //浮動小数点誤差と指数表記を回避
+            stack[1] = (1 / Number(stack[0])).toFixed(13).toString();        
             break;
           default:
             return;
         }
-        return;
       }
-      if(stack[0] !== '' && stack[1] !== '' && operator !== ''){
+      else if(stack[0] !== '' && stack[1] !== '' && operator !== '' && afterCalc === false){
         switch(operator){
           case '+':
+            //連続計算対応のための処理
             stack[2] = stack[1];
             //浮動小数点誤差と指数表記を回避
-            const sum = (Number(stack[0]) + Number(stack[1])).toFixed(13).toString();
-            //符号が-の場合は11桁まで、+の場合は10桁までを表示
-            if(sum.includes('-')){
-              stack[1] = sum.slice(0, 11);
-            }else{
-              stack[1] = sum.slice(0, 10);
-            }
-            //連続計算対応のための処理
-            if(afterCalc === false){
-              stack[0] = stack[2];
-            }
-            //小数点以下の末尾の0を削除
-            for(let i = 0; i < 10; i++){
-              if(stack[1].includes('.') && stack[1].endsWith('0')){
-                stack[1] = stack[1].slice(0, -1);
-              }
-              if(stack[1].endsWith('.')){
-                stack[1] = stack[1].slice(0, -1);
-                break;
-              }
-            }
-            //表示できないほど小さい数の場合は0を表示
-            if(Number(sum) < 10 ** -8 && Number(sum) > -(10 ** -8)){
-              stack[1] = '0';
-            }
-            display.textContent = stack[1];
-            //表示できないほど大きい数の場合はeを表示
-            if(Number(sum) >= 10 ** 10 || Number(sum) <= -(10 ** 10)){
-              display.textContent = `e${stack[1]}`;
-              error = true;
-              return;
-            }
-            afterCalc = true;
+            stack[1] = (Number(stack[0]) + Number(stack[1])).toFixed(13).toString();
             break;
           case '-':
             //連続計算対応のための処理
-            if(afterCalc === true){
-              stack[0] = stack[1];
-              stack[1] = stack[2];
-            }else{
-              stack[2] = stack[1];
-            }
-            const diff = (Number(stack[0]) - Number(stack[1])).toFixed(13).toString();
-            //符号が-の場合は11桁まで、+の場合は10桁までを表示
-            if(diff.includes('-')){
-              stack[1] = diff.slice(0, 11);
-            }else{
-              stack[1] = diff.slice(0, 10);
-            }
-            //小数点以下の末尾の0を削除
-            for(let i = 0; i < 10; i++){
-              if(stack[1].includes('.') && stack[1].endsWith('0')){
-                stack[1] = stack[1].slice(0, -1);
-              }
-              if(stack[1].endsWith('.')){
-                stack[1] = stack[1].slice(0, -1);
-                break;
-              }
-            }
-            //表示できないほど小さい数の場合は0を表示
-            if(Number(diff) < 10 ** -8 && Number(diff) > -(10 ** -8)){
-              stack[1] = '0';
-            }
-            display.textContent = stack[1];
-            //表示できないほど大きい数の場合はeを表示
-            if(Number(diff) >= 10 ** 10 || Number(diff) <= -(10 ** 10)){
-              display.textContent = `e${stack[1]}`;
-              error = true;
-              return;
-            }
-            afterCalc = true;
+            stack[2] = stack[1];
+            //浮動小数点誤差と指数表記を回避
+            stack[1] = (Number(stack[0]) - Number(stack[1])).toFixed(13).toString();
             break;
           case '*':
+            //連続計算対応のための処理
+            stack[2] = stack[0];
             //浮動小数点誤差と指数表記を回避
-            const prod = (Number(stack[0]) * Number(stack[1])).toFixed(13).toString();
-            //符号が-の場合は11桁まで、+の場合は10桁までを表示
-            if(prod.includes('-')){
-              stack[1] = prod.slice(0, 11);
-            }else{
-              stack[1] = prod.slice(0, 10);
-            }
-            //小数点以下の末尾の0を削除
-            for(let i = 0; i < 10; i++){
-              if(stack[1].includes('.') && stack[1].endsWith('0')){
-                stack[1] = stack[1].slice(0, -1);
-              }
-              if(stack[1].endsWith('.')){
-                stack[1] = stack[1].slice(0, -1);
-                break;
-              }
-            }
-            //表示できないほど小さい数の場合は0を表示
-            if(Number(prod) < 10 ** -8 && Number(prod) > -(10 ** -8)){
-              stack[1] = '0';
-            }
-            display.textContent = stack[1];
-            //表示できないほど大きい数の場合はeを表示
-            if(Number(prod) >= 10 ** 10 || Number(prod) <= -(10 ** 10)){
-              display.textContent = `e${stack[1]}`;
-              error = true;
-              return;
-            }
-            afterCalc = true;
+            stack[1] = (Number(stack[0]) * Number(stack[1])).toFixed(13).toString();
             break;
           case '/':
             //連続計算対応のための処理
-            if(afterCalc === true){
-              stack[0] = stack[1];
-              stack[1] = stack[2];
-            }else{
-              stack[2] = stack[1];
-            } 
+            stack[2] = stack[1];
             //0で割られた場合の処理
             if(Number(stack[1]) === 0){
               display.textContent = 'error';
@@ -274,40 +108,69 @@ export class AppComponent implements AfterViewInit {
               return;
             }
             //浮動小数点誤差と指数表記を回避
-            const quot = (Number(stack[0]) / Number(stack[1])).toFixed(13).toString();
-            //符号が-の場合は11桁まで、+の場合は10桁までを表示
-            if(quot.includes('-')){
-              stack[1] = quot.slice(0, 11);
-            }else{
-              stack[1] = quot.slice(0, 10);
-            }
-            //小数点以下の末尾の0を削除
-            for(let i = 0; i < 10; i++){
-              if(stack[1].includes('.') && stack[1].endsWith('0')){
-                stack[1] = stack[1].slice(0, -1);
-              }
-              if(stack[1].endsWith('.')){
-                stack[1] = stack[1].slice(0, -1);
-                break;
-              }
-            }
-            //表示できないほど小さい数の場合は0を表示
-            if(Number(quot) < 10 ** -8 && Number(quot) > -(10 ** -8)){
-              stack[1] = '0';
-            }
-            display.textContent = stack[1];
-            //表示できないほど大きい数の場合はeを表示
-            if(Number(quot) >= 10 ** 10 || Number(quot) <= -(10 ** 10)){
-              display.textContent = `e${stack[1]}`;
-              error = true;
-              return;
-            } 
-            afterCalc = true;
+            stack[1] = (Number(stack[0]) / Number(stack[1])).toFixed(13).toString();
             break;
           default:
             return;
         }
       }
+      //連続計算対応のための処理
+      else if(stack[1] !== '' && stack[2] !== '' && operator !== '' && afterCalc === true){
+        switch(operator){
+          case '+':
+            //浮動小数点誤差と指数表記を回避
+            stack[1] = (Number(stack[1]) + Number(stack[2])).toFixed(13).toString();
+            break;
+          case '-':
+            //浮動小数点誤差と指数表記を回避
+            stack[1] = (Number(stack[1]) - Number(stack[2])).toFixed(13).toString();
+            break;
+          case '*':
+            //浮動小数点誤差と指数表記を回避
+            stack[1] = (Number(stack[1]) * Number(stack[2])).toFixed(13).toString();
+            break;
+          case '/':
+            //0で割られた場合の処理
+            if(Number(stack[2]) === 0){
+              display.textContent = 'error';
+              error = true;
+              return;
+            }
+            //浮動小数点誤差と指数表記を回避
+            stack[1] = (Number(stack[1]) / Number(stack[2])).toFixed(13).toString();
+            break;
+          default:
+            return;
+        }
+      }
+      //表示できないほど小さい数の場合は0を表示
+      if(Number(stack[1]) < 10 ** -8 && Number(stack[1]) > -(10 ** -8)){
+        stack[1] = '0';
+      }
+      //表示できないほど大きい数の場合はeを表示
+      if(Number(stack[1]) >= 10 ** 10 || Number(stack[1]) <= -(10 ** 10)){
+        display.textContent = `e${stack[1]}`;
+        error = true;
+        return;
+      }
+      //符号が-の場合は11桁まで、+の場合は10桁までを表示
+      if(stack[1].includes('-')){
+        stack[1] = stack[1].slice(0, 11);
+      }else{
+        stack[1] = stack[1].slice(0, 10);
+      }
+      //小数点以下の末尾の0を削除
+      for(let i = 0; i < 10; i++){
+        if(stack[1].includes('.') && stack[1].endsWith('0')){
+          stack[1] = stack[1].slice(0, -1);
+        }
+        if(stack[1].endsWith('.')){
+          stack[1] = stack[1].slice(0, -1);
+          break;
+        }
+      }
+      display.textContent = stack[1];
+      afterCalc = true;
     }
 
     //数字をクリックした時に表示される数字を追加
@@ -321,6 +184,7 @@ export class AppComponent implements AfterViewInit {
           //calc後の数値入力を初期化
           if(afterCalc === true){
             stack[1] = '0';
+            afterCalc = false;
           }
           if(stack[1] === '0' && !stack[1].includes('.')){         //ディスプレイが0の時は消してから数字を入力、小数点が入力されている場合は消さない
             stack[1] = '';
@@ -349,8 +213,8 @@ export class AppComponent implements AfterViewInit {
           stack[1] += btn.value as string;
           display.textContent = stack[1];
         }
-        console.log(`stack[0]: ${stack[0]} stack[1]: ${stack[1]} 
-          stack[2]: ${stack[2]} operator: ${operator} afterCalc: ${afterCalc}`);
+        console.log(`stack[0]: ${stack[0]} stack[1]: ${stack[1]} stack[2]: ${stack[2]} 
+          operator: ${operator} afterCalc: ${afterCalc} error: ${error} afterSqrt: ${afterSqrt}`);
       });
     });
 
@@ -377,6 +241,8 @@ export class AppComponent implements AfterViewInit {
       stack[1] += '.';
       display.textContent = stack[1];
       }
+      console.log(`stack[0]: ${stack[0]} stack[1]: ${stack[1]} stack[2]: ${stack[2]} 
+        operator: ${operator} afterCalc: ${afterCalc} error: ${error} afterSqrt: ${afterSqrt}`);
     });
 
     //演算子の処理
@@ -404,8 +270,8 @@ export class AppComponent implements AfterViewInit {
           stack[1] = '';
           afterCalc = false;
         }
-        console.log(`stack[0]: ${stack[0]} stack[1]: ${stack[1]} 
-          stack[2]: ${stack[2]} operator: ${operator} afterCalc: ${afterCalc}`);
+        console.log(`stack[0]: ${stack[0]} stack[1]: ${stack[1]} stack[2]: ${stack[2]} 
+          operator: ${operator} afterCalc: ${afterCalc} error: ${error} afterSqrt: ${afterSqrt}`);
       });
     });
 
@@ -416,6 +282,8 @@ export class AppComponent implements AfterViewInit {
         return;
       }
       calc();
+      console.log(`stack[0]: ${stack[0]} stack[1]: ${stack[1]} stack[2]: ${stack[2]} 
+        operator: ${operator} afterCalc: ${afterCalc} error: ${error} afterSqrt: ${afterSqrt}`);
     });
   
     //CEをクリックした時にスタックの1番目を初期化
@@ -430,6 +298,8 @@ export class AppComponent implements AfterViewInit {
           stack[1] = '0';
           display.textContent = stack[1];
       }
+      console.log(`stack[0]: ${stack[0]} stack[1]: ${stack[1]} stack[2]: ${stack[2]} 
+        operator: ${operator} afterCalc: ${afterCalc} error: ${error} afterSqrt: ${afterSqrt}`);
     });
     
     //Cをクリックした時にスタックを初期化
@@ -442,6 +312,8 @@ export class AppComponent implements AfterViewInit {
       afterSqrt = false;
       error = false;
       display.textContent = stack[1];
+      console.log(`stack[0]: ${stack[0]} stack[1]: ${stack[1]} stack[2]: ${stack[2]} 
+        operator: ${operator} afterCalc: ${afterCalc} error: ${error} afterSqrt: ${afterSqrt}`);
     });
 
     //±をクリックした時に符号を反転
@@ -479,6 +351,8 @@ export class AppComponent implements AfterViewInit {
       }else{
         return;
       }
+      console.log(`stack[0]: ${stack[0]} stack[1]: ${stack[1]} stack[2]: ${stack[2]} 
+        operator: ${operator} afterCalc: ${afterCalc} error: ${error} afterSqrt: ${afterSqrt}`);
     });
 
     //平方根をクリックした時の処理
@@ -498,6 +372,8 @@ export class AppComponent implements AfterViewInit {
         display.textContent = stack[1];
         afterSqrt = true;
       }
+      console.log(`stack[0]: ${stack[0]} stack[1]: ${stack[1]} stack[2]: ${stack[2]} 
+        operator: ${operator} afterCalc: ${afterCalc} error: ${error} afterSqrt: ${afterSqrt}`);
     });
 
     //パーセントをクリックした時の処理
@@ -524,6 +400,8 @@ export class AppComponent implements AfterViewInit {
       }else{
         return;
       }
+      console.log(`stack[0]: ${stack[0]} stack[1]: ${stack[1]} stack[2]: ${stack[2]} 
+        operator: ${operator} afterCalc: ${afterCalc} error: ${error} afterSqrt: ${afterSqrt}`);
     });
   }
 }
