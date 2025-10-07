@@ -29,11 +29,11 @@ export class AppComponent implements AfterViewInit {
     const persent = document.querySelector('.button-percent') as HTMLButtonElement;
 
     //基本的に式の左辺がstack[0]、右辺がstack[1]、連続計算対応のための一時保管場所としてstack[2]を用意
-    const stack: string[] = ['', '0', ''];
+    const stack: string[] = ['', '', ''];
     let afterCalc: boolean = false;
     let afterSqrt: boolean = false;
     let error: boolean = false;
-    display.textContent = stack[1];
+    display.textContent = '0';
     // 最後に押した演算子を格納
     let operator: string = '';
     //計算を行う関数
@@ -42,7 +42,7 @@ export class AppComponent implements AfterViewInit {
       if(error === true){
         return;
       }
-      //演算子の後に＝を押した場合の処理
+      //演算子のすぐ後に＝を押した場合の処理
       if(stack[0] !== '' && stack[1] === '' && stack[2] === '' && operator !== '' && afterCalc === false){
         switch(operator){
           case '+':
@@ -54,13 +54,13 @@ export class AppComponent implements AfterViewInit {
             //連続計算対応のための処理
             stack[2] = stack[0];
             //浮動小数点誤差と指数表記を回避
-            stack[1] = (Number(stack[0]) * -1).toFixed(13).toString();
+            stack[1] = (Number(stack[0]) * -1).toFixed(13);
             break;
           case '*':
             //連続計算対応のための処理
             stack[2] = stack[0];
             //浮動小数点誤差と指数表記を回避
-            stack[1] = (Number(stack[0]) ** 2).toFixed(13).toString();
+            stack[1] = (Number(stack[0]) ** 2).toFixed(13);
             break;
           case '/':
             //連続計算対応のための処理
@@ -72,31 +72,32 @@ export class AppComponent implements AfterViewInit {
               return;
             }
             //浮動小数点誤差と指数表記を回避
-            stack[1] = (1 / Number(stack[0])).toFixed(13).toString();        
+            stack[1] = (1 / Number(stack[0])).toFixed(13);        
             break;
           default:
             return;
         }
       }
-      else if(stack[0] !== '' && stack[1] !== '' && stack[2] === '' && operator !== '' && afterCalc === false){
+      //基本的な計算の処理
+      else if(stack[0] !== '' && stack[1] !== '' && operator !== '' && afterCalc === false){
         switch(operator){
           case '+':
             //連続計算対応のための処理
             stack[2] = stack[1];
             //浮動小数点誤差と指数表記を回避
-            stack[1] = (Number(stack[0]) + Number(stack[1])).toFixed(13).toString();
+            stack[1] = (Number(stack[0]) + Number(stack[1])).toFixed(13);
             break;
           case '-':
             //連続計算対応のための処理
             stack[2] = stack[1];
             //浮動小数点誤差と指数表記を回避
-            stack[1] = (Number(stack[0]) - Number(stack[1])).toFixed(13).toString();
+            stack[1] = (Number(stack[0]) - Number(stack[1])).toFixed(13);
             break;
           case '*':
             //連続計算対応のための処理
             stack[2] = stack[0];
             //浮動小数点誤差と指数表記を回避
-            stack[1] = (Number(stack[0]) * Number(stack[1])).toFixed(13).toString();
+            stack[1] = (Number(stack[0]) * Number(stack[1])).toFixed(13);
             break;
           case '/':
             //連続計算対応のための処理
@@ -108,7 +109,7 @@ export class AppComponent implements AfterViewInit {
               return;
             }
             //浮動小数点誤差と指数表記を回避
-            stack[1] = (Number(stack[0]) / Number(stack[1])).toFixed(13).toString();
+            stack[1] = (Number(stack[0]) / Number(stack[1])).toFixed(13);
             break;
           default:
             return;
@@ -119,15 +120,15 @@ export class AppComponent implements AfterViewInit {
         switch(operator){
           case '+':
             //浮動小数点誤差と指数表記を回避
-            stack[1] = (Number(stack[1]) + Number(stack[2])).toFixed(13).toString();
+            stack[1] = (Number(stack[1]) + Number(stack[2])).toFixed(13);
             break;
           case '-':
             //浮動小数点誤差と指数表記を回避
-            stack[1] = (Number(stack[1]) - Number(stack[2])).toFixed(13).toString();
+            stack[1] = (Number(stack[1]) - Number(stack[2])).toFixed(13);
             break;
           case '*':
             //浮動小数点誤差と指数表記を回避
-            stack[1] = (Number(stack[1]) * Number(stack[2])).toFixed(13).toString();
+            stack[1] = (Number(stack[1]) * Number(stack[2])).toFixed(13);
             break;
           case '/':
             //0で割られた場合の処理
@@ -137,15 +138,48 @@ export class AppComponent implements AfterViewInit {
               return;
             }
             //浮動小数点誤差と指数表記を回避
-            stack[1] = (Number(stack[1]) / Number(stack[2])).toFixed(13).toString();
+            stack[1] = (Number(stack[1]) / Number(stack[2])).toFixed(13);
             break;
           default:
             return;
         }
-      }else if(operator === ''){
-        return;
-      }else{
-        alert('error');
+      }
+      //calc後に演算子を入力してすぐにcalcを行う場合の例外処理
+      else if(stack[0] !== '' && stack[1] === '' && stack[2] !== '' && operator !== ''){
+        switch(operator){
+          case '+':
+            //浮動小数点誤差と指数表記を回避
+            stack[1] = (Number(stack[0]) + Number(stack[2])).toFixed(13);
+            //連続計算対応のための処理
+            stack[2] = stack[0];
+            break;
+          case '-':
+            //浮動小数点誤差と指数表記を回避
+            stack[1] = (Number(stack[2]) - Number(stack[0])).toFixed(13);
+            //連続計算対応のための処理
+            stack[2] = stack[0];
+            break;
+          case '*':
+            //浮動小数点誤差と指数表記を回避
+            stack[1] = (Number(stack[0]) ** 2).toFixed(13);
+            //連続計算対応のための処理
+            stack[2] = stack[0];
+            break;
+          case '/':
+            //0で割られた場合の処理
+            if(Number(stack[2]) === 0){
+              display.textContent = 'error';
+              error = true;
+              return;
+            }
+            //浮動小数点誤差と指数表記を回避
+            stack[1] = (1 / Number(stack[0])).toFixed(13);
+            //連続計算対応のための処理
+            stack[2] = stack[0];
+            break;
+          default:
+            return;
+        }
       }
       //表示できないほど大きい数の場合はeを表示
       if(Number(stack[1]) >= 10 ** 10 || Number(stack[1]) <= -(10 ** 10)){
@@ -191,11 +225,15 @@ export class AppComponent implements AfterViewInit {
           return;
         }
         if(operator !== ''){            //演算子が入力されている場合
-          //calc,sqrt後の数値入力を初期化
+          //calc,sqrt後の数値入力を初期化(ただし小数点が入力されている場合は引き継ぐ)
           if(afterCalc === true || afterSqrt === true){
+            stack[0] = '';
             stack[1] = '0';
             afterCalc = false;
             afterSqrt = false;
+          }else{
+            //演算子がある状態で数字を入力したときは連続計算処理を回避するためにstack[2]を初期化
+            // stack[2] = '';
           }
           if(stack[1] === '0' && !stack[1].includes('.')){         //ディスプレイが0の時は消してから数字を入力、小数点が入力されている場合は消さない
             stack[1] = '';
@@ -208,11 +246,12 @@ export class AppComponent implements AfterViewInit {
           stack[1] += btn.value as string;
           display.textContent = stack[1];
         }else{                          //演算子が入力されていない場合
-          //calc,sqrt後の数値入力を初期化
-          if(afterCalc === true || afterSqrt === true){
+          //calc,sqrt後の数値入力を初期化(ただし小数点が入力されている場合は引き継ぐ)
+          if(afterSqrt === true || afterCalc === true){
+            stack[0] = '';
             stack[1] = '0';
-            afterCalc = false;
             afterSqrt = false;
+            afterCalc = false;
           }
           if(stack[1] === '0' && !stack[1].includes('.')){
             stack[1] = '';
@@ -238,6 +277,7 @@ export class AppComponent implements AfterViewInit {
       }
       //calc後の数値入力を初期化
       if(afterCalc === true || afterSqrt === true){
+        stack[0] = '';
         stack[1] = '0';
         afterCalc = false;
         afterSqrt = false;
@@ -283,8 +323,6 @@ export class AppComponent implements AfterViewInit {
           stack[1] = '';
           afterCalc = false;
         }
-        //演算子を入力したときは連続計算処理を回避するためにstack[2]を初期化
-        stack[2] = '';
         console.log(`stack[0]: ${stack[0]} stack[1]: ${stack[1]} stack[2]: ${stack[2]} 
           operator: ${operator} afterCalc: ${afterCalc} error: ${error} afterSqrt: ${afterSqrt}`);
       });
@@ -338,7 +376,7 @@ export class AppComponent implements AfterViewInit {
         return;
       }
       if(stack[1] !== ''){
-        stack[1] = (Number(stack[1]) * -1).toFixed(13).toString();
+        stack[1] = (Number(stack[1]) * -1).toFixed(13);
         //小数点以下の末尾の0と小数点を削除
         for(let i = 0; i < 13; i++){
           if(stack[1].includes('.') && stack[1].endsWith('0')){
@@ -351,7 +389,7 @@ export class AppComponent implements AfterViewInit {
         }
         display.textContent = stack[1];
       }else if(stack[0] !== '' && stack[1] === ''){       //演算子が入力されている場合
-        stack[0] = (Number(stack[0]) * -1).toFixed(13).toString();
+        stack[0] = (Number(stack[0]) * -1).toFixed(13);
         //小数点以下の末尾の0を削除
         for(let i = 0; i < 13; i++){
           if(stack[0].includes('.') && stack[0].endsWith('0')){
@@ -380,8 +418,19 @@ export class AppComponent implements AfterViewInit {
           error = true;
           return;
         }
-        stack[1] = Math.sqrt(Number(stack[1])).toString();
+        //浮動小数点誤差と指数表記を回避
+        stack[1] = Math.sqrt(Number(stack[1])).toFixed(13);
         stack[1] = stack[1].slice(0, 10);
+        //小数点以下の末尾の0を削除
+        for(let i = 0; i < 13; i++){
+          if(stack[1].includes('.') && stack[1].endsWith('0')){
+            stack[1] = stack[1].slice(0, -1);
+          }
+          if(stack[1].endsWith('.')){
+            stack[1] = stack[1].slice(0, -1);
+            break;
+          }
+        }
         display.textContent = stack[1];
         afterSqrt = true;
         afterCalc = false;
@@ -414,10 +463,10 @@ export class AppComponent implements AfterViewInit {
             calc();
             break;
           case '/':
-            const stackDivide = stack[1];
+            const stackDivide1 = stack[1];
             stack[1] = (Number(stack[1]) / 100).toString();
             calc();
-            stack[2] = stackDivide;     //連続計算を見本の電卓の仕様に合わせる
+            stack[2] = stackDivide1;     //連続計算を見本の電卓の仕様に合わせる
             break;
           default:
           return;
@@ -429,10 +478,10 @@ export class AppComponent implements AfterViewInit {
             calc();
             break;
           case '/':
-            const stackDivide = stack[2];
+            const stackDivide2 = stack[2];
             stack[2] = (Number(stack[2]) / 100).toString();
             calc();
-            stack[2] = stackDivide;     //連続計算を見本の電卓の仕様に合わせる
+            stack[2] = stackDivide2;     //連続計算を見本の電卓の仕様に合わせる
             break;
           default:
             return;
