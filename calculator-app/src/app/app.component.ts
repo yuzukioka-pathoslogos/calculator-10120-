@@ -142,6 +142,10 @@ export class AppComponent implements AfterViewInit {
           default:
             return;
         }
+      }else if(operator === ''){
+        return;
+      }else{
+        alert('error');
       }
       //表示できないほど大きい数の場合はeを表示
       if(Number(stack[1]) >= 10 ** 10 || Number(stack[1]) <= -(10 ** 10)){
@@ -187,10 +191,11 @@ export class AppComponent implements AfterViewInit {
           return;
         }
         if(operator !== ''){            //演算子が入力されている場合
-          //calc後の数値入力を初期化
-          if(afterCalc === true){
+          //calc,sqrt後の数値入力を初期化
+          if(afterCalc === true || afterSqrt === true){
             stack[1] = '0';
             afterCalc = false;
+            afterSqrt = false;
           }
           if(stack[1] === '0' && !stack[1].includes('.')){         //ディスプレイが0の時は消してから数字を入力、小数点が入力されている場合は消さない
             stack[1] = '';
@@ -203,9 +208,10 @@ export class AppComponent implements AfterViewInit {
           stack[1] += btn.value as string;
           display.textContent = stack[1];
         }else{                          //演算子が入力されていない場合
-          //calc後の数値入力を初期化
-          if(afterSqrt === true){
+          //calc,sqrt後の数値入力を初期化
+          if(afterCalc === true || afterSqrt === true){
             stack[1] = '0';
+            afterCalc = false;
             afterSqrt = false;
           }
           if(stack[1] === '0' && !stack[1].includes('.')){
@@ -233,6 +239,7 @@ export class AppComponent implements AfterViewInit {
       //calc後の数値入力を初期化
       if(afterCalc === true || afterSqrt === true){
         stack[1] = '0';
+        afterCalc = false;
         afterSqrt = false;
       }
       if(stack[1] === ''){
@@ -373,8 +380,8 @@ export class AppComponent implements AfterViewInit {
           error = true;
           return;
         }
-        const ans = Math.sqrt(Number(stack[1])).toString();
-        stack[1] = ans.slice(0, 10);
+        stack[1] = Math.sqrt(Number(stack[1])).toString();
+        stack[1] = stack[1].slice(0, 10);
         display.textContent = stack[1];
         afterSqrt = true;
         afterCalc = false;
