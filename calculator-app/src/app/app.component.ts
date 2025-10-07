@@ -337,7 +337,7 @@ export class AppComponent implements AfterViewInit {
           }
         }
         display.textContent = stack[1];
-      }else if(stack[0] !== '' && stack[1] === ''){   //演算子が入力されている場合
+      }else if(stack[0] !== '' && stack[1] === ''){       //演算子が入力されている場合
         stack[0] = (Number(stack[0]) * -1).toFixed(13).toString();
         //小数点以下の末尾の0を削除
         for(let i = 0; i < 13; i++){
@@ -392,7 +392,7 @@ export class AppComponent implements AfterViewInit {
         stack[1] = (Number(stack[0]) * Number(stack[1]) / 100).toString();
         const stack0: string = stack[0];
         calc();
-        stack[0] = stack0;      //連続計算を見本の電卓の仕様に合わせる
+        stack[2] = stack0;      //連続計算を見本の電卓の仕様に合わせる
       }else if(operator === '-'){
         stack[1] = (Number(stack[0]) * Number(stack[1]) / 100).toString();
         calc();
