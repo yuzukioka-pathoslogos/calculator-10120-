@@ -320,12 +320,7 @@ export class AppComponent implements AfterViewInit {
         if(operator !== ''){            //演算子が入力されている場合
           //calc後の数値入力を初期化
           if(afterCalc === true){
-            stack[0] = '';
             stack[1] = '0';
-            stack[2] = '';
-            operator = '';
-            afterCalc = false;
-            afterSqrt = false;
           }
           if(stack[1] === '0' && !stack[1].includes('.')){         //ディスプレイが0の時は消してから数字を入力、小数点が入力されている場合は消さない
             stack[1] = '';
@@ -339,12 +334,8 @@ export class AppComponent implements AfterViewInit {
           display.textContent = stack[1];
         }else{                          //演算子が入力されていない場合
           //calc後の数値入力を初期化
-          if(afterCalc === true || afterSqrt === true){
-            stack[0] = '';
+          if(afterSqrt === true){
             stack[1] = '0';
-            stack[2] = '';
-            operator = '';
-            afterCalc = false;
             afterSqrt = false;
           }
           if(stack[1] === '0' && !stack[1].includes('.')){
