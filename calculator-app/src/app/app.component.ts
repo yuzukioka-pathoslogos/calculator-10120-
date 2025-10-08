@@ -79,7 +79,7 @@ export class AppComponent implements AfterViewInit {
         }
       }
       //基本的な計算の処理
-      else if(stack[0] !== '' && stack[1] !== '' && operator !== '' && afterCalc === false){
+      else if(stack[0] !== '' && stack[1] !== '' && operator !== '' && afterCalc === false && afterSqrt === false){
         switch(operator){
           case '+':
             //連続計算対応のための処理
@@ -181,42 +181,6 @@ export class AppComponent implements AfterViewInit {
             return;
         }
       }
-      // //stack[2]が値を持つときに演算子を入力してすぐにcalcを行う場合の例外処理
-      // else if(stack[0] !== '' && stack[1] === '' && stack[2] !== '' && operator !== ''){
-      //   switch(operator){
-      //     case '+':
-      //       //連続計算対応のための処理
-      //       stack[2] = stack[0];
-      //       stack[1] = stack[0];
-      //       break;
-      //     case '-':
-      //       //連続計算対応のための処理
-      //       stack[2] = stack[0];
-      //       //浮動小数点誤差と指数表記を回避
-      //       stack[1] = (Number(stack[0]) * -1).toFixed(13);
-      //       break;
-      //     case '*':
-      //       //連続計算対応のための処理
-      //       stack[2] = stack[0];
-      //       //浮動小数点誤差と指数表記を回避
-      //       stack[1] = (Number(stack[0]) ** 2).toFixed(13);
-      //       break;
-      //     case '/':
-      //       //連続計算対応のための処理
-      //       stack[2] = stack[0];
-      //       //0で割られた場合の処理
-      //       if(Number(stack[0]) === 0){
-      //         display.textContent = 'error';
-      //         error = true;
-      //         return;
-      //       }
-      //       //浮動小数点誤差と指数表記を回避
-      //       stack[1] = (1 / Number(stack[0])).toFixed(13);        
-      //       break;
-      //     default:
-      //       return;
-      //   }
-      // }
       //表示できないほど大きい数の場合はeを表示
       if(Number(stack[1]) >= 10 ** 10 || Number(stack[1]) <= -(10 ** 10)){
         //符号が-の場合は11桁まで、+の場合は10桁までを表示
@@ -262,14 +226,14 @@ export class AppComponent implements AfterViewInit {
         }
         if(operator !== ''){            //演算子が入力されている場合
           //calc,sqrt後の数値入力を初期化(ただし小数点が入力されている場合は引き継ぐ)
-          if(afterCalc === true || afterSqrt === true){
+          if(afterCalc === true){
             stack[0] = '';
             stack[1] = '0';
             afterCalc = false;
+          }
+          if(afterSqrt === true){
+            stack[1] = '0';
             afterSqrt = false;
-          }else{
-            //演算子がある状態で数字を入力したときは連続計算処理を回避するためにstack[2]を初期化
-            // stack[2] = '';
           }
           if(stack[1] === '0' && !stack[1].includes('.')){         //ディスプレイが0の時は消してから数字を入力、小数点が入力されている場合は消さない
             stack[1] = '';
@@ -283,11 +247,14 @@ export class AppComponent implements AfterViewInit {
           display.textContent = stack[1];
         }else{                          //演算子が入力されていない場合
           //calc,sqrt後の数値入力を初期化(ただし小数点が入力されている場合は引き継ぐ)
-          if(afterSqrt === true || afterCalc === true){
+          if(afterCalc === true){
             stack[0] = '';
             stack[1] = '0';
-            afterSqrt = false;
             afterCalc = false;
+          }
+          if(afterSqrt === true){
+            stack[1] = '0';
+            afterSqrt = false;
           }
           if(stack[1] === '0' && !stack[1].includes('.')){
             stack[1] = '';
@@ -349,7 +316,7 @@ export class AppComponent implements AfterViewInit {
           afterSqrt = false;
         }else if(stack[0] !== '' && stack[1] === ''){     //演算子の入力を訂正したいとき
           operator = op.value as string;
-        }else if(stack[0] !== '' && stack[1] !== '' && afterCalc === false){
+        }else if(stack[0] !== '' && stack[1] !== '' && afterCalc === false && afterSqrt === false){
           //stack[2]が残っていると連続計算になってしまうため初期化
           stack[2] = '';
           calc();
@@ -359,6 +326,11 @@ export class AppComponent implements AfterViewInit {
           afterCalc = false;
           afterSqrt = false;
           operator = op.value as string;
+        }else if(stack[0] !== '' && stack[1] !== '' && afterCalc === false && afterSqrt === true){
+          operator = op.value as string;
+          stack[0] = stack[1];
+          stack[1] = '';
+          afterSqrt = false;
         }else if(stack[0] !== '' && stack[1] !== '' && afterCalc === true){
           operator = op.value as string;
           stack[0] = stack[1];
