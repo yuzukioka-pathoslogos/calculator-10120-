@@ -366,8 +366,10 @@ export class AppComponent implements AfterViewInit {
       if(afterCalc === true){
         return;
       }else{
-        stack[1] = '0';
-        display.textContent = stack[1];
+        if(stack[1] !== ''){
+          stack[1] = '0';
+          display.textContent = stack[1];
+        }
       }
       console.log(`stack[0]: ${stack[0]} stack[1]: ${stack[1]} stack[2]: ${stack[2]} 
         operator: ${operator} afterCalc: ${afterCalc} error: ${error} afterSqrt: ${afterSqrt}`);
