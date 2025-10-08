@@ -279,10 +279,13 @@ export class AppComponent implements AfterViewInit {
         return;
       }
       //calc後の数値入力を初期化
-      if(afterCalc === true || afterSqrt === true){
+      if(afterCalc === true){
         stack[0] = '';
         stack[1] = '0';
         afterCalc = false;
+      }
+      if(afterSqrt === true){
+        stack[1] = '0';
         afterSqrt = false;
       }
       if(stack[1] === ''){
