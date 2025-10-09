@@ -523,7 +523,6 @@ export class AppComponent implements AfterViewInit {
           }
         }
       }else{        //stack[1]が空の場合の例外処理
-        console.log(`stack[1]: ${stack[1]}`);
         switch(operator){
           case '+':
             stack[1] = "0";
