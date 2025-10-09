@@ -96,6 +96,70 @@ describe('AppComponent', () => {
     fixture.detectChanges();
     expect(display.textContent).toBe('1.66666666');
   });
+  it('5+3*2= 16',() =>{
+    btn5.click();
+    btnPlus.click();
+    btn3.click();
+    btnAsterisk.click();
+    btn2.click();
+    btnEqual.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('16');
+  })
+
+
+  //errorが出るテストケース
+  it('0/0= error',() =>{
+    btn0.click();
+    btnSlash.click();
+    btn0.click();
+    btnEqual.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('error');
+  })
+  it('999999*= e9999980000',() =>{
+    btn9.click();
+    btn9.click(); 
+    btn9.click();
+    btn9.click();
+    btn9.click();
+    btn9.click();
+    btnAsterisk.click();
+    btnEqual.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('e9999980000');
+  })
+  it('9999999999/= 0',() =>{
+    btn9.click();
+    btn9.click();
+    btn9.click();
+    btn9.click();
+    btn9.click();
+    btn9.click(); 
+    btn9.click();
+    btn9.click();
+    btn9.click();
+    btn9.click();
+    btnSlash.click();
+    btnEqual.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('0');
+  })
+  it('5-=r error',() =>{
+    btn5.click();
+    btnMinus.click();
+    btnEqual.click();
+    btnSqrt.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('error');
+  })
+ 
+
+
+
+
+
+  //%の特殊入力
   it('200+5%%% 210', () => {
     btn2.click();
     btn0.click();
@@ -317,7 +381,19 @@ describe('AppComponent', () => {
     expect(display.textContent).toBe('0.015625');
   });
 
+  //+-の特殊入力
+
+
   //sqrtの特殊入力
+  it('9r+5= 8',() =>{
+    btn9.click();
+    btnSqrt.click();
+    btnPlus.click();
+    btn5.click();
+    btnEqual.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('8');
+  })
   it('1+3=r+3= 5',() =>{
     btn1.click();
     btnPlus.click();
@@ -329,6 +405,40 @@ describe('AppComponent', () => {
     btnEqual.click();
     fixture.detectChanges();
     expect(display.textContent).toBe('5');
+  })
+  it('2+9rCE5= 7',() =>{
+    btn2.click();
+    btnPlus.click();
+    btn9.click();
+    btnSqrt.click();
+    btnClearEntry.click();
+    btn5.click();
+    btnEqual.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('7');
+  })
+  it('2+9r.5= 2.5',() =>{
+    btn2.click();
+    btnPlus.click();
+    btn9.click();
+    btnSqrt.click();
+    btnDot.click();
+    btn5.click();
+    btnEqual.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('2.5');
+  })
+  it('1+3=r.5= 3.5',() =>{
+    btn1.click();
+    btnPlus.click();
+    btn3.click();
+    btnEqual.click();
+    btnSqrt.click();
+    btnDot.click();
+    btn5.click();
+    btnEqual.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('3.5');
   })
   it('10-1=rCE= -1',() =>{
     btn1.click();

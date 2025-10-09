@@ -235,6 +235,9 @@ export class AppComponent implements AfterViewInit {
             afterCalc = false;
           }
           if(afterSqrt === true){
+            if(stack[2] !== ''){
+              stack[0] = '';
+            }
             stack[1] = '0';
             afterSqrt = false;
           }
@@ -256,6 +259,9 @@ export class AppComponent implements AfterViewInit {
             afterCalc = false;
           }
           if(afterSqrt === true){
+            if(stack[2] !== ''){
+              stack[0] = '';
+            }
             stack[1] = '0';
             afterSqrt = false;
           }
@@ -288,6 +294,9 @@ export class AppComponent implements AfterViewInit {
         afterCalc = false;
       }
       if(afterSqrt === true){
+        if(stack[2] !== ''){
+          stack[0] = '';
+        }
         stack[1] = '0';
         afterSqrt = false;
       }
@@ -372,6 +381,7 @@ export class AppComponent implements AfterViewInit {
         if(stack[1] !== ''){
           stack[1] = '0';
           display.textContent = stack[1];
+          // afterSqrt = false;
         }
       }
       console.log(`stack[0]: ${stack[0]} stack[1]: ${stack[1]} stack[2]: ${stack[2]} 
