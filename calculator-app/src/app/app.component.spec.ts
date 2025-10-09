@@ -72,6 +72,248 @@ describe('AppComponent', () => {
     fixture.detectChanges();
     expect(display.textContent).toBe('8');
   });
-  
-
+  it('5 - 3 = 2', () => {
+    btn5.click();
+    btnMinus.click();
+    btn3.click();
+    btnEqual.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('2');
+  });
+  it('5 * 3 = 15', () => {
+    btn5.click();
+    btnAsterisk.click();
+    btn3.click();
+    btnEqual.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('15');
+  });
+  it('5 / 3 = 1.66666666', () => {
+    btn5.click();
+    btnSlash.click();
+    btn3.click();
+    btnEqual.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('1.66666666');
+  });
+  it('200+5%%% 210', () => {
+    btn2.click();
+    btn0.click();
+    btn0.click();
+    btnPlus.click();
+    btn5.click();
+    btnPercent.click();
+    btnPercent.click();
+    btnPercent.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('210');
+  });
+  it('200-5%%% 190', () => {
+    btn2.click();
+    btn0.click();
+    btn0.click();
+    btnMinus.click();
+    btn5.click();
+    btnPercent.click();
+    btnPercent.click();
+    btnPercent.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('190');
+  });
+  it('200*5%%% 40', () => {
+    btn2.click();
+    btn0.click();
+    btn0.click();
+    btnAsterisk.click();
+    btn5.click();
+    btnPercent.click();
+    btnPercent.click();
+    btnPercent.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('40');
+  });
+  it('200/5%%% 1600000', () => {
+    btn2.click();
+    btn0.click();
+    btn0.click();
+    btnSlash.click();
+    btn5.click();
+    btnPercent.click();
+    btnPercent.click();
+    btnPercent.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('1600000');
+  });
+  it('200+5%== 610', () => {
+    btn2.click();
+    btn0.click();
+    btn0.click();
+    btnPlus.click();
+    btn5.click();
+    btnPercent.click();
+    btnEqual.click();
+    btnEqual.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('610');
+  });
+  it('200-5%== -210', () => {
+    btn2.click();
+    btn0.click();
+    btn0.click();
+    btnMinus.click();
+    btn5.click();
+    btnPercent.click();
+    btnEqual.click();
+    btnEqual.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('-210');
+  });
+  it('200*5%== 400000', () => {
+    btn2.click();
+    btn0.click();
+    btn0.click();
+    btnAsterisk.click();
+    btn5.click();
+    btnPercent.click();
+    btnEqual.click();
+    btnEqual.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('400000');
+  });
+  it('200/5%== 160', () => {
+    btn2.click();
+    btn0.click();
+    btn0.click();
+    btnSlash.click();
+    btn5.click();
+    btnPercent.click();
+    btnEqual.click();
+    btnEqual.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('160');
+  });
+  it('5+=== 15', () => {
+    btn5.click();
+    btnPlus.click();
+    btnEqual.click();
+    btnEqual.click();
+    btnEqual.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('15');
+  });
+  it('5-=== -15', () => {
+    btn5.click();
+    btnMinus.click();
+    btnEqual.click();
+    btnEqual.click();
+    btnEqual.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('-15');
+  });
+  it('5*=== 625', () => {
+    btn5.click();
+    btnAsterisk.click();
+    btnEqual.click();
+    btnEqual.click();
+    btnEqual.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('625');
+  });
+  it('5/=== 0.008', () => {
+    btn5.click();
+    btnSlash.click();
+    btnEqual.click();
+    btnEqual.click();
+    btnEqual.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('0.008');
+  });
+  it('5+3+=== 24', () => {
+    btn5.click();
+    btnPlus.click();
+    btn3.click();
+    btnPlus.click();
+    btnEqual.click();
+    btnEqual.click();
+    btnEqual.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('24');
+  });
+  it('5+3-=== -24', () => {
+    btn5.click();
+    btnPlus.click();
+    btn3.click();
+    btnMinus.click();
+    btnEqual.click();
+    btnEqual.click();
+    btnEqual.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('-24');
+  });
+  it('5+3*=== 4096', () => {
+    btn5.click();
+    btnPlus.click();
+    btn3.click();
+    btnAsterisk.click();
+    btnEqual.click();
+    btnEqual.click();
+    btnEqual.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('4096');
+  });
+  it('5+3/=== 0.00195312', () => {
+    btn5.click();
+    btnPlus.click();
+    btn3.click();
+    btnSlash.click();
+    btnEqual.click();
+    btnEqual.click();
+    btnEqual.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('0.00195312');
+  });
+  it('5+3=+== 19', () => {
+    btn5.click();
+    btnPlus.click();
+    btn3.click();
+    btnEqual.click();
+    btnPlus.click();
+    btnEqual.click();
+    btnEqual.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('19');
+  });
+  it('5+3=-== -13', () => {
+    btn5.click();
+    btnPlus.click();
+    btn3.click();
+    btnEqual.click();
+    btnMinus.click();
+    btnEqual.click();
+    btnEqual.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('-13');
+  });
+  it('5+3=*== 512', () => {
+    btn5.click();
+    btnPlus.click();
+    btn3.click();
+    btnEqual.click();
+    btnAsterisk.click();
+    btnEqual.click();
+    btnEqual.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('512');
+  });
+  it('5+3=/== 0.015625', () => {
+    btn5.click();
+    btnPlus.click();
+    btn3.click();
+    btnEqual.click();
+    btnSlash.click();
+    btnEqual.click();
+    btnEqual.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('0.015625');
+  });
 });
