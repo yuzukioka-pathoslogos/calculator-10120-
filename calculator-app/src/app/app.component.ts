@@ -454,6 +454,29 @@ export class AppComponent implements AfterViewInit {
         display.textContent = stack[1];
         afterSqrt = true;
         afterCalc = false;
+      }else if(stack[0] !== '' && stack[1] === ''){
+        if(stack[0].includes('-')){
+          display.textContent = 'error';
+          error = true;
+          return;
+        }
+        stack[1] = stack[0]
+        //浮動小数点誤差と指数表記を回避
+        stack[1] = Math.sqrt(Number(stack[0])).toFixed(13);
+        stack[1] = stack[1].slice(0, 10);
+        //小数点以下の末尾の0を削除
+        for(let i = 0; i < 13; i++){
+          if(stack[1].includes('.') && stack[1].endsWith('0')){
+            stack[1] = stack[1].slice(0, -1);
+          }
+          if(stack[1].endsWith('.')){
+            stack[1] = stack[1].slice(0, -1);
+            break;
+          }
+        }
+        display.textContent = stack[1];
+        afterSqrt = true;
+        afterCalc = false;
       }
       console.log(`stack[0]: ${stack[0]} stack[1]: ${stack[1]} stack[2]: ${stack[2]} 
         operator: ${operator} afterCalc: ${afterCalc} error: ${error} afterSqrt: ${afterSqrt}`);
