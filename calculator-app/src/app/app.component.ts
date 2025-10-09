@@ -227,55 +227,33 @@ export class AppComponent implements AfterViewInit {
         if(error === true){
           return;
         }
-        if(operator !== ''){            //演算子が入力されている場合
-          //calc,sqrt後の数値入力を初期化
-          if(afterCalc === true){
-            stack[0] = '';
-            stack[1] = '0';
-            afterCalc = false;
-          }
-          if(afterSqrt === true){
-            if(stack[2] !== ''){
-              stack[0] = '';
-            }
-            stack[1] = '0';
-            afterSqrt = false;
-          }
-          if(stack[1] === '0' && !stack[1].includes('.')){         //ディスプレイが0の時は消してから数字を入力、小数点が入力されている場合は消さない
-            stack[1] = '';
-          }
-          if(stack[1] !=null && stack[1].length === 10 && stack[1].includes('-') === false){
-            return;
-          }else if(stack[1] !=null && stack[1].length === 11 && stack[1].includes('-') === true){
-            return;
-          }
-          stack[1] += btn.value as string;
-          display.textContent = stack[1];
-        }else{                          //演算子が入力されていない場合
-          //calc,sqrt後の数値入力を初期化
-          if(afterCalc === true){
-            stack[0] = '';
-            stack[1] = '0';
-            afterCalc = false;
-          }
-          if(afterSqrt === true){
-            if(stack[2] !== ''){
-              stack[0] = '';
-            }
-            stack[1] = '0';
-            afterSqrt = false;
-          }
-          if(stack[1] === '0' && !stack[1].includes('.')){
-            stack[1] = '';
-          }
-          if(stack[1] !=null && stack[1].length === 10 && stack[1].includes('-') === false){
-            return;
-          }else if(stack[1] !=null && stack[1].length === 11 && stack[1].includes('-') === true){
-            return;
-          }
-          stack[1] += btn.value as string;
-          display.textContent = stack[1];
+        //calc後の数値入力を初期化
+        if(afterCalc === true){
+          stack[0] = '';
+          stack[1] = '0';
+          afterCalc = false;
         }
+        //sqrt後の数値入力を初期化ただし、stack[0]とstack[2]のどちらも空になるのは避ける
+        if(afterSqrt === true){
+          if(stack[2] !== ''){
+            stack[0] = '';
+          }
+          stack[1] = '0';
+          afterSqrt = false;
+        }
+        //ディスプレイが0の時は消してから数字を入力、小数点が入力されている場合は消さない
+        if(stack[1] === '0' && !stack[1].includes('.')){         
+          stack[1] = '';
+        }
+        //10桁（-を含めて11桁）までしか入力できないようにする
+        if(stack[1] !=null && stack[1].length === 10 && stack[1].includes('-') === false){
+          return;
+        }else if(stack[1] !=null && stack[1].length === 11 && stack[1].includes('-') === true){
+          return;
+        }
+        stack[1] += btn.value as string;
+        display.textContent = stack[1];
+      
         console.log(`stack[0]: ${stack[0]} stack[1]: ${stack[1]} stack[2]: ${stack[2]} 
           operator: ${operator} afterCalc: ${afterCalc} error: ${error} afterSqrt: ${afterSqrt}`);
       });
