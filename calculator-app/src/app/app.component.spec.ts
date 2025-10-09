@@ -316,4 +316,39 @@ describe('AppComponent', () => {
     fixture.detectChanges();
     expect(display.textContent).toBe('0.015625');
   });
+
+  //sqrtの特殊入力
+  it('1+3=r+3= 5',() =>{
+    btn1.click();
+    btnPlus.click();
+    btn3.click();
+    btnEqual.click();
+    btnSqrt.click();
+    btnPlus.click();
+    btn3.click();
+    btnEqual.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('5');
+  })
+  it('10-1=rCE= -1',() =>{
+    btn1.click();
+    btn0.click();
+    btnMinus.click();
+    btn1.click();
+    btnEqual.click();
+    btnSqrt.click();
+    btnClearEntry.click();
+    btnEqual.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('-1');
+  })
+  it('4+r= 6',() =>{
+    btn4.click();
+    btnPlus.click();
+    btnSqrt.click();
+    btnEqual.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('6');
+  })
+
 });

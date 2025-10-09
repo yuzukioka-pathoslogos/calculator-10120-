@@ -43,7 +43,8 @@ export class AppComponent implements AfterViewInit {
         return;
       }
       //左辺のみの例外処理
-      if(stack[0] !== '' && stack[1] === '' && stack[2] === '' && operator !== '' && afterCalc === false){
+      if(stack[0] !== '' && stack[1] === '' && stack[2] === '' 
+        && operator !== '' && afterCalc === false){
         switch(operator){
           case '+':
             //連続計算対応のための処理
@@ -79,7 +80,8 @@ export class AppComponent implements AfterViewInit {
         }
       }
       //基本的な計算の処理
-      else if(stack[0] !== '' && stack[1] !== '' && operator !== '' && afterCalc === false && afterSqrt === false){
+      else if(stack[0] !== '' && stack[1] !== '' && operator !== '' 
+      && afterCalc === false && afterSqrt === false ){
         switch(operator){
           case '+':
             //連続計算対応のための処理
@@ -145,7 +147,8 @@ export class AppComponent implements AfterViewInit {
         }
       }
       //calc後に演算子を入力してすぐにcalcを行う場合の例外処理
-      else if(stack[0] !== '' && stack[1] === '' && stack[2] !== '' && operator !== '' && afterCalc === false){
+      else if(stack[0] !== '' && stack[1] === '' && stack[2] !== '' 
+        && operator !== '' && afterCalc === false){
         switch(operator){
           case '+':
             //浮動小数点誤差と指数表記を回避
@@ -460,21 +463,21 @@ export class AppComponent implements AfterViewInit {
           error = true;
           return;
         }
-        stack[1] = stack[0]
+        stack[2] = stack[0]
         //浮動小数点誤差と指数表記を回避
-        stack[1] = Math.sqrt(Number(stack[0])).toFixed(13);
-        stack[1] = stack[1].slice(0, 10);
+        stack[0] = Math.sqrt(Number(stack[0])).toFixed(13);
+        stack[0] = stack[0].slice(0, 10);
         //小数点以下の末尾の0を削除
         for(let i = 0; i < 13; i++){
-          if(stack[1].includes('.') && stack[1].endsWith('0')){
-            stack[1] = stack[1].slice(0, -1);
+          if(stack[0].includes('.') && stack[0].endsWith('0')){
+            stack[0] = stack[0].slice(0, -1);
           }
-          if(stack[1].endsWith('.')){
-            stack[1] = stack[1].slice(0, -1);
+          if(stack[0].endsWith('.')){
+            stack[0] = stack[0].slice(0, -1);
             break;
           }
         }
-        display.textContent = stack[1];
+        display.textContent = stack[0];
         afterSqrt = true;
         afterCalc = false;
       }
