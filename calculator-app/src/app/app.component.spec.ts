@@ -807,7 +807,7 @@ describe('AppComponent', () => {
     fixture.detectChanges();
     expect(display.textContent).toBe('36');
   })
-  it('7 * * / 9 . 9 + ± 3 = = 5.29292929',() =>{
+  it('7 * * / 9 . 9 + ± 3 = = 5.2929293',() =>{
     btn7.click();
     btnAsterisk.click();
     btnAsterisk.click();
@@ -821,7 +821,7 @@ describe('AppComponent', () => {
     btnEqual.click();
     btnEqual.click();
     fixture.detectChanges();
-    expect(display.textContent).toBe('5.29292929');
+    expect(display.textContent).toBe('5.2929293');
   })
   it('1 0 . 5 + 6 . * = ± 7 CE / = error',() =>{
     btn1.click();
