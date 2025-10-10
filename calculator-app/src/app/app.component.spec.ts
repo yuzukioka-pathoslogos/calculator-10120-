@@ -153,6 +153,24 @@ describe('AppComponent', () => {
     fixture.detectChanges();
     expect(display.textContent).toBe('error');
   })
+  it('33554432.3-.1= 33554432.2',() =>{
+    btn3.click();
+    btn3.click();
+    btn5.click();
+    btn5.click();
+    btn4.click();
+    btn4.click();
+    btn3.click();
+    btn2.click();
+    btnDot.click();
+    btn3.click();
+    btnMinus.click();
+    btnDot.click();
+    btn1.click();
+    btnEqual.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('33554432.2');
+  })
  
 
 
