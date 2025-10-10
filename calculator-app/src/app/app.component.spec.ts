@@ -967,7 +967,29 @@ describe('AppComponent', () => {
     fixture.detectChanges();
     expect(display.textContent).toBe('0.05555554');
   })
-  it('5%r= o',() =>{
+  it('4r+3== 8',() =>{
+    btn4.click();
+    btnSqrt.click();
+    btnPlus.click();
+    btn3.click();
+    btnEqual.click();
+    btnEqual.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('8');
+  })
+  it('5+r9== 23',() =>{
+    btn5.click();
+    btnPlus.click();
+    btnSqrt.click();
+    btn9.click();
+    btnEqual.click();
+    btnEqual.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('23');
+  })
+
+  //sqrtと%を組み合わせた計算
+  it('5%r= 0',() =>{
     btn5.click();
     btnPercent.click();
     btnSqrt.click();
@@ -1035,8 +1057,8 @@ describe('AppComponent', () => {
   it('5-%r= 2.76393203',() =>{
     btn5.click();
     btnMinus.click();
-    btnSqrt.click();
     btnPercent.click();
+    btnSqrt.click();
     btnEqual.click();
     fixture.detectChanges();
     expect(display.textContent).toBe('2.76393203');
@@ -1059,6 +1081,7 @@ describe('AppComponent', () => {
     fixture.detectChanges();
     expect(display.textContent).toBe('100');
   })
+
 
 
 })
