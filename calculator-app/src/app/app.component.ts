@@ -604,7 +604,6 @@ export class AppComponent implements AfterViewInit {
             return;
           }
         }
-        // afterCalc = true;
       }
       console.log(`stack[0]: ${stack[0]} stack[1]: ${stack[1]} stack[2]: ${stack[2]} 
         operator: ${operator} afterCalc: ${afterCalc} error: ${error} afterSqrt: ${afterSqrt}`);
