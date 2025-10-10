@@ -339,7 +339,7 @@ export class AppComponent implements AfterViewInit {
           afterSqrt = false;
         }else if(stack[0] !== '' && stack[1] === ''){     //演算子の入力を訂正したいとき
           operator = op.value as string;
-        }else if(stack[0] !== '' && stack[1] !== '' && afterCalc === false /*&& afterSqrt === false*/){
+        }else if(stack[0] !== '' && stack[1] !== '' && afterCalc === false){
           //stack[2]が残っていると連続計算になってしまうため初期化
           stack[2] = '';
           calc();
@@ -389,7 +389,6 @@ export class AppComponent implements AfterViewInit {
         if(stack[1] !== ''){
           stack[1] = '0';
           display.textContent = stack[1];
-          // afterSqrt = false;
         }
       }
       console.log(`stack[0]: ${stack[0]} stack[1]: ${stack[1]} stack[2]: ${stack[2]} 
@@ -474,7 +473,6 @@ export class AppComponent implements AfterViewInit {
         }
         display.textContent = stack[1];
         afterSqrt = true;
-        // afterCalc = false;
       }else if(stack[0] !== '' && stack[1] === ''){
         if(stack[0].includes('-')){
           display.textContent = 'error';
@@ -497,7 +495,6 @@ export class AppComponent implements AfterViewInit {
         }
         display.textContent = stack[0];
         afterSqrt = true;
-        // afterCalc = false;
       }
       console.log(`stack[0]: ${stack[0]} stack[1]: ${stack[1]} stack[2]: ${stack[2]} 
         operator: ${operator} afterCalc: ${afterCalc} error: ${error} afterSqrt: ${afterSqrt}`);
