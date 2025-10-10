@@ -1018,6 +1018,228 @@ describe('AppComponent', () => {
     fixture.detectChanges();
     expect(display.textContent).toBe('2.5');
   })
+  it('9 * CE 5 = = 405',() =>{
+    btn9.click();
+    btnAsterisk.click();
+    btnClearEntry.click();
+    btn5.click();
+    btnEqual.click();
+    btnEqual.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('405');
+  })
+  it('. 5 + 1 = = 2.5',() =>{
+    btnDot.click();
+    btn5.click();
+    btnPlus.click();
+    btn1.click();
+    btnEqual.click();
+    btnEqual.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('2.5');
+  })
+  it('9 √ = = = 3',() =>{
+    btn9.click();
+    btnSqrt.click();
+    btnEqual.click();
+    btnEqual.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('3');
+  })
+  it('5 + 4 = √ = = 11',() =>{
+    btn5.click();
+    btnPlus.click();
+    btn4.click();
+    btnEqual.click();
+    btnSqrt.click();
+    btnEqual.click();
+    btnEqual.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('11');
+  })
+  it('9rPM+5%= -6.15',() =>{
+    btn9.click();
+    btnSqrt.click();
+    btnPlusMinus.click();
+    btnPlus.click();
+    btn5.click();
+    btnPercent.click();
+    btnEqual.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('-6.15');
+  })
+  it('8+4%PM= -0.32',() =>{
+    btn8.click();
+    btnPlus.click();
+    btn4.click();
+    btnPercent.click();
+    btnPlusMinus.click();
+    btnEqual.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('-0.32');
+  })
+  it('16r-4PMCE2= 2',() =>{
+    btn1.click();
+    btn6.click();
+    btnSqrt.click();
+    btnMinus.click();
+    btn4.click();
+    btnPlusMinus.click();
+    btnClearEntry.click();
+    btn2.click();
+    btnEqual.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('2');
+  })
+  it('25rPM+5%PM= 0.25',() =>{
+    btn2.click();
+    btn5.click();
+    btnSqrt.click();
+    btnPlusMinus.click();
+    btnPlus.click();
+    btn5.click();
+    btnPercent.click();
+    btnPlusMinus.click();
+    btnEqual.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('0.25');
+  })
+  it('9r+16%PM= -0.48',() =>{
+    btn9.click();
+    btnSqrt.click();
+    btnPlus.click();
+    btn1.click();
+    btn6.click();
+    btnPercent.click();
+    btnPlusMinus.click();
+    btnEqual.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('-0.48');
+  })
+  it('9rPM*2%== -0.54',() =>{
+    btn9.click();
+    btnSqrt.click();
+    btnPlusMinus.click();
+    btnAsterisk.click();
+    btn2.click();
+    btnPercent.click();
+    btnEqual.click();
+    btnEqual.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('-0.54');
+  })
+  it('4PM√+8%= error',() =>{
+    btn4.click();
+    btnPlusMinus.click();
+    btnSqrt.click();
+    btn8.click();
+    btnPercent.click();
+    btnEqual.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('error');
+  })
+  it('49rCE+7PM= -7',() =>{
+    btn4.click();
+    btn9.click();
+    btnSqrt.click();
+    btnClearEntry.click();
+    btn7.click();
+    btnPlusMinus.click();
+    btnEqual.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('-7');
+  })
+  it('36rPM+64%PM= 3.84',() =>{
+    btn3.click();
+    btn6.click();
+    btnSqrt.click();
+    btnPlusMinus.click();
+    btnPlus.click();
+    btn6.click();
+    btn4.click();
+    btnPercent.click();
+    btnPlusMinus.click();
+    btnEqual.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('3.84');
+  })
+  it('9r+9%CE= 6.27',() =>{
+    btn9.click();
+    btnSqrt.click();
+    btnPlus.click();
+    btn9.click();
+    btnPercent.click();
+    btnClearEntry.click();
+    btnEqual.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('6.27');
+  })
+  it('5PM+5%PM√= -2.70871216',() =>{
+    btn5.click();
+    btnPlusMinus.click();
+    btnPlus.click();
+    btn5.click();
+    btnPercent.click();
+    btnPlusMinus.click();
+    btnSqrt.click();
+    btnEqual.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('-2.70871216');
+  })
+  it('16rPMCE+4PM= -4',() =>{
+    btn1.click();
+    btn6.click();
+    btnSqrt.click();
+    btnPlusMinus.click();
+    btnClearEntry.click();
+    btnPlus.click();
+    btn4.click();
+    btnPlusMinus.click();
+    btnEqual.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('-4');
+  })
+  it('9rPM*9%PM= -0.81',() =>{
+    btn9.click();
+    btnSqrt.click();
+    btnPlusMinus.click();
+    btnAsterisk.click();
+    btn9.click();
+    btnPercent.click();
+    btnPlusMinus.click();
+    btnEqual.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('-0.81');
+  })
+  it('64rPM+36%PM= 2.88',() =>{
+    btn6.click();
+    btn4.click();
+    btnSqrt.click();
+    btnPlusMinus.click();
+    btnPlus.click();
+    btn3.click();
+    btn6.click();
+    btnPercent.click();
+    btnPlusMinus.click();
+    btnEqual.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('2.88');
+  })
+  it('9rPMCE+100%PM= 0',() =>{
+    btn9.click();
+    btnSqrt.click();
+    btnPlusMinus.click();
+    btnClearEntry.click();
+    btnPlus.click();
+    btn1.click();
+    btn0.click();
+    btn0.click();
+    btnPercent.click();
+    btnPlusMinus.click();
+    btnEqual.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('0');
+  })
 
   //sqrtと%を組み合わせた計算
   it('5%r= 0',() =>{
@@ -1112,6 +1334,7 @@ describe('AppComponent', () => {
     fixture.detectChanges();
     expect(display.textContent).toBe('100');
   })
+  
 
 
 
