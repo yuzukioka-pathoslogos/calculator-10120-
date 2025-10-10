@@ -529,51 +529,82 @@ export class AppComponent implements AfterViewInit {
           }
         }
       }else{        //stack[1]が空の場合の例外処理
-        switch(operator){
-          case '+':
-            stack[1] = "0";
-            stack[2] = stack[0];
-            break;
-          case '-':
-            stack[1] = "0";
-            stack[2] = stack[0];
-            break;
-          case '*':
-            calc();
-            //浮動小数点誤差と指数表記を回避
-            stack[1] = Number((Number(stack[1]) / 100).toPrecision(13)).toFixed(13);
-            stack[1] = stack[1].slice(0, 10);
-            //小数点以下の末尾の0を削除
-            for(let i = 0; i < 13; i++){
-              if(stack[1].includes('.') && stack[1].endsWith('0')){
-                stack[1] = stack[1].slice(0, -1);
+        if(stack[2] === ''){
+          switch(operator){
+            case '+':
+              stack[1] = "";
+              stack[2] = stack[0];
+              break;
+            case '-':
+              stack[1] = "";
+              stack[2] = stack[0];
+              break;
+            case '*':
+              calc();
+              //浮動小数点誤差と指数表記を回避
+              stack[1] = Number((Number(stack[1]) / 100).toPrecision(13)).toFixed(13);
+              stack[1] = stack[1].slice(0, 10);
+              //小数点以下の末尾の0を削除
+              for(let i = 0; i < 13; i++){
+                if(stack[1].includes('.') && stack[1].endsWith('0')){
+                  stack[1] = stack[1].slice(0, -1);
+                }
+                if(stack[1].endsWith('.')){
+                  stack[1] = stack[1].slice(0, -1);
+                  break;
+                }
               }
-              if(stack[1].endsWith('.')){
-                stack[1] = stack[1].slice(0, -1);
-                break;
+              display.textContent = stack[1];
+              break;
+            case '/':
+              calc();
+              //浮動小数点誤差と指数表記を回避
+              stack[1] = Number((Number(stack[1]) * 100).toPrecision(13)).toFixed(13);
+              stack[1] = stack[1].slice(0, 10);
+              //小数点以下の末尾の0を削除
+              for(let i = 0; i < 13; i++){
+                if(stack[1].includes('.') && stack[1].endsWith('0')){
+                  stack[1] = stack[1].slice(0, -1);
+                }
+                if(stack[1].endsWith('.')){
+                  stack[1] = stack[1].slice(0, -1);
+                  break;
+                }
               }
-            }
-            display.textContent = stack[1];
-            break;
-          case '/':
-            calc();
-            //浮動小数点誤差と指数表記を回避
-            stack[1] = Number((Number(stack[1]) * 100).toPrecision(13)).toFixed(13);
-            stack[1] = stack[1].slice(0, 10);
-            //小数点以下の末尾の0を削除
-            for(let i = 0; i < 13; i++){
-              if(stack[1].includes('.') && stack[1].endsWith('0')){
-                stack[1] = stack[1].slice(0, -1);
-              }
-              if(stack[1].endsWith('.')){
-                stack[1] = stack[1].slice(0, -1);
-                break;
-              }
-            }
-            display.textContent = stack[1];
-            break;
+              display.textContent = stack[1];
+              break;
+          }
+        }else if(stack[2] !== ''){
+          stack[1] = stack[0];
+          stack[0] = stack[2];
+          stack[2] = '';
+          switch(operator){
+            case '+':
+              stack[1] = Number((Number(stack[0]) * Number(stack[1]) / 100).toPrecision(13)).toFixed(13);
+              calc();
+              stack[2] = stack[0];       //連続計算を見本の電卓の仕様に合わせる
+              break;
+            case '-':
+              const stackMinus = stack[0];
+              stack[1] = Number((Number(stack[0]) * Number(stack[1]) / 100).toPrecision(13)).toFixed(13);
+              calc();
+              stack[2] = stackMinus;     //連続計算を見本の電卓の仕様に合わせる
+              break;
+            case '*':
+              stack[1] = Number((Number(stack[1]) / 100).toPrecision(13)).toFixed(13);
+              calc();
+              break;
+            case '/':
+              const stackDivide1 = stack[1];
+              stack[1] = Number((Number(stack[1]) / 100).toPrecision(13)).toFixed(13);
+              calc();
+              stack[2] = stackDivide1;     //連続計算を見本の電卓の仕様に合わせる
+              break;
+            default:
+            return;
+          }
         }
-        afterCalc = true;
+        // afterCalc = true;
       }
       console.log(`stack[0]: ${stack[0]} stack[1]: ${stack[1]} stack[2]: ${stack[2]} 
         operator: ${operator} afterCalc: ${afterCalc} error: ${error} afterSqrt: ${afterSqrt}`);

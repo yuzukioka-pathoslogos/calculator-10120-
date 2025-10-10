@@ -452,6 +452,12 @@ describe('AppComponent', () => {
     expect(display.textContent).toBe('-18.75');
   })
 
+
+
+
+
+
+
   //sqrtの特殊入力
   it('9r+5= 8',() =>{
     btn9.click();
@@ -897,5 +903,162 @@ describe('AppComponent', () => {
     fixture.detectChanges();
     expect(display.textContent).toBe('25');
   })
+  it('2 ± * 9 . 3 + = = -37.2',() =>{
+    btn2.click();
+    btnPlusMinus.click();
+    btnAsterisk.click();
+    btn9.click();
+    btnDot.click();
+    btn3.click();
+    btnPlus.click();
+    btnEqual.click();
+    btnEqual.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('-37.2');
+  })
+  it('4 / = = 2 . 2 * = 4.84',() =>{
+    btn4.click();
+    btnSlash.click();
+    btnEqual.click();
+    btnEqual.click();
+    btn2.click();
+    btnDot.click();
+    btn2.click();
+    btnAsterisk.click();
+    btnEqual.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('4.84');
+  })
+  it('1 . . 1 + 9 9 9 = CE 1000.1',() =>{
+    btn1.click();
+    btnDot.click();
+    btnDot.click();
+    btn1.click();
+    btnPlus.click();
+    btn9.click();
+    btn9.click();
+    btn9.click();
+    btnEqual.click();
+    btnClearEntry.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('1000.1');
+  })
+  it('3 3 % + 9 . * = 81',() =>{
+    btn3.click();
+    btn3.click();
+    btnPercent.click();
+    btnPlus.click();
+    btn9.click();
+    btnDot.click();
+    btnAsterisk.click();
+    btnEqual.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('81');
+  })
+  it('6 / = / 6 * 2 = 0.05555554',() =>{
+    btn6.click();
+    btnSlash.click();
+    btnEqual.click();
+    btnSlash.click();
+    btn6.click();
+    btnAsterisk.click();
+    btn2.click();
+    btnEqual.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('0.05555554');
+  })
+  it('5%r= o',() =>{
+    btn5.click();
+    btnPercent.click();
+    btnSqrt.click();
+    btnEqual.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('0');
+  })
+  it('5r%= 0',() =>{
+    btn5.click();
+    btnSqrt.click();
+    btnPercent.click();
+    btnEqual.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('0');
+  })
+  it('5+%r 2.23606797',() =>{
+    btn5.click();
+    btnPlus.click();
+    btnPercent.click();
+    btnSqrt.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('2.23606797');
+  })
+  it('5+r% 5.11180339',() =>{
+    btn5.click();
+    btnPlus.click();
+    btnSqrt.click();
+    btnPercent.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('5.11180339');
+  })
+  it('5-r% 4.8881966',() =>{
+    btn5.click();
+    btnMinus.click();
+    btnSqrt.click();
+    btnPercent.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('4.8881966');
+  })
+  it('5*r% 0.11180339',() =>{
+    btn5.click();
+    btnAsterisk.click();
+    btnSqrt.click();
+    btnPercent.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('0.11180339');
+  })
+  it('5/r% 223.606798',() =>{
+    btn5.click();
+    btnSlash.click();
+    btnSqrt.click();
+    btnPercent.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('223.606798');
+  })
+  it('5+%r= 7.23606797',() =>{
+    btn5.click();
+    btnPlus.click();
+    btnPercent.click();
+    btnSqrt.click();
+    btnEqual.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('7.23606797');
+  })
+  it('5-%r= 2.76393203',() =>{
+    btn5.click();
+    btnMinus.click();
+    btnSqrt.click();
+    btnPercent.click();
+    btnEqual.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('2.76393203');
+  })
+  it('5*%r= 2.5',() =>{
+    btn5.click();
+    btnAsterisk.click();
+    btnPercent.click();
+    btnSqrt.click();
+    btnEqual.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('2.5');
+  })
+  it('5/r%= 100',() =>{
+    btn5.click();
+    btnSlash.click();
+    btnSqrt.click();
+    btnPercent.click();
+    btnEqual.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('100');
+  })
+
 
 })
