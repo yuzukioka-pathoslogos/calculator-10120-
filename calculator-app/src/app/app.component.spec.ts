@@ -619,6 +619,101 @@ describe('AppComponent', () => {
   })
 
 
+  //追加ケース
+  it('5+3=*2√= 11.3137084',() =>{
+    btn5.click();
+    btnPlus.click();
+    btn3.click();
+    btnEqual.click();
+    btnAsterisk.click();
+    btn2.click();
+    btnSqrt.click();
+    btnEqual.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('11.3137084');
+  })
+  it('.1+0.2=√±= -0.34772255',() =>{
+    btnDot.click();
+    btn1.click();
+    btnPlus.click();
+    btn0.click();
+    btnDot.click();
+    btn2.click();
+    btnEqual.click();
+    btnSqrt.click();
+    btnPlusMinus.click();
+    btnEqual.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('-0.34772255');
+  })
+  it('7 * 8 / 4 + 2 % = 28.28',() =>{
+    btn7.click();
+    btnAsterisk.click();
+    btn8.click();
+    btnSlash.click();
+    btn4.click();
+    btnPlus.click();
+    btn2.click();
+    btnPercent.click();
+    btnEqual.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('28.28');
+  })
+  it('9 ± - 5 √ + 1 = -10.2360679',() =>{
+    btn9.click();
+    btnPlusMinus.click();
+    btnMinus.click();
+    btn5.click();
+    btnSqrt.click();
+    btnPlus.click();
+    btn1.click();
+    btnEqual.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('-10.2360679');
+  })
+  it('3 . 1 4 * 2 . 0 0 = CE 5 + = 8.14',() =>{
+    btn3.click();
+    btnDot.click();
+    btn1.click();
+    btn4.click();
+    btnAsterisk.click();
+    btn2.click();
+    btnDot.click();
+    btn0.click();
+    btn0.click();
+    btnEqual.click();
+    btnClearEntry.click();
+    btn5.click();
+    btnPlus.click();
+    btnEqual.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('8.14');
+  })
+  it('6 6 ± / 3 √ = -38.1051179',() =>{
+    btn6.click();
+    btn6.click();
+    btnPlusMinus.click();
+    btnSlash.click();
+    btn3.click();
+    btnSqrt.click();
+    btnEqual.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('-38.1051179');
+  })
+  it('1 0 0 % + 5 √ - 2 = 0.23606797',() =>{
+    btn1.click();
+    btn0.click();
+    btn0.click();
+    btnPercent.click();
+    btnPlus.click();
+    btn5.click();
+    btnSqrt.click();
+    btnMinus.click();
+    btn2.click();
+    btnEqual.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('0.23606797');
+  })
 
 
 });

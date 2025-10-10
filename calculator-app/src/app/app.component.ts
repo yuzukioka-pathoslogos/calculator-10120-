@@ -81,7 +81,7 @@ export class AppComponent implements AfterViewInit {
       }
       //基本的な計算の処理
       else if(stack[0] !== '' && stack[1] !== '' && operator !== '' 
-      && afterCalc === false /*&& afterSqrt === false */){
+      && afterCalc === false){
         switch(operator){
           case '+':
             //連続計算対応のための処理
@@ -309,7 +309,7 @@ export class AppComponent implements AfterViewInit {
           afterSqrt = false;
         }else if(stack[0] !== '' && stack[1] === ''){     //演算子の入力を訂正したいとき
           operator = op.value as string;
-        }else if(stack[0] !== '' && stack[1] !== '' && afterCalc === false && afterSqrt === false){
+        }else if(stack[0] !== '' && stack[1] !== '' && afterCalc === false /*&& afterSqrt === false*/){
           //stack[2]が残っていると連続計算になってしまうため初期化
           stack[2] = '';
           calc();
@@ -388,7 +388,6 @@ export class AppComponent implements AfterViewInit {
       }
       if(stack[1] !== ''){
         stack[1] = Number((Number(stack[1]) * -1).toPrecision(13)).toFixed(13);
-        console.log(`stack[1]: ${stack[1]}`);
         //小数点以下の末尾の0と小数点を削除
         for(let i = 0; i < 13; i++){
           if(stack[1].includes('.') && stack[1].endsWith('0')){
