@@ -481,6 +481,11 @@ export class AppComponent implements AfterViewInit {
       }
       if(stack[1] !== ''){
         if(afterCalc === false){
+          if(stack[0] === ''){
+            stack[1] = '0';
+            display.textContent = stack[1];
+            return;
+          }
           switch(operator){
             case '+':
               stack[1] = Number((Number(stack[0]) * Number(stack[1]) / 100).toPrecision(13)).toFixed(13);
@@ -519,6 +524,7 @@ export class AppComponent implements AfterViewInit {
               stack[2] = stackDivide2;     //連続計算を見本の電卓の仕様に合わせる
               break;
             default:
+              //=を押した後だと入力を無視する
               return;
           }
         }
