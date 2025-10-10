@@ -462,6 +462,15 @@ describe('AppComponent', () => {
     fixture.detectChanges();
     expect(display.textContent).toBe('8');
   })
+  it('5+4r= 7',() =>{
+    btn5.click();
+    btnPlus.click();
+    btn4.click();
+    btnSqrt.click();
+    btnEqual.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('7');
+  })
   it('1+3=r+3= 5',() =>{
     btn1.click();
     btnPlus.click();
@@ -608,6 +617,7 @@ describe('AppComponent', () => {
     fixture.detectChanges();
     expect(display.textContent).toBe('6.96');
   })
+
 
 
 
