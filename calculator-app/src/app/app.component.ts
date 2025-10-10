@@ -118,7 +118,7 @@ export class AppComponent implements AfterViewInit {
         }
       }
       //連続計算対応のための処理
-      else if(stack[1] !== '' && stack[2] !== '' && operator !== ''){
+      else if(stack[0] !== '' && stack[1] !== '' && stack[2] !== '' && operator !== ''){
         switch(operator){
           case '+':
             //浮動小数点誤差と指数表記を回避
@@ -141,6 +141,36 @@ export class AppComponent implements AfterViewInit {
             }
             //浮動小数点誤差と指数表記を回避
             stack[1] = Number((Number(stack[1]) / Number(stack[2])).toPrecision(13)).toFixed(13);
+            break;
+          default:
+            return;
+        }
+      }
+      //stack[0]が空の場合の例外処理
+      else if(stack[0] === '' && stack[1] !== '' && stack[2] !== '' && operator !== ''){
+        switch(operator){
+          case '+':
+            stack[0] = stack[1];
+            stack[1] = Number((Number(stack[1]) + Number(stack[2])).toPrecision(13)).toFixed(13);
+            stack[2] = stack[0];
+            break;
+          case '-':
+            stack[0] = stack[1];
+            stack[1] = Number((Number(stack[2]) - Number(stack[1])).toPrecision(13)).toFixed(13);
+            stack[2] = stack[0];
+            break;
+          case '*':
+            stack[1] = Number((Number(stack[1]) * Number(stack[2])).toPrecision(13)).toFixed(13);
+            break;
+          case '/':
+            stack[0] = stack[1];
+            if(Number(stack[2]) === 0){
+              display.textContent = 'error';
+              error = true;
+              return;
+            }
+            stack[1] = Number((Number(stack[2]) / Number(stack[1])).toPrecision(13)).toFixed(13);
+            stack[2] = stack[0];
             break;
           default:
             return;
