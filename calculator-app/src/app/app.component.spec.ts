@@ -714,6 +714,188 @@ describe('AppComponent', () => {
     fixture.detectChanges();
     expect(display.textContent).toBe('0.23606797');
   })
+  it('. 5 + . 2 * 4 = ± C 7 = 7',() =>{
+    btnDot.click();
+    btn5.click();
+    btnPlus.click();
+    btnDot.click();
+    btn2.click();
+    btnAsterisk.click();
+    btn4.click();
+    btnEqual.click();
+    btnPlusMinus.click();
+    btnClear.click();
+    btn7.click();
+    btnEqual.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('7');
+  })
+  it('8 0 / 2 - 3 √ + 6 ± = 32.2679492',() =>{
+    btn8.click();
+    btn0.click();
+    btnSlash.click();
+    btn2.click();
+    btnMinus.click();
+    btn3.click();
+    btnSqrt.click();
+    btnPlus.click();
+    btn6.click();
+    btnPlusMinus.click();
+    btnEqual.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('32.2679492');
+  })
+  it('9 9 9 * 0 . 1 0 + 2 CE 4 = 103.9',() =>{
+    btn9.click();
+    btn9.click();
+    btn9.click();
+    btnAsterisk.click();
+    btn0.click();
+    btnDot.click();
+    btn1.click();
+    btn0.click();
+    btnPlus.click();
+    btn2.click();
+    btnClearEntry.click();
+    btn4.click();
+    btnEqual.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('103.9');
+  })
+  it('2 + 2 = * 3 = / 6 = 2',() =>{
+    btn2.click();
+    btnPlus.click();
+    btn2.click();
+    btnEqual.click();
+    btnAsterisk.click();
+    btn3.click();
+    btnEqual.click();
+    btnSlash.click();
+    btn6.click();
+    btnEqual.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('2');
+  })
+  it('4 * 5 = + 1 0 = 30',() =>{
+    btn4.click();
+    btnAsterisk.click();
+    btn5.click();
+    btnEqual.click();
+    btnPlus.click();
+    btn1.click();
+    btn0.click();
+    btnEqual.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('30');
+  })
+  it('5 + = * . 3 √ CE 0 = 1 8 * 2 = 36',() =>{
+    btn5.click();
+    btnPlus.click();
+    btnEqual.click();
+    btnAsterisk.click();
+    btnDot.click();
+    btn3.click();
+    btnSqrt.click();
+    btnClearEntry.click();
+    btn0.click();
+    btnEqual.click();
+    btn1.click();
+    btn8.click();
+    btnAsterisk.click();
+    btn2.click();
+    btnEqual.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('36');
+  })
+  it('7 * * / 9 . 9 + ± 3 = = 5.29292929',() =>{
+    btn7.click();
+    btnAsterisk.click();
+    btnAsterisk.click();
+    btnSlash.click();
+    btn9.click();
+    btnDot.click();
+    btn9.click();
+    btnPlus.click();
+    btnPlusMinus.click();
+    btn3.click();
+    btnEqual.click();
+    btnEqual.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('5.29292929');
+  })
+  it('1 0 . 5 + 6 . * = ± 7 CE / = error',() =>{
+    btn1.click();
+    btn0.click();
+    btnDot.click();
+    btn5.click();
+    btnPlus.click();
+    btn6.click();
+    btnDot.click();
+    btnAsterisk.click();
+    btnEqual.click();
+    btn7.click();
+    btnClearEntry.click();
+    btnSlash.click();
+    btnEqual.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('error');
+  })
+  it('3 + + 2 * * 5 = √ 9 = 45',() =>{
+    btn3.click();
+    btnPlus.click();
+    btnPlus.click();
+    btn2.click();
+    btnAsterisk.click();
+    btnAsterisk.click();
+    btn5.click();
+    btnEqual.click();
+    btnSqrt.click();
+    btn9.click();
+    btnEqual.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('45');
+  })
+  it('9 ± 9 / 3 * 1 0 = -330',() =>{
+    btn9.click();
+    btnPlusMinus.click();
+    btn9.click();
+    btnSlash.click();
+    btn3.click();
+    btnAsterisk.click();
+    btn1.click();
+    btn0.click();
+    btnEqual.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('-330');
+  })
+  it('0 . 0 1 + 8 8 - = / √ = error',() =>{
+    btnDot.click();
+    btn0.click();
+    btn1.click();
+    btnPlus.click();
+    btn8.click();
+    btn8.click();
+    btnMinus.click();
+    btnEqual.click();
+    btnSlash.click();
+    btnSqrt.click();
+    btnEqual.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('error');
+  })
+  it('6 9 * 0 0 = % 5 * = 25',() =>{
+    btn6.click();
+    btn9.click();
+    btnAsterisk.click();
+    btn0.click();
+    btn0.click();
+    btnEqual.click();
+    btnPercent.click();
+    btn5.click();
+    btnAsterisk.click();
+    btnEqual.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('25');
+  })
 
-
-});
+})
