@@ -15,30 +15,31 @@ import { RouterOutlet } from '@angular/router';
 export class AppComponent implements AfterViewInit {
   title = 'calculator-app';
   display = '0';
+  number = (num: string) => {};
+  operator = (op: string) => {};
+  clear = () => {};
+  clearEntry = () => {};
+  dot = () => {};
+  plusMinus = () => {};
+  sqrt = () => {};
+  percent = () => {};
+  equal = () => {};
+
 
   //コンポーネントのテンプレートが読み込まれた後に実行されるメソッド
   ngAfterViewInit(): void {
-    const buttons = document.querySelectorAll('.button') as NodeListOf<HTMLButtonElement>;
-    const operators = document.querySelectorAll('.button-operator') as NodeListOf<HTMLButtonElement>;
-    const equal = document.querySelector('.button-equal') as HTMLButtonElement;
-    const clear = document.querySelector('.button-clear') as HTMLButtonElement;
-    const clearEntry = document.querySelector('.button-clear-entry') as HTMLButtonElement;
-    const dot = document.querySelector('.button-dot') as HTMLButtonElement;
-    const plusMinus = document.querySelector('.button-plus-minus') as HTMLButtonElement;
-    const squareRoot = document.querySelector('.button-sqrt') as HTMLButtonElement;
-    const persent = document.querySelector('.button-percent') as HTMLButtonElement;
 
     //基本的に式の左辺がstack[0]、右辺がstack[1]、連続計算対応のための一時保管場所としてstack[2]を用意
     const stack: string[] = ['', '', ''];
     let afterCalc: boolean = false;
     let afterSqrt: boolean = false;
     let error: boolean = false;
-    this.display = '0';
     const self = this;
+    self.display = '0';
     // 最後に押した演算子を格納
     let operator: string = '';
     //計算を行う関数
-    const calc = function(){
+    const calc = () => {
       //エラーが発生している場合は計算を行わない
       if(error === true){
         return;
@@ -289,8 +290,7 @@ export class AppComponent implements AfterViewInit {
     }
 
     //数字をクリックした時に表示される数字を追加
-    buttons.forEach((btn: HTMLButtonElement) => {
-      btn.addEventListener('click', () => {
+    self.number = (num: string) => {
         //エラーが発生している場合入力を受け付けない
         if(error === true){
           return;
@@ -319,16 +319,15 @@ export class AppComponent implements AfterViewInit {
         }else if(stack[1] !=null && stack[1].length === 11 && stack[1].includes('-') === true){
           return;
         }
-        stack[1] += btn.value as string;
+        stack[1] += num as string;
         self.display = stack[1];
       
         console.log(`stack[0]: ${stack[0]} stack[1]: ${stack[1]} stack[2]: ${stack[2]} 
           operator: ${operator} afterCalc: ${afterCalc} error: ${error} afterSqrt: ${afterSqrt}`);
-      });
-    });
+      };
 
     //小数点をクリックした時に小数点を入力
-    dot.addEventListener('click', () => {
+    self.dot = () => {
       //エラーが発生している場合入力を受け付けない
       if(error === true){
         return;
@@ -360,23 +359,22 @@ export class AppComponent implements AfterViewInit {
       }
       console.log(`stack[0]: ${stack[0]} stack[1]: ${stack[1]} stack[2]: ${stack[2]} 
         operator: ${operator} afterCalc: ${afterCalc} error: ${error} afterSqrt: ${afterSqrt}`);
-    });
+    };
 
     //演算子の処理
-    operators.forEach((op: HTMLButtonElement) => {
-      op.addEventListener('click', () => {
+    self.operator = (op: string) => {
         //エラーが発生している場合入力を受け付けない
         if(error === true){
           return;
         }
         if(stack[0] === ''){
-          operator = op.value as string;
+          operator = op as string;
           stack[0] = stack[1];
           stack[1] = '';
           afterCalc = false;
           afterSqrt = false;
         }else if(stack[0] !== '' && stack[1] === ''){     //演算子の入力を訂正したいとき
-          operator = op.value as string;
+          operator = op as string;
         }else if(stack[0] !== '' && stack[1] !== '' && afterCalc === false){
           //stack[2]が残っていると連続計算になってしまうため初期化
           stack[2] = '';
@@ -386,14 +384,14 @@ export class AppComponent implements AfterViewInit {
           stack[2] = '';
           afterCalc = false;
           afterSqrt = false;
-          operator = op.value as string;
+          operator = op as string;
         }else if(stack[0] !== '' && stack[1] !== '' && afterCalc === false && afterSqrt === true){
-          operator = op.value as string;
+          operator = op as string;
           stack[0] = stack[1];
           stack[1] = '';
           afterSqrt = false;
         }else if(stack[0] !== '' && stack[1] !== '' && afterCalc === true){
-          operator = op.value as string;
+          operator = op as string;
           stack[0] = stack[1];
           stack[1] = '';
           afterCalc = false;
@@ -401,11 +399,10 @@ export class AppComponent implements AfterViewInit {
         }
         console.log(`stack[0]: ${stack[0]} stack[1]: ${stack[1]} stack[2]: ${stack[2]} 
           operator: ${operator} afterCalc: ${afterCalc} error: ${error} afterSqrt: ${afterSqrt}`);
-      });
-    });
+      };
 
     //=をクリックした時の処理
-    equal.addEventListener('click', () => {
+    self.equal = () => {
       //エラーが発生している場合入力を受け付けない
       if(error === true){
         return;
@@ -413,10 +410,10 @@ export class AppComponent implements AfterViewInit {
       calc();
       console.log(`stack[0]: ${stack[0]} stack[1]: ${stack[1]} stack[2]: ${stack[2]} 
         operator: ${operator} afterCalc: ${afterCalc} error: ${error} afterSqrt: ${afterSqrt}`);
-    });
+    };
   
     //CEをクリックした時にスタックの1番目を初期化
-    clearEntry.addEventListener('click', () => {
+    self.clearEntry = () => {
       //エラーが発生している場合入力を受け付けない
       if(error === true){
         return;
@@ -431,10 +428,10 @@ export class AppComponent implements AfterViewInit {
       }
       console.log(`stack[0]: ${stack[0]} stack[1]: ${stack[1]} stack[2]: ${stack[2]} 
         operator: ${operator} afterCalc: ${afterCalc} error: ${error} afterSqrt: ${afterSqrt}`);
-    });
+    };
     
     //Cをクリックした時にスタックを初期化
-    clear.addEventListener('click', () => {
+    self.clear = () => {
       stack[0] = '';
       stack[1] = '0';
       stack[2] = '';
@@ -445,10 +442,10 @@ export class AppComponent implements AfterViewInit {
       self.display = stack[1];
       console.log(`stack[0]: ${stack[0]} stack[1]: ${stack[1]} stack[2]: ${stack[2]} 
         operator: ${operator} afterCalc: ${afterCalc} error: ${error} afterSqrt: ${afterSqrt}`);
-    });
+    };
 
     //±をクリックした時に符号を反転
-    plusMinus.addEventListener('click', () => {
+    self.plusMinus = () => {
       //エラーが発生している場合入力を受け付けない
       if(error === true){
         return;
@@ -482,10 +479,10 @@ export class AppComponent implements AfterViewInit {
       }
       console.log(`stack[0]: ${stack[0]} stack[1]: ${stack[1]} stack[2]: ${stack[2]} 
         operator: ${operator} afterCalc: ${afterCalc} error: ${error} afterSqrt: ${afterSqrt}`);
-    });
+    };
 
     //平方根をクリックした時の処理
-    squareRoot.addEventListener('click', () => {
+    self.sqrt = () => {
       //エラーが発生している場合入力を受け付けない
       if(error === true){
         return;
@@ -536,10 +533,10 @@ export class AppComponent implements AfterViewInit {
       }
       console.log(`stack[0]: ${stack[0]} stack[1]: ${stack[1]} stack[2]: ${stack[2]} 
         operator: ${operator} afterCalc: ${afterCalc} error: ${error} afterSqrt: ${afterSqrt}`);
-    });
+    };
 
     //パーセントをクリックした時の処理
-    persent.addEventListener('click', () => {
+    self.percent = () => {
       //エラーが発生している場合入力を受け付けない
       if(error === true){
         return;
@@ -672,6 +669,6 @@ export class AppComponent implements AfterViewInit {
       }
       console.log(`stack[0]: ${stack[0]} stack[1]: ${stack[1]} stack[2]: ${stack[2]} 
         operator: ${operator} afterCalc: ${afterCalc} error: ${error} afterSqrt: ${afterSqrt}`);
-    });
+    };
   }
 }
