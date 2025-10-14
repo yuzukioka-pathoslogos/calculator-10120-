@@ -579,7 +579,7 @@ describe('AppComponent', () => {
     component.sqrt();
     component.number('5');
     component.equal();
-    component.plus();
+    component.operator('+');
     component.number('1');
     component.number('0');
     component.percent();

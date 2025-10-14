@@ -196,18 +196,16 @@ export class AppComponent implements AfterViewInit {
           case '*':
             //浮動小数点誤差と指数表記を回避
             stack[1] = Number((Number(stack[0]) * Number(stack[2])).toPrecision(13)).toFixed(13);
-            //連続計算対応のための処理
-            stack[2] = stack[0];
             break;
           case '/':
             //0で割られた場合の処理
-            if(Number(stack[2]) === 0){
+            if(Number(stack[0]) === 0){
               self.display = 'error';
               error = true;
               return;
             }
             //浮動小数点誤差と指数表記を回避
-            stack[1] = Number((Number(stack[0]) / Number(stack[2])).toPrecision(13)).toFixed(13);
+            stack[1] = Number((Number(stack[2]) / Number(stack[0])).toPrecision(13)).toFixed(13);
             //連続計算対応のための処理
             stack[2] = stack[0];
             break;
