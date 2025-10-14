@@ -14,10 +14,10 @@ import { RouterOutlet } from '@angular/router';
 //インターフェースAfterViewInitをclass AppCompenentに対して実装
 export class AppComponent implements AfterViewInit {
   title = 'calculator-app';
+  display = '0';
 
   //コンポーネントのテンプレートが読み込まれた後に実行されるメソッド
   ngAfterViewInit(): void {
-    const display = document.querySelector('#display') as HTMLDivElement;
     const buttons = document.querySelectorAll('.button') as NodeListOf<HTMLButtonElement>;
     const operators = document.querySelectorAll('.button-operator') as NodeListOf<HTMLButtonElement>;
     const equal = document.querySelector('.button-equal') as HTMLButtonElement;
@@ -33,7 +33,8 @@ export class AppComponent implements AfterViewInit {
     let afterCalc: boolean = false;
     let afterSqrt: boolean = false;
     let error: boolean = false;
-    display.textContent = '0';
+    this.display = '0';
+    const self = this;
     // 最後に押した演算子を格納
     let operator: string = '';
     //計算を行う関数
@@ -68,7 +69,7 @@ export class AppComponent implements AfterViewInit {
             stack[2] = stack[0];
             //0で割られた場合の処理
             if(Number(stack[0]) === 0){
-              display.textContent = 'error';
+              self.display = 'error';
               error = true;
               return;
             }
@@ -106,7 +107,7 @@ export class AppComponent implements AfterViewInit {
             stack[2] = stack[1];
             //0で割られた場合の処理
             if(Number(stack[1]) === 0){
-              display.textContent = 'error';
+              self.display = 'error';
               error = true;
               return;
             }
@@ -135,7 +136,7 @@ export class AppComponent implements AfterViewInit {
           case '/':
             //0で割られた場合の処理
             if(Number(stack[2]) === 0){
-              display.textContent = 'error';
+              self.display = 'error';
               error = true;
               return;
             }
@@ -165,7 +166,7 @@ export class AppComponent implements AfterViewInit {
           case '/':
             stack[0] = stack[1];
             if(Number(stack[2]) === 0){
-              display.textContent = 'error';
+              self.display = 'error';
               error = true;
               return;
             }
@@ -200,7 +201,7 @@ export class AppComponent implements AfterViewInit {
           case '/':
             //0で割られた場合の処理
             if(Number(stack[2]) === 0){
-              display.textContent = 'error';
+              self.display = 'error';
               error = true;
               return;
             }
@@ -238,7 +239,7 @@ export class AppComponent implements AfterViewInit {
           case '/':
             //0で割られた場合の処理
             if(Number(stack[0]) === 0){
-              display.textContent = 'error';
+              self.display = 'error';
               error = true;
               return;
             }
@@ -259,7 +260,7 @@ export class AppComponent implements AfterViewInit {
         }else{
           stack[1] = stack[1].slice(0, 10);
         }
-        display.textContent = `e${stack[1]}`;
+        self.display = `e${stack[1]}`;
         error = true;
         return;
       }
@@ -283,7 +284,7 @@ export class AppComponent implements AfterViewInit {
           break;
         }
       }
-      display.textContent = stack[1];
+      self.display = stack[1];
       afterCalc = true;
     }
 
@@ -319,7 +320,7 @@ export class AppComponent implements AfterViewInit {
           return;
         }
         stack[1] += btn.value as string;
-        display.textContent = stack[1];
+        self.display = stack[1];
       
         console.log(`stack[0]: ${stack[0]} stack[1]: ${stack[1]} stack[2]: ${stack[2]} 
           operator: ${operator} afterCalc: ${afterCalc} error: ${error} afterSqrt: ${afterSqrt}`);
@@ -355,7 +356,7 @@ export class AppComponent implements AfterViewInit {
         return;
       }else{                            //小数点が入力されていない場合は小数点を入力
       stack[1] += '.';
-      display.textContent = stack[1];
+      self.display = stack[1];
       }
       console.log(`stack[0]: ${stack[0]} stack[1]: ${stack[1]} stack[2]: ${stack[2]} 
         operator: ${operator} afterCalc: ${afterCalc} error: ${error} afterSqrt: ${afterSqrt}`);
@@ -425,7 +426,7 @@ export class AppComponent implements AfterViewInit {
       }else{
         if(stack[1] !== ''){
           stack[1] = '0';
-          display.textContent = stack[1];
+          self.display = stack[1];
         }
       }
       console.log(`stack[0]: ${stack[0]} stack[1]: ${stack[1]} stack[2]: ${stack[2]} 
@@ -441,7 +442,7 @@ export class AppComponent implements AfterViewInit {
       afterCalc = false;
       afterSqrt = false;
       error = false;
-      display.textContent = stack[1];
+      self.display = stack[1];
       console.log(`stack[0]: ${stack[0]} stack[1]: ${stack[1]} stack[2]: ${stack[2]} 
         operator: ${operator} afterCalc: ${afterCalc} error: ${error} afterSqrt: ${afterSqrt}`);
     });
@@ -464,7 +465,7 @@ export class AppComponent implements AfterViewInit {
             break;
           }
         }
-        display.textContent = stack[1];
+        self.display = stack[1];
       }else if(stack[0] !== '' && stack[1] === ''){       //演算子が入力されている場合
         stack[0] = Number((Number(stack[0]) * -1).toPrecision(13)).toFixed(13);
         //小数点以下の末尾の0を削除
@@ -477,7 +478,7 @@ export class AppComponent implements AfterViewInit {
             break;
           }
         }
-        display.textContent = stack[0];
+        self.display = stack[0];
       }
       console.log(`stack[0]: ${stack[0]} stack[1]: ${stack[1]} stack[2]: ${stack[2]} 
         operator: ${operator} afterCalc: ${afterCalc} error: ${error} afterSqrt: ${afterSqrt}`);
@@ -491,7 +492,7 @@ export class AppComponent implements AfterViewInit {
       }
       if(stack[1] !== ''){
         if(stack[1].includes('-')){
-          display.textContent = 'error';
+          self.display = 'error';
           error = true;
           return;
         }
@@ -508,11 +509,11 @@ export class AppComponent implements AfterViewInit {
             break;
           }
         }
-        display.textContent = stack[1];
+        self.display = stack[1];
         afterSqrt = true;
       }else if(stack[0] !== '' && stack[1] === ''){
         if(stack[0].includes('-')){
-          display.textContent = 'error';
+          self.display = 'error';
           error = true;
           return;
         }
@@ -530,7 +531,7 @@ export class AppComponent implements AfterViewInit {
             break;
           }
         }
-        display.textContent = stack[0];
+        self.display = stack[0];
         afterSqrt = true;
       }
       console.log(`stack[0]: ${stack[0]} stack[1]: ${stack[1]} stack[2]: ${stack[2]} 
@@ -547,7 +548,7 @@ export class AppComponent implements AfterViewInit {
         if(afterCalc === false){
           if(stack[0] === ''){
             stack[1] = '0';
-            display.textContent = stack[1];
+            self.display = stack[1];
             return;
           }
           switch(operator){
@@ -618,7 +619,7 @@ export class AppComponent implements AfterViewInit {
                   break;
                 }
               }
-              display.textContent = stack[1];
+              self.display = stack[1];
               break;
             case '/':
               calc();
@@ -635,7 +636,7 @@ export class AppComponent implements AfterViewInit {
                   break;
                 }
               }
-              display.textContent = stack[1];
+              self.display = stack[1];
               break;
           }
         }else if(stack[2] !== ''){
