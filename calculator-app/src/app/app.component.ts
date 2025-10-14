@@ -176,6 +176,43 @@ export class AppComponent implements AfterViewInit {
             return;
         }
       }
+      //stack[1]が空かつsqrt後の場合の例外処理
+      else if(stack[0] !== '' && stack[1] === '' && stack[2] !== '' && operator !== '' && afterCalc === false && afterSqrt === true){
+        switch(operator){
+          case '+':
+            //浮動小数点誤差と指数表記を回避
+            stack[1] = Number((Number(stack[0]) + Number(stack[2])).toPrecision(13)).toFixed(13);
+            //連続計算対応のための処理
+            stack[2] = stack[0];
+            break;
+          case '-':
+            //浮動小数点誤差と指数表記を回避
+            stack[1] = Number((Number(stack[2]) - Number(stack[0])).toPrecision(13)).toFixed(13);
+            //連続計算対応のための処理
+            stack[2] = stack[0];
+            break;
+          case '*':
+            //浮動小数点誤差と指数表記を回避
+            stack[1] = Number((Number(stack[0]) * Number(stack[2])).toPrecision(13)).toFixed(13);
+            //連続計算対応のための処理
+            stack[2] = stack[0];
+            break;
+          case '/':
+            //0で割られた場合の処理
+            if(Number(stack[2]) === 0){
+              display.textContent = 'error';
+              error = true;
+              return;
+            }
+            //浮動小数点誤差と指数表記を回避
+            stack[1] = Number((Number(stack[0]) / Number(stack[2])).toPrecision(13)).toFixed(13);
+            //連続計算対応のための処理
+            stack[2] = stack[0];
+            break;
+          default:
+            return;
+        }
+      }
       //calc後に演算子を入力してすぐにcalcを行う場合の例外処理
       else if(stack[0] !== '' && stack[1] === '' && stack[2] !== '' 
         && operator !== '' && afterCalc === false){

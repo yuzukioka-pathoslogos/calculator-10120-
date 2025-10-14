@@ -543,6 +543,14 @@ describe('AppComponent', () => {
     fixture.detectChanges();
     expect(display.textContent).toBe('6');
   })
+  it('4*r= 8',() =>{
+    btn4.click();
+    btnAsterisk.click();
+    btnSqrt.click();
+    btnEqual.click();
+    fixture.detectChanges();
+    expect(display.textContent).toBe('8');
+  })
 
   //複雑な計算
   it('5+3=PM*2=5= -40',() =>{
