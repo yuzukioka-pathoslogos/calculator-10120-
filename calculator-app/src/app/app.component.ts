@@ -166,7 +166,8 @@ export class AppComponent implements AfterViewInit {
             break;
           case '/':
             stack[0] = stack[1];
-            if(Number(stack[2]) === 0){
+            //0で割られた場合の処理
+            if(Number(stack[1]) === 0){
               self.display = 'error';
               error = true;
               return;
@@ -563,10 +564,10 @@ export class AppComponent implements AfterViewInit {
               calc();
               break;
             case '/':
-              const stackDivide1 = stack[1];
+              const stackDivide = stack[1];
               stack[1] = Number((Number(stack[1]) / 100).toPrecision(13)).toFixed(13);
               calc();
-              stack[2] = stackDivide1;     //連続計算を見本の電卓の仕様に合わせる
+              stack[2] = stackDivide;     //連続計算を見本の電卓の仕様に合わせる
               break;
             default:
             return;
@@ -655,10 +656,10 @@ export class AppComponent implements AfterViewInit {
               calc();
               break;
             case '/':
-              const stackDivide1 = stack[1];
+              const stackDivide = stack[1];
               stack[1] = Number((Number(stack[1]) / 100).toPrecision(13)).toFixed(13);
               calc();
-              stack[2] = stackDivide1;     //連続計算を見本の電卓の仕様に合わせる
+              stack[2] = stackDivide;     //連続計算を見本の電卓の仕様に合わせる
               break;
             default:
             return;
