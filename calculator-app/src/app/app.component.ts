@@ -39,21 +39,26 @@ export class AppComponent implements AfterViewInit {
     // 最後に押した演算子を格納
     let operator: string = '';
 
+    //浮動小数点誤差と指数表記を回避するための関数（整数スケーリング＋文字列操作）
     function scaleCalc(a: string, b: string, op: string): string {
+      //小数点以下の桁数を取得
       const aDecimals = (a.split('.')[1] || '').length;
       const bDecimals = (b.split('.')[1] || '').length;
+      //小数点以下の桁数の最大値を取得
       const maxDecimals = Math.max(aDecimals, bDecimals);
-      const scale = 10 ** maxDecimals;
+      //文字列からBigintに変換し、桁数を調整
       const aScaled = BigInt(a.replace('.', '')) * BigInt(10 ** (maxDecimals - aDecimals));
       const bScaled = BigInt(b.replace('.', '')) * BigInt(10 ** (maxDecimals - bDecimals));
       switch(op){
         case '+':
           const sum = aScaled + bScaled;
           let sumString = sum.toString();
-          console.log(`sumString: ${sumString}`);
+          //小数を含んでいた場合
           if(0 < maxDecimals){
             if(sumString.includes('-')){
+              //符号を削除して置き、後から追加
               sumString = sumString.slice(1);
+              //小数点以下の桁数の最大値を超えるまで0を追加
               while(sumString.length <= maxDecimals){
                 sumString = '0' + sumString;
               }
@@ -64,7 +69,9 @@ export class AppComponent implements AfterViewInit {
               }
             }
           }
-            sumString = sumString.slice(0, sumString.length - maxDecimals) + '.' + sumString.slice(sumString.length - maxDecimals);
+            //整数部分と小数部分の間に小数点を追加
+            sumString = sumString.slice(0, sumString.length - maxDecimals)
+             + '.' + sumString.slice(sumString.length - maxDecimals);
           return sumString;
         case '-':
           const diff = aScaled - bScaled;
@@ -82,7 +89,8 @@ export class AppComponent implements AfterViewInit {
               }
             }
           }
-            diffString = diffString.slice(0, diffString.length - maxDecimals) + '.' + diffString.slice(diffString.length - maxDecimals);
+            diffString = diffString.slice(0, diffString.length - maxDecimals)
+             + '.' + diffString.slice(diffString.length - maxDecimals);
           return diffString;
         case '*':
           const product = aScaled * bScaled;
@@ -100,11 +108,11 @@ export class AppComponent implements AfterViewInit {
               }
             }
           }
-            productString = productString.slice(0, productString.length - maxDecimals * 2) + '.' + productString.slice(productString.length - maxDecimals * 2);
+            productString = productString.slice(0, productString.length - maxDecimals * 2)
+             + '.' + productString.slice(productString.length - maxDecimals * 2);
           return productString;
         case '/':
           const quotient = aScaled * BigInt(10 ** 10) / bScaled;
-          console.log(`quotient: ${quotient}`);
           let quotientString = quotient.toString();
           if(quotientString.includes('-')){
             quotientString = quotientString.slice(1);
@@ -117,18 +125,13 @@ export class AppComponent implements AfterViewInit {
               quotientString = '0' + quotientString;
             }
           }
-          quotientString = quotientString.slice(0, quotientString.length - 10) + '.' + quotientString.slice(quotientString.length - 10);
+          quotientString = quotientString.slice(0, quotientString.length - 10)
+           + '.' + quotientString.slice(quotientString.length - 10);
           return quotientString;
         default:
           return '';
       }
     }
-
-
-
-
-
-
 
     //計算を行う関数
     const calc = () => {
@@ -276,7 +279,8 @@ export class AppComponent implements AfterViewInit {
         }
       }
       //stack[1]が空かつsqrt後の場合の例外処理
-      else if(stack[0] !== '' && stack[1] === '' && stack[2] !== '' && operator !== '' && afterCalc === false && afterSqrt === true){
+      else if(stack[0] !== '' && stack[1] === '' && stack[2] !== '' 
+      && operator !== '' && afterCalc === false && afterSqrt === true){
         switch(operator){
           case '+':
             //浮動小数点誤差と指数表記を回避
@@ -371,15 +375,7 @@ export class AppComponent implements AfterViewInit {
         stack[1] = stack[1].slice(0, 10);
       }
       //小数点以下の末尾の0を削除
-      for(let i = 0; i < 13; i++){
-        if(stack[1].includes('.') && stack[1].endsWith('0')){
-          stack[1] = stack[1].slice(0, -1);
-        }
-        if(stack[1].endsWith('.')){
-          stack[1] = stack[1].slice(0, -1);
-          break;
-        }
-      }
+      stack[1] = stack[1].replace(/\.?0+$/,'');
       self.display = stack[1];
       afterCalc = true;
     }
@@ -548,28 +544,12 @@ export class AppComponent implements AfterViewInit {
       if(stack[1] !== ''){
         stack[1] = scaleCalc(stack[1], '-1', '*');
         //小数点以下の末尾の0と小数点を削除
-        for(let i = 0; i < 13; i++){
-          if(stack[1].includes('.') && stack[1].endsWith('0')){
-            stack[1] = stack[1].slice(0, -1);
-          }
-          if(stack[1].endsWith('.')){
-            stack[1] = stack[1].slice(0, -1);
-            break;
-          }
-        }
+        stack[1] = stack[1].replace(/\.?0+$/,'');
         self.display = stack[1];
       }else if(stack[0] !== '' && stack[1] === ''){       //演算子が入力されている場合
         stack[0] = scaleCalc(stack[0], '-1', '*');
         //小数点以下の末尾の0を削除
-        for(let i = 0; i < 13; i++){
-          if(stack[0].includes('.') && stack[0].endsWith('0')){
-            stack[0] = stack[0].slice(0, -1);
-          }
-          if(stack[0].endsWith('.')){
-            stack[0] = stack[0].slice(0, -1);
-            break;
-          }
-        }
+        stack[0] = stack[0].replace(/\.?0+$/,'');
         self.display = stack[0];
       }
       console.log(`stack[0]: ${stack[0]} stack[1]: ${stack[1]} stack[2]: ${stack[2]} 
@@ -589,18 +569,10 @@ export class AppComponent implements AfterViewInit {
           return;
         }
         //浮動小数点誤差と指数表記を回避
-        stack[1] = Number(Math.sqrt(Number(stack[1])).toPrecision(13)).toFixed(13);
+        stack[1] = Math.sqrt(Number(stack[1])).toString();
         stack[1] = stack[1].slice(0, 10);
         //小数点以下の末尾の0を削除
-        for(let i = 0; i < 13; i++){
-          if(stack[1].includes('.') && stack[1].endsWith('0')){
-            stack[1] = stack[1].slice(0, -1);
-          }
-          if(stack[1].endsWith('.')){
-            stack[1] = stack[1].slice(0, -1);
-            break;
-          }
-        }
+        stack[1] = stack[1].replace(/\.?0+$/,'');
         self.display = stack[1];
         afterSqrt = true;
       }else if(stack[0] !== '' && stack[1] === ''){
@@ -611,18 +583,10 @@ export class AppComponent implements AfterViewInit {
         }
         stack[2] = stack[0]
         //浮動小数点誤差と指数表記を回避
-        stack[0] = Number(Math.sqrt(Number(stack[0])).toPrecision(13)).toFixed(13);
+        stack[0] = Math.sqrt(Number(stack[0])).toString();
         stack[0] = stack[0].slice(0, 10);
         //小数点以下の末尾の0を削除
-        for(let i = 0; i < 13; i++){
-          if(stack[0].includes('.') && stack[0].endsWith('0')){
-            stack[0] = stack[0].slice(0, -1);
-          }
-          if(stack[0].endsWith('.')){
-            stack[0] = stack[0].slice(0, -1);
-            break;
-          }
-        }
+        stack[0] = stack[0].replace(/\.?0+$/,'');
         self.display = stack[0];
         afterSqrt = true;
       }
@@ -704,15 +668,7 @@ export class AppComponent implements AfterViewInit {
               stack[1] = scaleCalc(stack[1], '100', '/');
               stack[1] = stack[1].slice(0, 10);
               //小数点以下の末尾の0を削除
-              for(let i = 0; i < 13; i++){
-                if(stack[1].includes('.') && stack[1].endsWith('0')){
-                  stack[1] = stack[1].slice(0, -1);
-                }
-                if(stack[1].endsWith('.')){
-                  stack[1] = stack[1].slice(0, -1);
-                  break;
-                }
-              }
+              stack[1] = stack[1].replace(/\.?0+$/,'');
               self.display = stack[1];
               break;
             case '/':
@@ -721,15 +677,7 @@ export class AppComponent implements AfterViewInit {
               stack[1] = scaleCalc(stack[1], '100', '*');
               stack[1] = stack[1].slice(0, 10);
               //小数点以下の末尾の0を削除
-              for(let i = 0; i < 13; i++){
-                if(stack[1].includes('.') && stack[1].endsWith('0')){
-                  stack[1] = stack[1].slice(0, -1);
-                }
-                if(stack[1].endsWith('.')){
-                  stack[1] = stack[1].slice(0, -1);
-                  break;
-                }
-              }
+              stack[1] = stack[1].replace(/\.?0+$/,'');
               self.display = stack[1];
               break;
           }
