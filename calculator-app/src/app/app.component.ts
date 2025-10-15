@@ -569,7 +569,8 @@ export class AppComponent implements AfterViewInit {
           return;
         }
         //浮動小数点誤差と指数表記を回避
-        stack[1] = Math.sqrt(Number(stack[1])).toString();
+        stack[1] = Math.sqrt(Number(stack[1]) * (10 ** 8)).toString();
+        stack[1] = scaleCalc(stack[1], '10000', '/');
         stack[1] = stack[1].slice(0, 10);
         //小数点以下の末尾の0を削除
         stack[1] = stack[1].replace(/\.?0+$/,'');
@@ -583,7 +584,8 @@ export class AppComponent implements AfterViewInit {
         }
         stack[2] = stack[0]
         //浮動小数点誤差と指数表記を回避
-        stack[0] = Math.sqrt(Number(stack[0])).toString();
+        stack[0] = Math.sqrt(Number(stack[0]) * (10 ** 8)).toString();
+        stack[0] = scaleCalc(stack[0], '10000', '/');
         stack[0] = stack[0].slice(0, 10);
         //小数点以下の末尾の0を削除
         stack[0] = stack[0].replace(/\.?0+$/,'');
