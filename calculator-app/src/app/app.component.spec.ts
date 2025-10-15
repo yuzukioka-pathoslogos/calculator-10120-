@@ -126,7 +126,35 @@ describe('AppComponent', () => {
     fixture.detectChanges();
     expect(component.display).toBe('33554432.2');
   })
- 
+  it('99999*.1= 9999.9',() =>{
+    component.number('9');
+    component.number('9');  
+    component.number('9');
+    component.number('9');
+    component.number('9');
+    component.operator('*');
+    component.dot();
+    component.number('1');
+    component.equal();
+    fixture.detectChanges();
+    expect(component.display).toBe('9999.9');
+  })
+  it('81000019+.1= 81000019.1',() =>{
+    component.number('8');
+    component.number('1');
+    component.number('0');
+    component.number('0');  
+    component.number('0');
+    component.number('0');
+    component.number('1');
+    component.number('9');
+    component.operator('+');
+    component.dot();
+    component.number('1');
+    component.equal();
+    fixture.detectChanges();
+    expect(component.display).toBe('81000019.1');
+  })
 
 
 
