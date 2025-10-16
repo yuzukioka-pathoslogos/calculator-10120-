@@ -535,13 +535,6 @@ export class AppComponent implements AfterViewInit {
       if(error === true){
         return;
       }
-      //演算子→√→％の順で入力した場合の例外処理
-      if(afterSqrt === true && stack[0] !== '' && stack[1] === '' && stack[2] !== ''){
-        stack[1] = stack[0];
-        stack[0] = stack[2];
-        stack[2] = '';
-        afterSqrt = false;
-      }
       if(stack[1] !== ''){
         if(afterCalc === false){
           if(stack[0] === ''){
