@@ -68,7 +68,7 @@ export class AppComponent implements AfterViewInit {
             if(sumString.includes('-')){
               //符号を削除して置き、後から追加
               sumString = sumString.slice(1);
-              //小数点以下の桁数の最大値を超えるまで0を追加
+              //小数点以下の桁数の最大値を超えるまで0埋め
               while(sumString.length <= maxDecimals){
                 sumString = '0' + sumString;
               }
@@ -161,13 +161,11 @@ export class AppComponent implements AfterViewInit {
           case '-':
             //連続計算対応のための処理
             stack[2] = stack[0];
-            //浮動小数点誤差と指数表記を回避、13桁で丸めることで計算への影響を小さくする
             stack[1] = scaleCalc(stack[0], '-1', '*');
             break;
           case '*':
             //連続計算対応のための処理
             stack[2] = stack[0];
-            //浮動小数点誤差と指数表記を回避
             stack[1] = scaleCalc(stack[0], stack[0], '*');
             break;
           case '/':
@@ -179,7 +177,6 @@ export class AppComponent implements AfterViewInit {
               error = true;
               return;
             }
-            //浮動小数点誤差と指数表記を回避
             stack[1] = scaleCalc('1', stack[0], '/');        
             break;
           default:
@@ -193,19 +190,16 @@ export class AppComponent implements AfterViewInit {
           case '+':
             //連続計算対応のための処理
             stack[2] = stack[1];
-            //浮動小数点誤差と指数表記を回避
             stack[1] = scaleCalc(stack[0], stack[1], '+');
             break;
           case '-':
             //連続計算対応のための処理
             stack[2] = stack[1];
-            //浮動小数点誤差と指数表記を回避
             stack[1] = scaleCalc(stack[0], stack[1], '-');
             break;
           case '*':
             //連続計算対応のための処理
             stack[2] = stack[0];
-            //浮動小数点誤差と指数表記を回避
             stack[1] = scaleCalc(stack[0], stack[1], '*');
             break;
           case '/':
@@ -217,9 +211,7 @@ export class AppComponent implements AfterViewInit {
               error = true;
               return;
             }
-            //浮動小数点誤差と指数表記を回避
             stack[1] = scaleCalc(stack[0], stack[1], '/');
-            console.log(`stack[1]: ${stack[1]}`);
             break;
           default:
             return;
@@ -229,16 +221,12 @@ export class AppComponent implements AfterViewInit {
       else if(stack[0] !== '' && stack[1] !== '' && stack[2] !== '' && operator !== ''){
         switch(operator){
           case '+':
-            //浮動小数点誤差と指数表記を回避
             stack[1] = scaleCalc(stack[1], stack[2], '+');
-            console.log(`stack[1]: ${stack[1]}`);
             break;
           case '-':
-            //浮動小数点誤差と指数表記を回避
             stack[1] = scaleCalc(stack[1], stack[2], '-');
             break;
           case '*':
-            //浮動小数点誤差と指数表記を回避
             stack[1] = scaleCalc(stack[1], stack[2], '*');
             break;
           case '/':
@@ -248,7 +236,6 @@ export class AppComponent implements AfterViewInit {
               error = true;
               return;
             }
-            //浮動小数点誤差と指数表記を回避
             stack[1] = scaleCalc(stack[1], stack[2], '/');
             break;
           default:
@@ -291,19 +278,16 @@ export class AppComponent implements AfterViewInit {
       && operator !== '' && afterCalc === false && afterSqrt === true){
         switch(operator){
           case '+':
-            //浮動小数点誤差と指数表記を回避
             stack[1] = scaleCalc(stack[0], stack[2], '+');
             //連続計算対応のための処理
             stack[2] = stack[0];
             break;
           case '-':
-            //浮動小数点誤差と指数表記を回避
             stack[1] = scaleCalc(stack[2], stack[0], '-');
             //連続計算対応のための処理
             stack[2] = stack[0];
             break;
           case '*':
-            //浮動小数点誤差と指数表記を回避
             stack[1] = scaleCalc(stack[0], stack[2], '*');
             break;
           case '/':
@@ -313,7 +297,6 @@ export class AppComponent implements AfterViewInit {
               error = true;
               return;
             }
-            //浮動小数点誤差と指数表記を回避
             stack[1] = scaleCalc(stack[2], stack[0], '/');
             //連続計算対応のための処理
             stack[2] = stack[0];
@@ -327,19 +310,16 @@ export class AppComponent implements AfterViewInit {
         && operator !== '' && afterCalc === false){
         switch(operator){
           case '+':
-            //浮動小数点誤差と指数表記を回避
             stack[1] = scaleCalc(stack[0], stack[2], '+');
             //連続計算対応のための処理
             stack[2] = stack[0];
             break;
-          case '-':
-            //浮動小数点誤差と指数表記を回避
+            case '-':
             stack[1] = scaleCalc(stack[2], stack[0], '-');
             //連続計算対応のための処理
             stack[2] = stack[0];
             break;
           case '*':
-            //浮動小数点誤差と指数表記を回避
             stack[1] = scaleCalc(stack[0], stack[0], '*');
             //連続計算対応のための処理
             stack[2] = stack[0];
@@ -351,7 +331,6 @@ export class AppComponent implements AfterViewInit {
               error = true;
               return;
             }
-            //浮動小数点誤差と指数表記を回避
             stack[1] = scaleCalc('1', stack[0], '/');
             //連続計算対応のための処理
             stack[2] = stack[0];
@@ -400,7 +379,7 @@ export class AppComponent implements AfterViewInit {
           stack[1] = '0';
           afterCalc = false;
         }
-        //sqrt後の数値入力を初期化ただし、stack[0]とstack[2]のどちらも空になるのは避ける
+        //sqrt後の数値入力を初期化。ただし、stack[0]とstack[2]のどちらも空になるのは避ける
         if(afterSqrt === true){
           if(stack[2] !== ''){
             stack[0] = '';
@@ -409,7 +388,7 @@ export class AppComponent implements AfterViewInit {
           afterSqrt = false;
         }
         //ディスプレイが0の時は消してから数字を入力、小数点が入力されている場合は消さない
-        if(stack[1] === '0' && !stack[1].includes('.')){         
+        if(stack[1] === '0' && stack[1].includes('.') === false){         
           stack[1] = '';
         }
         //10桁（-を含めて11桁）までしか入力できないようにする
@@ -625,11 +604,10 @@ export class AppComponent implements AfterViewInit {
               stack[2] = stack[0];       //連続計算を見本の電卓の仕様に合わせる
               break;
             case '-':
-              const stackMinus = stack[0];
               stack[1] = scaleCalc(stack[0], stack[1], '*');
               stack[1] = scaleCalc(stack[1], '100', '/');
               calc();
-              stack[2] = stackMinus;     //連続計算を見本の電卓の仕様に合わせる
+              stack[2] = stack[0];     //連続計算を見本の電卓の仕様に合わせる
               break;
             case '*':
               stack[1] = scaleCalc(stack[1], '100', '/');
@@ -674,7 +652,6 @@ export class AppComponent implements AfterViewInit {
               break;
             case '*':
               calc();
-              //浮動小数点誤差と指数表記を回避
               stack[1] = scaleCalc(stack[1], '100', '/');
               stack[1] = stack[1].slice(0, 10);
               //小数点以下の末尾の0を削除
@@ -683,7 +660,6 @@ export class AppComponent implements AfterViewInit {
               break;
             case '/':
               calc();
-              //浮動小数点誤差と指数表記を回避
               stack[1] = scaleCalc(stack[1], '100', '*');
               stack[1] = stack[1].slice(0, 10);
               //小数点以下の末尾の0を削除
@@ -703,11 +679,10 @@ export class AppComponent implements AfterViewInit {
               stack[2] = stack[0];       //連続計算を見本の電卓の仕様に合わせる
               break;
             case '-':
-              const stackMinus = stack[0];
               stack[1] = scaleCalc(stack[0], stack[1], '*');
               stack[1] = scaleCalc(stack[1], '100', '/');
               calc();
-              stack[2] = stackMinus;     //連続計算を見本の電卓の仕様に合わせる
+              stack[2] = stack[0];     //連続計算を見本の電卓の仕様に合わせる
               break;
             case '*':
               stack[1] = scaleCalc(stack[1], '100', '/');
