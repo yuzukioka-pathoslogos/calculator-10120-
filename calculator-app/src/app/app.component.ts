@@ -30,12 +30,12 @@ export class AppComponent implements AfterViewInit {
   ngAfterViewInit(): void {
 
     //基本的に式の左辺がstack[0]、右辺がstack[1]、連続計算対応のための一時保管場所としてstack[2]を用意
-    const stack: string[] = ['', '', ''];
+    const stack: string[] = ['', '0', ''];
     let afterCalc: boolean = false;
     let afterSqrt: boolean = false;
     let error: boolean = false;
     const self = this;
-    self.display = '0';
+    self.display = stack[1];
     // 最後に押した演算子を格納
     let operator: string = '';
 
@@ -330,7 +330,7 @@ export class AppComponent implements AfterViewInit {
           afterSqrt = false;
         }
         //ディスプレイが0の時は消してから数字を入力、小数点が入力されている場合は消さない
-        if(stack[1] === '0' && stack[1].includes('.') === false){         
+        if(stack[1] === '0' && stack[1].includes('.') === false || stack[1] === '-0' && stack[1].includes('.') === false){         
           stack[1] = '';
         }
         //10桁（-を含めて11桁）までしか入力できないようにする
@@ -474,14 +474,20 @@ export class AppComponent implements AfterViewInit {
         return;
       }
       if(stack[1] !== ''){
-        stack[1] = scaleCalc(stack[1], '-1', '*');
-        //小数点以下の末尾の0と小数点を削除
-        stack[1] = removeTrailingZeros(stack[1]);
+        //-が入力されていない場合は-を追加、入力されている場合は-を削除
+        if(stack[1].includes('-') === false){
+          stack[1] = '-' + stack[1];
+        }else{
+          stack[1] = stack[1].slice(1);
+        }
         self.display = stack[1];
-      }else if(stack[0] !== '' && stack[1] === ''){       //演算子が入力されている場合
-        stack[0] = scaleCalc(stack[0], '-1', '*');
-        //小数点以下の末尾の0を削除
-        stack[0] = removeTrailingZeros(stack[0]);
+      }else if(stack[0] !== '' && stack[1] === ''){
+        //-が入力されていない場合は-を追加、入力されている場合は-を削除
+        if(stack[0].includes('-') === false){
+          stack[0] = '-' + stack[0];
+        }else{
+          stack[0] = stack[0].slice(1);
+        }
         self.display = stack[0];
       }
       console.log(`stack[0]: ${stack[0]} stack[1]: ${stack[1]} stack[2]: ${stack[2]} 
