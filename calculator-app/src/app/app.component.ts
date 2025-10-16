@@ -364,6 +364,7 @@ export class AppComponent implements AfterViewInit {
       //小数点以下の末尾の0を削除
       stack[1] = removeTrailingZeros(stack[1]);
       self.display = stack[1];
+      // stack[0] = '';
       afterCalc = true;
     }
 
@@ -640,7 +641,7 @@ export class AppComponent implements AfterViewInit {
           }
         }
       }else{        //stack[1]が空の場合の例外処理
-        if(stack[2] === ''){
+        // if(stack[2] === ''){
           switch(operator){
             case '+':
               stack[1] = '';
@@ -667,37 +668,38 @@ export class AppComponent implements AfterViewInit {
               self.display = stack[1];
               break;
           }
-        }else if(stack[2] !== ''){
-          stack[1] = stack[0];
-          stack[0] = stack[2];
-          stack[2] = '';
-          switch(operator){
-            case '+':
-              stack[1] = scaleCalc(stack[0], stack[1], '*');
-              stack[1] = scaleCalc(stack[1], '100', '/');
-              calc();
-              stack[2] = stack[0];       //連続計算を見本の電卓の仕様に合わせる
-              break;
-            case '-':
-              stack[1] = scaleCalc(stack[0], stack[1], '*');
-              stack[1] = scaleCalc(stack[1], '100', '/');
-              calc();
-              stack[2] = stack[0];     //連続計算を見本の電卓の仕様に合わせる
-              break;
-            case '*':
-              stack[1] = scaleCalc(stack[1], '100', '/');
-              calc();
-              break;
-            case '/':
-              const stackDivide = stack[1];
-              stack[1] = scaleCalc(stack[1], '100', '/');
-              calc();
-              stack[2] = stackDivide;     //連続計算を見本の電卓の仕様に合わせる
-              break;
-            default:
-            return;
-          }
-        }
+        // }
+        // else if(stack[2] !== ''){
+        //   stack[1] = stack[0];
+        //   stack[0] = stack[2];
+        //   stack[2] = '';
+        //   switch(operator){
+        //     case '+':
+        //       stack[1] = scaleCalc(stack[0], stack[1], '*');
+        //       stack[1] = scaleCalc(stack[1], '100', '/');
+        //       calc();
+        //       stack[2] = stack[0];       //連続計算を見本の電卓の仕様に合わせる
+        //       break;
+        //     case '-':
+        //       stack[1] = scaleCalc(stack[0], stack[1], '*');
+        //       stack[1] = scaleCalc(stack[1], '100', '/');
+        //       calc();
+        //       stack[2] = stack[0];     //連続計算を見本の電卓の仕様に合わせる
+        //       break;
+        //     case '*':
+        //       stack[1] = scaleCalc(stack[1], '100', '/');
+        //       calc();
+        //       break;
+        //     case '/':
+        //       const stackDivide = stack[1];
+        //       stack[1] = scaleCalc(stack[1], '100', '/');
+        //       calc();
+        //       stack[2] = stackDivide;     //連続計算を見本の電卓の仕様に合わせる
+        //       break;
+        //     default:
+        //     return;
+        //   }
+        // }
       }
       console.log(`stack[0]: ${stack[0]} stack[1]: ${stack[1]} stack[2]: ${stack[2]} 
         operator: ${operator} afterCalc: ${afterCalc} error: ${error} afterSqrt: ${afterSqrt}`);
