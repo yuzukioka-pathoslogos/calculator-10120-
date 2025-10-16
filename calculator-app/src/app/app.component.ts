@@ -320,7 +320,7 @@ export class AppComponent implements AfterViewInit {
           stack[1] = '0';
           afterCalc = false;
         }
-        //sqrt後の数値入力を初期化。ただし、stack[0]とstack[2]のどちらも空になるのは避ける
+        //sqrt後の数値入力を初期化。ただし、stack[2]が値を持つ場合はstack[0]に代入しておく
         if(afterSqrt === true){
           if(stack[2] !== ''){
             stack[0] = stack[2];
@@ -330,7 +330,7 @@ export class AppComponent implements AfterViewInit {
           afterSqrt = false;
         }
         //ディスプレイが0の時は消してから数字を入力、小数点が入力されている場合は消さない
-        if(stack[1] === '0' && stack[1].includes('.') === false || stack[1] === '-0' && stack[1].includes('.') === false){         
+        if(stack[1] === '0' || stack[1] === '-0'){         
           stack[1] = '';
         }
         //10桁（-を含めて11桁）までしか入力できないようにする
@@ -365,6 +365,11 @@ export class AppComponent implements AfterViewInit {
         stack[1] = '0';
         afterSqrt = false;
       }
+      //ディスプレイが0の時は消してから数字を入力、小数点が入力されている場合は消さない
+      if(stack[1] === '0' || stack[1] === '-0'){         
+        stack[1] = '';
+      }
+      //stack[1]が空の場合は0を入力
       if(stack[1] === ''){
         stack[1] = '0';
       }
