@@ -518,6 +518,43 @@ describe('AppComponent', () => {
     fixture.detectChanges();
     expect(component.display).toBe('1.5625');
   })
+  it('4+%== 8',() =>{
+    component.number('4');
+    component.operator('+');
+    component.percent();
+    component.equal();
+    component.equal();
+    fixture.detectChanges();
+    expect(component.display).toBe('8');
+  })
+  it('4-%== -8',() =>{
+    component.number('4');
+    component.operator('-');
+    component.percent();
+    component.equal();
+    component.equal();
+    fixture.detectChanges();
+    expect(component.display).toBe('-8');
+  })
+  it('4*%== 2.56',() =>{
+    component.number('4');
+    component.operator('*');
+    component.percent();
+    component.equal();
+    component.equal();
+    fixture.detectChanges();
+    expect(component.display).toBe('2.56');
+  })
+  it('4/%== 1.5625',() =>{
+    component.number('4');
+    component.operator('/');
+    component.percent();
+    component.equal();
+    component.equal();
+    fixture.detectChanges();
+    expect(component.display).toBe('1.5625');
+  })
+
 
 
   //sqrtの特殊入力
