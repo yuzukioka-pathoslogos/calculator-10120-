@@ -790,8 +790,56 @@ describe('AppComponent', () => {
     fixture.detectChanges();
     expect(component.display).toBe('250');
   })
+  it('4+2=5%== 6.1',() =>{
+    component.number('4');
+    component.operator('+');
+    component.number('2');
+    component.equal();
+    component.number('5');
+    component.percent();
+    component.equal();
+    component.equal();
+    fixture.detectChanges();
+    expect(component.display).toBe('6.1');
+  })
+  it('4-2=5%== -2.1',() =>{
+    component.number('4');
+    component.operator('-');
+    component.number('2');
+    component.equal();
+    component.number('5');
+    component.percent();
+    component.equal();
+    component.equal();
+    fixture.detectChanges();
+    expect(component.display).toBe('-2.1');
+  })
+  it('4*2=5%== 3.2',() =>{
+    component.number('4');
+    component.operator('*');
+    component.number('2');
+    component.equal();
+    component.number('5');
+    component.percent();
+    component.equal();
+    component.equal();
+    fixture.detectChanges();
+    expect(component.display).toBe('3.2');
+  })
+  it('4/2=5%== 62.5',() =>{
+    component.number('4');
+    component.operator('/');
+    component.number('2');
+    component.equal();
+    component.number('5');
+    component.percent();
+    component.equal();
+    component.equal();
+    fixture.detectChanges();
+    expect(component.display).toBe('62.5');
+  })
 
-
+  
   //追加ケース
   it('5+3=*2√= 11.3137084',() =>{
     component.number('5');

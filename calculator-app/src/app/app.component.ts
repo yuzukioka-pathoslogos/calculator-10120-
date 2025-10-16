@@ -88,9 +88,12 @@ export class AppComponent implements AfterViewInit {
         case '-':
           const diff = aScaled - bScaled;
           let diffString = diff.toString();
+          //小数点を含んでいた場合
           if(0 < maxDecimals){
             if(diffString.includes('-')){
+              //符号を削除して置き、後から追加
               diffString = diffString.slice(1);
+              //小数点以下の桁数の最大値を超えるまで0埋め
               while(diffString.length <= maxDecimals){
                 diffString = '0' + diffString;
               }
@@ -107,9 +110,12 @@ export class AppComponent implements AfterViewInit {
         case '*':
           const product = aScaled * bScaled;
           let productString = product.toString();
+          //小数点を含んでいた場合
           if(0 < maxDecimals){
             if(productString.includes('-')){
+              //符号を削除して置き、後から追加
               productString = productString.slice(1);
+              //小数点以下の桁数の最大値を超えるまで0埋め
               while(productString.length <= maxDecimals * 2){
                 productString = '0' + productString;
               }
@@ -127,6 +133,7 @@ export class AppComponent implements AfterViewInit {
           const quotient = aScaled * BigInt(10 ** 10) / bScaled;
           let quotientString = quotient.toString();
           if(quotientString.includes('-')){
+            //符号を削除して置き、後から追加
             quotientString = quotientString.slice(1);
             while(quotientString.length <= 10){
               quotientString = '0' + quotientString;
@@ -535,14 +542,108 @@ export class AppComponent implements AfterViewInit {
       if(error === true){
         return;
       }
-      if(stack[1] !== ''){
-        if(afterCalc === false){
-          //演算子が入力されていない時は0を表示
-          if(operator === ''){
-            stack[1] = '0';
+      //stack[0]のみ値を持つ場合（演算子→％→の順で入力した場合）
+      if(stack[0] !== '' && stack[1] === '' && stack[2] === ''){
+        switch(operator){
+          case '*':
+            calc();
+            stack[1] = scaleCalc(stack[1], '100', '/');
+            stack[1] = stack[1].slice(0, 10);
+            //小数点以下の末尾の0を削除
+            stack[1] = removeTrailingZeros(stack[1]);
             self.display = stack[1];
-            return;
+            break;
+          case '/':
+            calc();
+            stack[1] = scaleCalc(stack[1], '100', '*');
+            stack[1] = stack[1].slice(0, 10);
+            //小数点以下の末尾の0を削除
+            stack[1] = removeTrailingZeros(stack[1]);
+            self.display = stack[1];
+            break;
+        }
+      }
+      //stack[1]のみ値を持つ場合（数字→％→の順で入力した場合、演算子は入力されていない）
+      else if(stack[0] === '' && stack[1] !== '' && stack[2] === ''){
+        stack[1] = '0';
+        self.display = stack[1];
+        return;
+      }
+      //stack[0]とstack[1]が値を持つ場合,stack[2]はどちらでもよい（通常の計算）
+      else if(stack[0] !== '' && stack[1] !== ''){
+        switch(operator){
+          case '+':
+            const stackPlus = stack[0];       //連続計算を見本の電卓の仕様に合わせる
+            stack[1] = scaleCalc(stack[0], stack[1], '*');
+            stack[1] = scaleCalc(stack[1], '100', '/');
+            calc();
+            stack[2] = stackPlus;
+            break;
+          case '-':
+            const stackMinus = stack[0];     //連続計算を見本の電卓の仕様に合わせる
+            stack[1] = scaleCalc(stack[0], stack[1], '*');
+            stack[1] = scaleCalc(stack[1], '100', '/');
+            calc();
+            stack[2] = stackMinus;
+            break;
+          case '*':
+            stack[1] = scaleCalc(stack[1], '100', '/');
+            calc();
+            break;
+          case '/':
+            const stackDivide = stack[1];
+            stack[1] = scaleCalc(stack[1], '100', '/');
+            calc();
+            stack[2] = stackDivide;     //連続計算を見本の電卓の仕様に合わせる
+            break;
+          default:
+          return;
+        }
+      }
+      //stack[0]とstack[2]のみ値を持つ場合（＝→演算子→％の順で入力した場合）
+      else if(stack[0] !== '' && stack[1] === '' && stack[2] !== ''){
+        switch(operator){
+          case '*':
+            calc();
+            stack[1] = scaleCalc(stack[1], '100', '/');
+            stack[1] = stack[1].slice(0, 10);
+            //小数点以下の末尾の0を削除
+            stack[1] = removeTrailingZeros(stack[1]);
+            self.display = stack[1];
+            break;
+          case '/':
+            calc();
+            stack[1] = scaleCalc(stack[1], '100', '*');
+            stack[1] = stack[1].slice(0, 10);
+            //小数点以下の末尾の0を削除
+            stack[1] = removeTrailingZeros(stack[1]);
+            self.display = stack[1];
+            break;
+        }
+      }
+      //stack[1]とstack[2]のみ値を持つ場合（＝→％の順で入力した場合、＝→数字→％の順で入力した場合）
+      else if(stack[0] === '' && stack[1] !== '' && stack[2] !== ''){
+        //（＝→％の順で入力した場合）
+        if(afterCalc === true){
+          switch(operator){
+            case '*':
+              stack[1] = scaleCalc(stack[1], '100', '/');
+              calc();
+              break;
+            case '/':
+              const stackDivide2 = stack[2];
+              stack[2] = scaleCalc(stack[2], '100', '/');
+              calc();
+              stack[2] = stackDivide2;     //連続計算を見本の電卓の仕様に合わせる
+              break;
+            default:
+              //=を押した後だと入力を無視する
+              return;
           }
+        }
+        //（＝→数字→％の順で入力した場合）
+        else{
+          stack[0] = stack[2];
           switch(operator){
             case '+':
               const stackPlus = stack[0];       //連続計算を見本の電卓の仕様に合わせる
@@ -563,6 +664,9 @@ export class AppComponent implements AfterViewInit {
               calc();
               break;
             case '/':
+              //実機に準拠するための処理
+              stack[0] = stack[1];
+              stack[1] = stack[2];
               const stackDivide = stack[1];
               stack[1] = scaleCalc(stack[1], '100', '/');
               calc();
@@ -571,43 +675,86 @@ export class AppComponent implements AfterViewInit {
             default:
             return;
           }
-        }else if(afterCalc === true){
-          switch(operator){
-            case '*':
-              stack[1] = scaleCalc(stack[1], '100', '/');
-              calc();
-              break;
-            case '/':
-              const stackDivide2 = stack[2];
-              stack[2] = scaleCalc(stack[2], '100', '/');
-              calc();
-              stack[2] = stackDivide2;     //連続計算を見本の電卓の仕様に合わせる
-              break;
-            default:
-              //=を押した後だと入力を無視する
-              return;
-          }
         }
-      }else{        //stack[1]が空の場合の例外処理(演算子→％の順で入力した場合)
-          switch(operator){
-            case '*':
-              calc();
-              stack[1] = scaleCalc(stack[1], '100', '/');
-              stack[1] = stack[1].slice(0, 10);
-              //小数点以下の末尾の0を削除
-              stack[1] = removeTrailingZeros(stack[1]);
-              self.display = stack[1];
-              break;
-            case '/':
-              calc();
-              stack[1] = scaleCalc(stack[1], '100', '*');
-              stack[1] = stack[1].slice(0, 10);
-              //小数点以下の末尾の0を削除
-              stack[1] = removeTrailingZeros(stack[1]);
-              self.display = stack[1];
-              break;
-          }
       }
+      
+
+
+
+
+      // if(stack[1] !== ''){
+      //   if(afterCalc === false){
+      //     //演算子が入力されていない時は0を表示
+      //     if(operator === ''){
+      //       stack[1] = '0';
+      //       self.display = stack[1];
+      //       return;
+      //     }
+      //     switch(operator){
+      //       case '+':
+      //         const stackPlus = stack[0];       //連続計算を見本の電卓の仕様に合わせる
+      //         stack[1] = scaleCalc(stack[0], stack[1], '*');
+      //         stack[1] = scaleCalc(stack[1], '100', '/');
+      //         calc();
+      //         stack[2] = stackPlus;
+      //         break;
+      //       case '-':
+      //         const stackMinus = stack[0];     //連続計算を見本の電卓の仕様に合わせる
+      //         stack[1] = scaleCalc(stack[0], stack[1], '*');
+      //         stack[1] = scaleCalc(stack[1], '100', '/');
+      //         calc();
+      //         stack[2] = stackMinus;
+      //         break;
+      //       case '*':
+      //         stack[1] = scaleCalc(stack[1], '100', '/');
+      //         calc();
+      //         break;
+      //       case '/':
+      //         const stackDivide = stack[1];
+      //         stack[1] = scaleCalc(stack[1], '100', '/');
+      //         calc();
+      //         stack[2] = stackDivide;     //連続計算を見本の電卓の仕様に合わせる
+      //         break;
+      //       default:
+      //       return;
+      //     }
+      //   }else if(afterCalc === true){
+      //     switch(operator){
+      //       case '*':
+      //         stack[1] = scaleCalc(stack[1], '100', '/');
+      //         calc();
+      //         break;
+      //       case '/':
+      //         const stackDivide2 = stack[2];
+      //         stack[2] = scaleCalc(stack[2], '100', '/');
+      //         calc();
+      //         stack[2] = stackDivide2;     //連続計算を見本の電卓の仕様に合わせる
+      //         break;
+      //       default:
+      //         //=を押した後だと入力を無視する
+      //         return;
+      //     }
+      //   }
+      // }else{        //stack[1]が空の場合の例外処理(演算子→％の順で入力した場合)
+      //     switch(operator){
+      //       case '*':
+      //         calc();
+      //         stack[1] = scaleCalc(stack[1], '100', '/');
+      //         stack[1] = stack[1].slice(0, 10);
+      //         //小数点以下の末尾の0を削除
+      //         stack[1] = removeTrailingZeros(stack[1]);
+      //         self.display = stack[1];
+      //         break;
+      //       case '/':
+      //         calc();
+      //         stack[1] = scaleCalc(stack[1], '100', '*');
+      //         stack[1] = stack[1].slice(0, 10);
+      //         //小数点以下の末尾の0を削除
+      //         stack[1] = removeTrailingZeros(stack[1]);
+      //         self.display = stack[1];
+      //         break;
+      //     }
+      // }
       console.log(`stack[0]: ${stack[0]} stack[1]: ${stack[1]} stack[2]: ${stack[2]} 
         operator: ${operator} afterCalc: ${afterCalc} error: ${error} afterSqrt: ${afterSqrt}`);
     };
