@@ -750,6 +750,46 @@ describe('AppComponent', () => {
     fixture.detectChanges();
     expect(component.display).toBe('6.96');
   })
+  it('4+2=5% 2.1',() =>{
+    component.number('4');
+    component.operator('+');
+    component.number('2');
+    component.equal();
+    component.number('5');
+    component.percent();
+    fixture.detectChanges();
+    expect(component.display).toBe('2.1');
+  })
+  it('4-2=5% 1.9',() =>{
+    component.number('4');
+    component.operator('-');
+    component.number('2');
+    component.equal();
+    component.number('5');
+    component.percent();
+    fixture.detectChanges();
+    expect(component.display).toBe('1.9');
+  })
+  it('4*2=5% 0.2',() =>{
+    component.number('4');
+    component.operator('*');
+    component.number('2');
+    component.equal();
+    component.number('5');
+    component.percent();
+    fixture.detectChanges();
+    expect(component.display).toBe('0.2');
+  })
+  it('4/2=5% 250',() =>{
+    component.number('4');
+    component.operator('/');
+    component.number('2');
+    component.equal();
+    component.number('5');
+    component.percent();
+    fixture.detectChanges();
+    expect(component.display).toBe('250');
+  })
 
 
   //追加ケース
