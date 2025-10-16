@@ -537,7 +537,8 @@ export class AppComponent implements AfterViewInit {
       }
       if(stack[1] !== ''){
         if(afterCalc === false){
-          if(stack[0] === ''){
+          //演算子が入力されていない時は0を表示
+          if(operator === ''){
             stack[1] = '0';
             self.display = stack[1];
             return;
