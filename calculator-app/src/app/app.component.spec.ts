@@ -434,6 +434,90 @@ describe('AppComponent', () => {
     fixture.detectChanges();
     expect(component.display).toBe('-18.75');
   })
+  it('5+3=+% 8',() =>{
+    component.number('5');
+    component.operator('+');
+    component.number('3');
+    component.equal();
+    component.operator('+');
+    component.percent();
+    fixture.detectChanges();
+    expect(component.display).toBe('8');
+  })
+  it('5+3=-% 8',() =>{
+    component.number('5');
+    component.operator('+');
+    component.number('3');
+    component.equal();
+    component.operator('-');
+    component.percent();
+    fixture.detectChanges();
+    expect(component.display).toBe('8');
+  })
+  it('5+3=*% 0.64',() =>{
+    component.number('5');
+    component.operator('+');
+    component.number('3');
+    component.equal();
+    component.operator('*');
+    component.percent();
+    fixture.detectChanges();
+    expect(component.display).toBe('0.64');
+  })
+  it('5+3=/% 12.5',() =>{
+    component.number('5');
+    component.operator('+');
+    component.number('3');
+    component.equal();
+    component.operator('/');
+    component.percent();
+    fixture.detectChanges();
+    expect(component.display).toBe('12.5');
+  })
+  it('5+3=+%= 11',() =>{
+    component.number('5');
+    component.operator('+');
+    component.number('3');
+    component.equal();
+    component.operator('+');
+    component.percent();
+    component.equal();
+    fixture.detectChanges();
+    expect(component.display).toBe('11');
+  })
+  it('5+3=-%= -5',() =>{
+    component.number('5');
+    component.operator('+');
+    component.number('3');
+    component.equal();
+    component.operator('-');
+    component.percent();
+    component.equal();
+    fixture.detectChanges();
+    expect(component.display).toBe('-5');
+  })
+  it('5+3=*%= 5.12',() =>{
+    component.number('5');
+    component.operator('+');
+    component.number('3');
+    component.equal();
+    component.operator('*');
+    component.percent();
+    component.equal();
+    fixture.detectChanges();
+    expect(component.display).toBe('5.12');
+  })
+  it('5+3=/%= 1.5625',() =>{
+    component.number('5');
+    component.operator('+');
+    component.number('3');
+    component.equal();
+    component.operator('/');
+    component.percent();
+    component.equal();
+    fixture.detectChanges();
+    expect(component.display).toBe('1.5625');
+  })
 
 
   //sqrtの特殊入力
