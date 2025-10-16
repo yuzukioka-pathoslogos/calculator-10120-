@@ -413,18 +413,20 @@ export class AppComponent implements AfterViewInit {
           afterCalc = false;
           afterSqrt = false;
           operator = op as string;
-        }else if(stack[0] !== '' && stack[1] !== '' && afterCalc === false && afterSqrt === true){
-          operator = op as string;
-          stack[0] = stack[1];
-          stack[1] = '';
-          afterSqrt = false;
-        }else if(stack[0] !== '' && stack[1] !== '' && afterCalc === true){
-          operator = op as string;
-          stack[0] = stack[1];
-          stack[1] = '';
-          afterCalc = false;
-          afterSqrt = false;
         }
+        // else if(stack[0] !== '' && stack[1] !== '' && afterCalc === false && afterSqrt === true){
+        //   operator = op as string;
+        //   stack[0] = stack[1];
+        //   stack[1] = '';
+        //   afterSqrt = false;
+        // }
+        // else if(stack[0] !== '' && stack[1] !== '' && afterCalc === true){
+        //   operator = op as string;
+        //   stack[0] = stack[1];
+        //   stack[1] = '';
+        //   afterCalc = false;
+        //   afterSqrt = false;
+        // }
         console.log(`stack[0]: ${stack[0]} stack[1]: ${stack[1]} stack[2]: ${stack[2]} 
           operator: ${operator} afterCalc: ${afterCalc} error: ${error} afterSqrt: ${afterSqrt}`);
       };
