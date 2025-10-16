@@ -39,6 +39,16 @@ export class AppComponent implements AfterViewInit {
     // 最後に押した演算子を格納
     let operator: string = '';
 
+    //小数点以下の末尾の0と小数点を削除する関数
+    function removeTrailingZeros(num: string): string {
+      num = num.replace(/0+$/, '');
+      num = num.replace(/\.$/, '');
+      if(num === ''){
+        num = '0';
+      }
+      return num;
+    }
+
     //浮動小数点誤差と指数表記を回避するための関数（整数スケーリング＋文字列操作）
     function scaleCalc(a: string, b: string, op: string): string {
       //小数点以下の桁数を取得
@@ -185,7 +195,6 @@ export class AppComponent implements AfterViewInit {
             stack[2] = stack[1];
             //浮動小数点誤差と指数表記を回避
             stack[1] = scaleCalc(stack[0], stack[1], '+');
-            console.log(`stack[1]: ${stack[1]}`);
             break;
           case '-':
             //連続計算対応のための処理
@@ -198,7 +207,6 @@ export class AppComponent implements AfterViewInit {
             stack[2] = stack[0];
             //浮動小数点誤差と指数表記を回避
             stack[1] = scaleCalc(stack[0], stack[1], '*');
-            console.log(`stack[1]: ${stack[1]}`);
             break;
           case '/':
             //連続計算対応のための処理
@@ -375,7 +383,7 @@ export class AppComponent implements AfterViewInit {
         stack[1] = stack[1].slice(0, 10);
       }
       //小数点以下の末尾の0を削除
-      stack[1] = stack[1].replace(/\.?0+$/,'');
+      stack[1] = removeTrailingZeros(stack[1]);
       self.display = stack[1];
       afterCalc = true;
     }
@@ -544,12 +552,12 @@ export class AppComponent implements AfterViewInit {
       if(stack[1] !== ''){
         stack[1] = scaleCalc(stack[1], '-1', '*');
         //小数点以下の末尾の0と小数点を削除
-        stack[1] = stack[1].replace(/\.?0+$/,'');
+        stack[1] = removeTrailingZeros(stack[1]);
         self.display = stack[1];
       }else if(stack[0] !== '' && stack[1] === ''){       //演算子が入力されている場合
         stack[0] = scaleCalc(stack[0], '-1', '*');
         //小数点以下の末尾の0を削除
-        stack[0] = stack[0].replace(/\.?0+$/,'');
+        stack[0] = removeTrailingZeros(stack[0]);
         self.display = stack[0];
       }
       console.log(`stack[0]: ${stack[0]} stack[1]: ${stack[1]} stack[2]: ${stack[2]} 
@@ -568,12 +576,12 @@ export class AppComponent implements AfterViewInit {
           error = true;
           return;
         }
-        //浮動小数点誤差と指数表記を回避
+        //整数スケーリングしておくことで安全性を確保
         stack[1] = Math.sqrt(Number(stack[1]) * (10 ** 8)).toString();
         stack[1] = scaleCalc(stack[1], '10000', '/');
         stack[1] = stack[1].slice(0, 10);
         //小数点以下の末尾の0を削除
-        stack[1] = stack[1].replace(/\.?0+$/,'');
+        stack[1] = removeTrailingZeros(stack[1]);
         self.display = stack[1];
         afterSqrt = true;
       }else if(stack[0] !== '' && stack[1] === ''){
@@ -583,12 +591,12 @@ export class AppComponent implements AfterViewInit {
           return;
         }
         stack[2] = stack[0]
-        //浮動小数点誤差と指数表記を回避
+        //整数スケーリングしておくことで安全性を確保
         stack[0] = Math.sqrt(Number(stack[0]) * (10 ** 8)).toString();
         stack[0] = scaleCalc(stack[0], '10000', '/');
         stack[0] = stack[0].slice(0, 10);
         //小数点以下の末尾の0を削除
-        stack[0] = stack[0].replace(/\.?0+$/,'');
+        stack[0] = removeTrailingZeros(stack[0]);
         self.display = stack[0];
         afterSqrt = true;
       }
@@ -657,11 +665,11 @@ export class AppComponent implements AfterViewInit {
         if(stack[2] === ''){
           switch(operator){
             case '+':
-              stack[1] = "";
+              stack[1] = '';
               stack[2] = stack[0];
               break;
             case '-':
-              stack[1] = "";
+              stack[1] = '';
               stack[2] = stack[0];
               break;
             case '*':
@@ -670,7 +678,7 @@ export class AppComponent implements AfterViewInit {
               stack[1] = scaleCalc(stack[1], '100', '/');
               stack[1] = stack[1].slice(0, 10);
               //小数点以下の末尾の0を削除
-              stack[1] = stack[1].replace(/\.?0+$/,'');
+              stack[1] = removeTrailingZeros(stack[1]);
               self.display = stack[1];
               break;
             case '/':
@@ -679,7 +687,7 @@ export class AppComponent implements AfterViewInit {
               stack[1] = scaleCalc(stack[1], '100', '*');
               stack[1] = stack[1].slice(0, 10);
               //小数点以下の末尾の0を削除
-              stack[1] = stack[1].replace(/\.?0+$/,'');
+              stack[1] = removeTrailingZeros(stack[1]);
               self.display = stack[1];
               break;
           }
