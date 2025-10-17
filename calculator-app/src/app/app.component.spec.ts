@@ -61,6 +61,38 @@ describe('AppComponent', () => {
     fixture.detectChanges();
     expect(component.display).toBe('16');
   })
+  it('+5== 10',() =>{
+    component.operator('+');
+    component.number('5');
+    component.equal();
+    component.equal();
+    fixture.detectChanges();
+    expect(component.display).toBe('10');
+  })
+  it('-5== -10',() =>{
+    component.operator('-');
+    component.number('5');
+    component.equal();
+    component.equal();
+    fixture.detectChanges();
+    expect(component.display).toBe('-10');
+  })
+  it('*5== 0',() =>{
+    component.operator('*');
+    component.number('5');
+    component.equal();
+    component.equal();
+    fixture.detectChanges();
+    expect(component.display).toBe('0');
+  })
+  it('/5== 0',() =>{
+    component.operator('/');
+    component.number('5');
+    component.equal();
+    component.equal();
+    fixture.detectChanges();
+    expect(component.display).toBe('0');
+  })
 
 
   //errorが出るテストケース
@@ -839,7 +871,7 @@ describe('AppComponent', () => {
     expect(component.display).toBe('62.5');
   })
 
-  
+
   //追加ケース
   it('5+3=*2√= 11.3137084',() =>{
     component.number('5');
