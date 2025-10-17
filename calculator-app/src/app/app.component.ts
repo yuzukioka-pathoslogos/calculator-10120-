@@ -34,6 +34,7 @@ export class AppComponent implements AfterViewInit {
     let afterCalc: boolean = false;
     let afterSqrt: boolean = false;
     let error: boolean = false;
+    //バインドしたHTML要素をスコープ外から参照できるように変数に代入しておく
     const self = this;
     self.display = stack[1];
     // 最後に押した演算子を格納
@@ -285,7 +286,7 @@ export class AppComponent implements AfterViewInit {
             return;
         }
       }
-    //ここから下は計算結果であるstack[1]の処理
+      //ここから下は計算結果であるstack[1]の処理
 
       //表示できないほど大きい数の場合はeを表示
       if(Number(stack[1]) >= 10 ** 10 || Number(stack[1]) <= -(10 ** 10)){
@@ -300,7 +301,7 @@ export class AppComponent implements AfterViewInit {
         return;
       }
       //表示できないほど小さい数の場合は0を表示
-      if(Number(stack[1]) < 10 ** -8 && Number(stack[1]) > -(10 ** -8)){
+      if(-(10 ** -8) < Number(stack[1]) && Number(stack[1]) < 10 ** -8){
         stack[1] = '0';
       }
       //符号が-の場合は11桁まで、+の場合は10桁までを表示
@@ -327,23 +328,19 @@ export class AppComponent implements AfterViewInit {
           stack[1] = '0';
           afterCalc = false;
         }
-        //sqrt後の数値入力を初期化。ただし、stack[2]が値を持つ場合はstack[0]に代入しておく
+        //sqrt後の数値入力を初期化
         if(afterSqrt === true){
-          if(stack[2] !== ''){
-            stack[0] = stack[2];
-            stack[2] = '';
-          }
           stack[1] = '0';
           afterSqrt = false;
         }
-        //ディスプレイが0の時は消してから数字を入力、小数点が入力されている場合は消さない
+        //ディスプレイが0か-0の時は消してから数字を入力、小数点が入力されている場合は消さない
         if(stack[1] === '0' || stack[1] === '-0'){         
           stack[1] = '';
         }
         //10桁（-を含めて11桁）までしか入力できないようにする
-        if(stack[1] !=null && stack[1].length === 10 && stack[1].includes('-') === false){
+        if(stack[1] !== null && stack[1].length === 10 && stack[1].includes('-') === false){
           return;
-        }else if(stack[1] !=null && stack[1].length === 11 && stack[1].includes('-') === true){
+        }else if(stack[1] !== null && stack[1].length === 11 && stack[1].includes('-') === true){
           return;
         }
         stack[1] += num as string;
@@ -364,11 +361,8 @@ export class AppComponent implements AfterViewInit {
         stack[1] = '0';
         afterCalc = false;
       }
+      //sqrt後の数値入力を初期化
       if(afterSqrt === true){
-        if(stack[2] !== ''){
-          stack[0] = stack[2];
-          stack[2] = '';
-        }
         stack[1] = '0';
         afterSqrt = false;
       }
@@ -402,14 +396,10 @@ export class AppComponent implements AfterViewInit {
         if(error === true){
           return;
         }
-        if(stack[0] === ''){
-          operator = op as string;
+        if(stack[0] === '' && stack[1] !== ''){
           stack[0] = stack[1];
           stack[1] = '';
-          afterCalc = false;
-          afterSqrt = false;
         }else if(stack[0] !== '' && stack[1] === ''){     //演算子の入力を訂正したいとき
-          operator = op as string;
         }else if(stack[0] !== '' && stack[1] !== '' && afterCalc === false){
           //stack[2]が残っていると連続計算になってしまうため初期化
           stack[2] = '';
@@ -417,10 +407,10 @@ export class AppComponent implements AfterViewInit {
           stack[0] = stack[1];
           stack[1] = '';
           stack[2] = '';
-          afterCalc = false;
-          afterSqrt = false;
-          operator = op as string;
         }
+        operator = op as string;
+        afterCalc = false;
+        afterSqrt = false;
         console.log(`stack[0]: ${stack[0]} stack[1]: ${stack[1]} stack[2]: ${stack[2]} 
           operator: ${operator} afterCalc: ${afterCalc} error: ${error} afterSqrt: ${afterSqrt}`);
       };
@@ -442,6 +432,7 @@ export class AppComponent implements AfterViewInit {
       if(error === true){
         return;
       }
+      //calc直後は入力を受け付けない
       if(afterCalc === true && afterSqrt === false){
         return;
       }else{
@@ -454,7 +445,7 @@ export class AppComponent implements AfterViewInit {
         operator: ${operator} afterCalc: ${afterCalc} error: ${error} afterSqrt: ${afterSqrt}`);
     };
     
-    //Cをクリックした時にスタックを初期化
+    //Cをクリックした時、全ての状態を初期化
     self.clear = () => {
       stack[0] = '';
       stack[1] = '0';
@@ -542,7 +533,7 @@ export class AppComponent implements AfterViewInit {
       if(error === true){
         return;
       }
-      //stack[0]のみ値を持つ場合（演算子→％→の順で入力した場合）
+      //stack[0]のみ値を持つ場合（演算子→％の順で入力した場合）
       if(stack[0] !== '' && stack[1] === '' && stack[2] === ''){
         switch(operator){
           case '*':
@@ -554,6 +545,12 @@ export class AppComponent implements AfterViewInit {
             self.display = stack[1];
             break;
           case '/':
+            //calc中にエラーが出ても無視して操作してしまうのを防ぐためにcalc前にエラー判定
+            if(Number(stack[0]) === 0){
+              self.display = 'error';
+              error = true;
+              return;
+            }
             calc();
             stack[1] = scaleCalc(stack[1], '100', '*');
             stack[1] = stack[1].slice(0, 10);
@@ -561,6 +558,8 @@ export class AppComponent implements AfterViewInit {
             stack[1] = removeTrailingZeros(stack[1]);
             self.display = stack[1];
             break;
+          default:
+            return;
         }
       }
       //stack[1]のみ値を持つ場合（数字→％→の順で入力した場合、演算子は入力されていない）
@@ -612,6 +611,11 @@ export class AppComponent implements AfterViewInit {
             self.display = stack[1];
             break;
           case '/':
+            if(Number(stack[0]) === 0){
+              self.display = 'error';
+              error = true;
+              return;
+            }
             calc();
             stack[1] = scaleCalc(stack[1], '100', '*');
             stack[1] = stack[1].slice(0, 10);
@@ -676,85 +680,7 @@ export class AppComponent implements AfterViewInit {
             return;
           }
         }
-      }
-      
-
-
-
-
-      // if(stack[1] !== ''){
-      //   if(afterCalc === false){
-      //     //演算子が入力されていない時は0を表示
-      //     if(operator === ''){
-      //       stack[1] = '0';
-      //       self.display = stack[1];
-      //       return;
-      //     }
-      //     switch(operator){
-      //       case '+':
-      //         const stackPlus = stack[0];       //連続計算を見本の電卓の仕様に合わせる
-      //         stack[1] = scaleCalc(stack[0], stack[1], '*');
-      //         stack[1] = scaleCalc(stack[1], '100', '/');
-      //         calc();
-      //         stack[2] = stackPlus;
-      //         break;
-      //       case '-':
-      //         const stackMinus = stack[0];     //連続計算を見本の電卓の仕様に合わせる
-      //         stack[1] = scaleCalc(stack[0], stack[1], '*');
-      //         stack[1] = scaleCalc(stack[1], '100', '/');
-      //         calc();
-      //         stack[2] = stackMinus;
-      //         break;
-      //       case '*':
-      //         stack[1] = scaleCalc(stack[1], '100', '/');
-      //         calc();
-      //         break;
-      //       case '/':
-      //         const stackDivide = stack[1];
-      //         stack[1] = scaleCalc(stack[1], '100', '/');
-      //         calc();
-      //         stack[2] = stackDivide;     //連続計算を見本の電卓の仕様に合わせる
-      //         break;
-      //       default:
-      //       return;
-      //     }
-      //   }else if(afterCalc === true){
-      //     switch(operator){
-      //       case '*':
-      //         stack[1] = scaleCalc(stack[1], '100', '/');
-      //         calc();
-      //         break;
-      //       case '/':
-      //         const stackDivide2 = stack[2];
-      //         stack[2] = scaleCalc(stack[2], '100', '/');
-      //         calc();
-      //         stack[2] = stackDivide2;     //連続計算を見本の電卓の仕様に合わせる
-      //         break;
-      //       default:
-      //         //=を押した後だと入力を無視する
-      //         return;
-      //     }
-      //   }
-      // }else{        //stack[1]が空の場合の例外処理(演算子→％の順で入力した場合)
-      //     switch(operator){
-      //       case '*':
-      //         calc();
-      //         stack[1] = scaleCalc(stack[1], '100', '/');
-      //         stack[1] = stack[1].slice(0, 10);
-      //         //小数点以下の末尾の0を削除
-      //         stack[1] = removeTrailingZeros(stack[1]);
-      //         self.display = stack[1];
-      //         break;
-      //       case '/':
-      //         calc();
-      //         stack[1] = scaleCalc(stack[1], '100', '*');
-      //         stack[1] = stack[1].slice(0, 10);
-      //         //小数点以下の末尾の0を削除
-      //         stack[1] = removeTrailingZeros(stack[1]);
-      //         self.display = stack[1];
-      //         break;
-      //     }
-      // }
+      }      
       console.log(`stack[0]: ${stack[0]} stack[1]: ${stack[1]} stack[2]: ${stack[2]} 
         operator: ${operator} afterCalc: ${afterCalc} error: ${error} afterSqrt: ${afterSqrt}`);
     };
