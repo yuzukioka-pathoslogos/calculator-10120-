@@ -52,6 +52,35 @@ export class AppComponent implements AfterViewInit {
       return num;
     }
 
+    function numberCheck(num: string): string {
+      //表示できないほど大きい数の場合はeを表示
+      if(Number(num) >= 10 ** 10 || Number(num) <= -(10 ** 10)){
+        //符号が-の場合は11桁まで、+の場合は10桁までを表示
+        if(num.includes('-')){
+          num = num.slice(0, 11);
+        }else{
+          num = num.slice(0, 10);
+        }
+        num = `e${num}`;
+        self.display = num;
+        error = true;
+        return num;
+      }
+      //表示できないほど小さい数の場合は0を表示
+      if(-(10 ** -8) < Number(num) && Number(num) < 10 ** -8){
+        num = '0';
+      }
+      //符号が-の場合は11桁まで、+の場合は10桁までを表示
+      if(num.includes('-')){
+        num = num.slice(0, 11);
+      }else{
+        num = num.slice(0, 10);
+      }
+      //小数点以下の末尾の0を削除
+      num = removeTrailingZeros(num);
+      return num;
+    }
+
     //浮動小数点誤差と指数表記を回避するための関数（整数スケーリング＋文字列操作）
     function scaleCalc(a: string, b: string, op: string): string {
       //小数点以下の桁数を取得
@@ -286,32 +315,7 @@ export class AppComponent implements AfterViewInit {
             return;
         }
       }
-      //ここから下は計算結果であるstack[1]の処理
-
-      //表示できないほど大きい数の場合はeを表示
-      if(Number(stack[1]) >= 10 ** 10 || Number(stack[1]) <= -(10 ** 10)){
-        //符号が-の場合は11桁まで、+の場合は10桁までを表示
-        if(stack[1].includes('-')){
-          stack[1] = stack[1].slice(0, 11);
-        }else{
-          stack[1] = stack[1].slice(0, 10);
-        }
-        self.display = `e${stack[1]}`;
-        error = true;
-        return;
-      }
-      //表示できないほど小さい数の場合は0を表示
-      if(-(10 ** -8) < Number(stack[1]) && Number(stack[1]) < 10 ** -8){
-        stack[1] = '0';
-      }
-      //符号が-の場合は11桁まで、+の場合は10桁までを表示
-      if(stack[1].includes('-')){
-        stack[1] = stack[1].slice(0, 11);
-      }else{
-        stack[1] = stack[1].slice(0, 10);
-      }
-      //小数点以下の末尾の0を削除
-      stack[1] = removeTrailingZeros(stack[1]);
+      stack[1] = numberCheck(stack[1]);
       self.display = stack[1];
       stack[0] = '';
       afterCalc = true;
@@ -501,9 +505,7 @@ export class AppComponent implements AfterViewInit {
         //整数スケーリングしておくことで安全性を確保
         stack[1] = Math.sqrt(Number(stack[1]) * (10 ** 8)).toString();
         stack[1] = scaleCalc(stack[1], '10000', '/');
-        stack[1] = stack[1].slice(0, 10);
-        //小数点以下の末尾の0を削除
-        stack[1] = removeTrailingZeros(stack[1]);
+        stack[1] = numberCheck(stack[1]);
         self.display = stack[1];
         afterSqrt = true;
       }
@@ -517,9 +519,7 @@ export class AppComponent implements AfterViewInit {
         //整数スケーリングしておくことで安全性を確保
         stack[1] = Math.sqrt(Number(stack[0]) * (10 ** 8)).toString();
         stack[1] = scaleCalc(stack[1], '10000', '/');
-        stack[1] = stack[1].slice(0, 10);
-        //小数点以下の末尾の0を削除
-        stack[1] = removeTrailingZeros(stack[1]);
+        stack[1] = numberCheck(stack[1]);
         self.display = stack[1];
         afterSqrt = true;
       }
@@ -539,13 +539,11 @@ export class AppComponent implements AfterViewInit {
           case '*':
             calc();
             stack[1] = scaleCalc(stack[1], '100', '/');
-            stack[1] = stack[1].slice(0, 10);
-            //小数点以下の末尾の0を削除
-            stack[1] = removeTrailingZeros(stack[1]);
+            stack[1] = numberCheck(stack[1]);
             self.display = stack[1];
             break;
           case '/':
-            //calc中にエラーが出ても無視して操作してしまうのを防ぐためにcalc前にエラー判定
+            //calc中にエラーが出ても無視して操作してしまうのを防ぐためにcalc前にエラー判定を行う
             if(Number(stack[0]) === 0){
               self.display = 'error';
               error = true;
@@ -553,9 +551,7 @@ export class AppComponent implements AfterViewInit {
             }
             calc();
             stack[1] = scaleCalc(stack[1], '100', '*');
-            stack[1] = stack[1].slice(0, 10);
-            //小数点以下の末尾の0を削除
-            stack[1] = removeTrailingZeros(stack[1]);
+            stack[1] = numberCheck(stack[1]);
             self.display = stack[1];
             break;
           default:
@@ -605,12 +601,11 @@ export class AppComponent implements AfterViewInit {
           case '*':
             calc();
             stack[1] = scaleCalc(stack[1], '100', '/');
-            stack[1] = stack[1].slice(0, 10);
-            //小数点以下の末尾の0を削除
-            stack[1] = removeTrailingZeros(stack[1]);
+            stack[1] = numberCheck(stack[1]);
             self.display = stack[1];
             break;
           case '/':
+            //calc中にエラーが出ても無視して操作してしまうのを防ぐためにcalc前にエラー判定を行う
             if(Number(stack[0]) === 0){
               self.display = 'error';
               error = true;
@@ -618,9 +613,7 @@ export class AppComponent implements AfterViewInit {
             }
             calc();
             stack[1] = scaleCalc(stack[1], '100', '*');
-            stack[1] = stack[1].slice(0, 10);
-            //小数点以下の末尾の0を削除
-            stack[1] = removeTrailingZeros(stack[1]);
+            stack[1] = numberCheck(stack[1]);
             self.display = stack[1];
             break;
         }
