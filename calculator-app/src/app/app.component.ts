@@ -52,6 +52,7 @@ export class AppComponent implements AfterViewInit {
       return num;
     }
 
+    //数値のチェックを行う関数
     function numberCheck(num: string): string {
       //表示できないほど大きい数の場合はeを表示
       if(Number(num) >= 10 ** 10 || Number(num) <= -(10 ** 10)){
@@ -76,8 +77,8 @@ export class AppComponent implements AfterViewInit {
       }else{
         num = num.slice(0, 10);
       }
-      //小数点以下の末尾の0を削除
-      num = removeTrailingZeros(num);
+      //小数点以下の末尾の0と小数点を削除
+      num = removeTrailingZeros(num) as string;
       return num;
     }
 
@@ -189,8 +190,7 @@ export class AppComponent implements AfterViewInit {
         return;
       }
       //左辺のみの例外処理
-      if(stack[0] !== '' && stack[1] === '' && stack[2] === '' 
-        && operator !== '' && afterCalc === false){
+      if(stack[0] !== '' && stack[1] === '' && stack[2] === ''){
         switch(operator){
           case '+':
             //連続計算対応のための処理
@@ -223,8 +223,7 @@ export class AppComponent implements AfterViewInit {
         }
       }
       //基本的な計算の処理
-      else if(stack[0] !== '' && stack[1] !== '' && operator !== '' 
-      && afterCalc === false){
+      else if(stack[0] !== '' && stack[1] !== ''){
         switch(operator){
           case '+':
             //連続計算対応のための処理
@@ -257,7 +256,7 @@ export class AppComponent implements AfterViewInit {
         }
       }
       //連続計算対応のための処理
-      else if(stack[0] === '' && stack[1] !== '' && stack[2] !== '' && operator !== ''){
+      else if(stack[0] === '' && stack[1] !== '' && stack[2] !== ''){
         switch(operator){
           case '+':
             stack[1] = scaleCalc(stack[1], stack[2], '+');
@@ -282,8 +281,7 @@ export class AppComponent implements AfterViewInit {
         }
       }
       //calc後に演算子を入力してすぐにcalcを行う場合の例外処理
-      else if(stack[0] !== '' && stack[1] === '' && stack[2] !== '' 
-        && operator !== '' && afterCalc === false){
+      else if(stack[0] !== '' && stack[1] === '' && stack[2] !== ''){
         switch(operator){
           case '+':
             stack[1] = scaleCalc(stack[0], stack[2], '+');
