@@ -1,26 +1,26 @@
 <div id="calculator">
-    <div id="display" data-testid="display">0</div>
+    <div id="display">{{display}}</div>
     <div id="button-container">
-        <button class="btns button-percent" data-testid="button-percent">%</button>
-        <button class="btns button" value="7" data-testid="button-7">7</button>
-        <button class = "btns button" value="8" data-testid="button-8">8</button>
-        <button class = "btns button" value="9" data-testid="button-9">9</button>
-        <button class = "btns button-operator" value="/" data-testid="button-slash">÷</button>
-        <button class = "btns button-sqrt" value="√" data-testid="button-sqrt">√</button>
-        <button class = "btns button" value="4" data-testid="button-4">4</button>
-        <button class = "btns button" value="5" data-testid="button-5">5</button>
-        <button class = "btns button" value="6" data-testid="button-6">6</button>
-        <button class = "btns button-operator" value="*" data-testid="button-asterisk">x</button>
-        <button class = "btns button-clear-entry" data-testid="button-clear-entry">CE</button>
-        <button class = "btns button" value="1" data-testid="button-1">1</button>
-        <button class = "btns button" value="2" data-testid="button-2">2</button>
-        <button class = "btns button" value="3" data-testid="button-3">3</button>
-        <button class = "btns button-operator" value="-" data-testid="button-minus">-</button>
-        <button class = "btns button-clear" data-testid="button-clear">C</button>
-        <button class = "btns button" value="0" data-testid="button-0">0</button>
-        <button class = "btns button-dot" value="." data-testid="button-dot">.</button>
-        <button class = "btns button-plus-minus" data-testid="button-plus-minus">±</button>
-        <button class = "btns button-operator" value="+" data-testid="button-plus">+</button>
-        <button class = "btns button-equal" data-testid="button-equal">=</button>
+        <button (click)="percent()" class="btns button-percent">%</button>
+        <button (click)="number('7')" class="btns button">7</button>
+        <button (click)="number('8')" class = "btns button">8</button>
+        <button (click)="number('9')" class = "btns button">9</button>
+        <button (click)="operator('/')" class = "btns button-operator">÷</button>
+        <button (click)="sqrt()" class = "btns button-sqrt">√</button>
+        <button (click)="number('4')" class = "btns button">4</button>
+        <button (click)="number('5')" class = "btns button">5</button>
+        <button (click)="number('6')" class = "btns button">6</button>
+        <button (click)="operator('*')" class = "btns button-operator">x</button>
+        <button (click)="clearEntry()" class = "btns button-clear-entry">CE</button>
+        <button (click)="number('1')" class = "btns button">1</button>
+        <button (click)="number('2')" class = "btns button">2</button>
+        <button (click)="number('3')" class = "btns button">3</button>
+        <button (click)="operator('-')" class = "btns button-operator">-</button>
+        <button (click)="clear()" class = "btns button-clear">C</button>
+        <button (click)="number('0')" class = "btns button">0</button>
+        <button (click)="dot()" class = "btns button-dot">.</button>
+        <button (click)="plusMinus()" class = "btns button-plus-minus">±</button>
+        <button (click)="operator('+')" class = "btns button-operator">+</button>
+        <button (click)="equal()" class = "btns button-equal">=</button>
     </div>   
 </div>
