@@ -616,7 +616,7 @@ export class AppComponent implements AfterViewInit {
             return;
         }
       }
-      //stack[1]とstack[2]のみ値を持つ場合（＝→％の順で入力した場合、＝→数字→％の順で入力した場合）
+      //stack[1]とstack[2]のみ値を持つ場合（＝→％の順で入力した場合、＝→数字→％の順で入力した場合、＝→√→％の順で入力した場合）
       else if(stack[0] === '' && stack[1] !== '' && stack[2] !== ''){
         //（＝→％の順で入力した場合）
         if(afterCalc === true && afterSqrt === false){
