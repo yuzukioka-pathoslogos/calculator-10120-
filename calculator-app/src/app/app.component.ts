@@ -403,8 +403,6 @@ export class AppComponent implements AfterViewInit {
           stack[1] = '';
         }else if(stack[0] !== '' && stack[1] === ''){     //演算子の入力を訂正したいとき
         }else if(stack[0] !== '' && stack[1] !== ''){
-          //stack[2]が残っていると連続計算になってしまうため初期化
-          stack[2] = '';
           calc();
           stack[0] = stack[1];
           stack[1] = '';
