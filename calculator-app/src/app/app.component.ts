@@ -404,7 +404,7 @@ export class AppComponent implements AfterViewInit {
           stack[0] = stack[1];
           stack[1] = '';
         }else if(stack[0] !== '' && stack[1] === ''){     //演算子の入力を訂正したいとき
-        }else if(stack[0] !== '' && stack[1] !== '' && afterCalc === false){
+        }else if(stack[0] !== '' && stack[1] !== ''){
           //stack[2]が残っていると連続計算になってしまうため初期化
           stack[2] = '';
           calc();
@@ -558,7 +558,7 @@ export class AppComponent implements AfterViewInit {
             return;
         }
       }
-      //stack[1]のみ値を持つ場合（数字→％→の順で入力した場合、演算子は入力されていない）
+      //stack[1]のみ値を持つ場合（数字→％の順で入力した場合、演算子は入力されていない）
       else if(stack[0] === '' && stack[1] !== '' && stack[2] === ''){
         stack[1] = '0';
         self.display = stack[1];
@@ -616,12 +616,14 @@ export class AppComponent implements AfterViewInit {
             stack[1] = numberCheck(stack[1]);
             self.display = stack[1];
             break;
+          default:
+            return;
         }
       }
       //stack[1]とstack[2]のみ値を持つ場合（＝→％の順で入力した場合、＝→数字→％の順で入力した場合）
       else if(stack[0] === '' && stack[1] !== '' && stack[2] !== ''){
         //（＝→％の順で入力した場合）
-        if(afterCalc === true){
+        if(afterCalc === true && afterSqrt === false){
           switch(operator){
             case '*':
               stack[1] = scaleCalc(stack[1], '100', '/');
@@ -638,8 +640,11 @@ export class AppComponent implements AfterViewInit {
               return;
           }
         }
-        //（＝→数字→％の順で入力した場合）
+        //（＝→数字→％の順で入力した場合）、（＝→√→％の順で入力した場合）
         else{
+          //afterCalc===trueかつafterSqrt===trueの場合に計算結果が合うように処理
+          afterCalc = false;
+          afterSqrt = false;
           stack[0] = stack[2];
           switch(operator){
             case '+':

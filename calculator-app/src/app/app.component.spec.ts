@@ -614,7 +614,7 @@ describe('AppComponent', () => {
     component.sqrt();
     component.percent();
     fixture.detectChanges();
-    expect(component.display).toBe('0.3');
+    expect(component.display).toBe('0.32');
   })
   it('8/2=r% 100',() =>{
     component.number('8');
@@ -624,7 +624,7 @@ describe('AppComponent', () => {
     component.sqrt();
     component.percent();
     fixture.detectChanges();
-    expect(component.display).toBe('10');
+    expect(component.display).toBe('100');
   })
   it('5+4=r%== 12.12',() =>{
     component.number('5');
