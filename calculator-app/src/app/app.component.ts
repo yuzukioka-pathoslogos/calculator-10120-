@@ -317,6 +317,7 @@ export class AppComponent implements AfterViewInit {
       self.display = stack[1];
       stack[0] = '';
       afterCalc = true;
+      afterSqrt = false;
     }
 
     //数字をクリックした時に表示される数字を追加
