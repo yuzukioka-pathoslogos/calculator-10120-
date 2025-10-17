@@ -586,7 +586,94 @@ describe('AppComponent', () => {
     fixture.detectChanges();
     expect(component.display).toBe('1.5625');
   })
-
+  it('5+4=r% 4.12',() =>{
+    component.number('5');
+    component.operator('+');
+    component.number('4');
+    component.equal();
+    component.sqrt();
+    component.percent();
+    fixture.detectChanges();
+    expect(component.display).toBe('4.12');
+  })
+  it('5-4=r% 3.96',() =>{
+    component.number('5');
+    component.operator('-');
+    component.number('4');
+    component.equal();
+    component.sqrt();
+    component.percent();
+    fixture.detectChanges();
+    expect(component.display).toBe('3.96');
+  })
+  it('8*2=r% 0.32',() =>{
+    component.number('8');
+    component.operator('*');
+    component.number('2');
+    component.equal();
+    component.sqrt();
+    component.percent();
+    fixture.detectChanges();
+    expect(component.display).toBe('0.3');
+  })
+  it('8/2=r% 100',() =>{
+    component.number('8');
+    component.operator('/');
+    component.number('2');
+    component.equal();
+    component.sqrt();
+    component.percent();
+    fixture.detectChanges();
+    expect(component.display).toBe('10');
+  })
+  it('5+4=r%== 12.12',() =>{
+    component.number('5');
+    component.operator('+');
+    component.number('4');
+    component.equal();
+    component.sqrt();
+    component.percent();
+    component.equal();
+    component.equal();
+    fixture.detectChanges();
+    expect(component.display).toBe('12.12');
+  })
+  it('5-4=r%== -4.04',() =>{
+    component.number('5');
+    component.operator('-');
+    component.number('4');
+    component.equal();
+    component.sqrt();
+    component.percent();
+    component.equal();
+    component.equal();
+    fixture.detectChanges();
+    expect(component.display).toBe('-4.04');
+  })
+  it('8*2=r%== 20.48',() =>{
+    component.number('8');
+    component.operator('*');
+    component.number('2');
+    component.equal();
+    component.sqrt();
+    component.percent();
+    component.equal();
+    component.equal();
+    fixture.detectChanges();
+    expect(component.display).toBe('20.48');
+  })
+  it('8/2=r%== 25',() =>{
+    component.number('8');
+    component.operator('/');
+    component.number('2');
+    component.equal();
+    component.sqrt();
+    component.percent();
+    component.equal();
+    component.equal();
+    fixture.detectChanges();
+    expect(component.display).toBe('25');
+  })
 
 
   //sqrtの特殊入力
